@@ -14,9 +14,9 @@ public class CountryGovernment : ScriptableObject
 {
     public List<Tuple<CountryToGlobalCountry.GenericCountry, WorldEvent>> CountryHistory;
     public List<DiplomaticEvent> GovernmentHistoryWithPlayer;
- 
+
     public List<CountryToGlobalCountry.GenericProvince> ControlsProvincesNames;
-    
+
     public List<CountryToGlobalCountry.GenericCountry> ControlCountriesNames;
     public List<CountryToGlobalCountry.GenericCountryInfrastructure> ControlCountryCriticalInfrastructure;
     [Header("Heads of State")]
@@ -236,7 +236,7 @@ public class CountryGovernment : ScriptableObject
     public CountryGovernmentTypes GovernmentType;
     [Tooltip("If you want to use the historic bias to build up the country allies and rivals")]
     public CountryBias GovernmnetBias;
-    public RawImage CountryFlag;
+    public Texture2D CountryFlag;
     public List<CountryFlawSkill> CountryFlaws;
     public List<CountryPerkSkill> CountrPerks;
     public CountrySpokeLanguage CountrySpokenLanguage;
@@ -259,14 +259,20 @@ public class CountryGovernment : ScriptableObject
         CaptialName = captialCity.name;
 
         var captialProvince = localMap.GetProvince(captialProvinceName, localCountry.name);
-        CountryOfGovernment.index = localCountry.uniqueId;
-        CountryOfGovernment.name = localCountry.name;
+        CountryOfGovernment.index = countryIndex;
+        MapLookUpName = NameOfGovernment = CountryOfGovernment.name = localCountry.name;
         CountryOfGovernment.regionName = CustomRegionName.Length > 0 ? CustomRegionName : localCountry.continent;
 
         CaptialProvince.index = captialProvince.uniqueId;
         CaptialProvince.name = captialProvince.name;
-        CaptialProvince.location.x = captialProvince.center.x;
-        CaptialProvince.location.y = captialProvince.center.y;
+        CaptialProvince.location = captialProvince.center;
+        CaptialProvince.countryIndex = countryIndex;
+        CountryOfGovernment.captialLocation = captialCity.unity2DLocation;
+
+        if (CountryFlag != null) {
+            CaptialProvince.flagowner = CountryFlag;
+            CountryOfGovernment.flagowner = CountryFlag;
+        }
         ControlsProvincesNames.Clear();
         for (int i = 0; i < localCountry.provinces.Length; i++)
         {

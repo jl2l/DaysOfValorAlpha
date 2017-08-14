@@ -59,7 +59,9 @@ public class CountryToGlobalCountry
         public int CityPropertyValue;
         public int CityResearchIndex;
         public int CityTradeValue;
+        [Range(-100.0f, 100.0f)]
         public float CityControl;
+        [Range(-100.0f, 100.0f)]
         public float CityRebelControl;
         public bool IsInPanic;
         public bool IsTerrorAttack;
@@ -183,7 +185,9 @@ public class CountryToGlobalCountry
         public string name;
         public int countryIndex;
         public Vector2 location;
+        [Range(-100.0f, 100.0f)]
         public float ProvinceControl;
+        [Range(-100.0f, 100.0f)]
         public float ProvinceRebelControl;
         public Tuple<SectorManager.Sectors, long> ProductionSectors;
         public Vector2 regionCaptialLocation;
