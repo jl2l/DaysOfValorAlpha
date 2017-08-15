@@ -84,11 +84,11 @@ public class WorldManager : MonoBehaviour
 
 
             var countryPropertries = GameMapManager.wmslObj.GetCountry(gov.CountryOfGovernment.index);
-            countryPropertries.attrib[gov.CaptialName].str = gov.CaptialName;
+            countryPropertries.attrib.Absorb(gov.CaptialName);
 
 
             //GameMapManager.wmslObj.AddMarker2DSprite()
-            countryPropertries.attrib[gov.ContactOfHeadOfState.ContactName].str = gov.ContactOfHeadOfState.ContactName;
+            countryPropertries.attrib.Absorb(gov.ContactOfHeadOfState.ContactName);
             var citiesInCountry = GameMapManager.wmslObj.cities.Where(e => e.countryIndex == gov.CountryOfGovernment.index);
            
             if (gov.IsMasterPlayer || gov.IsHumanPlayer)
