@@ -49,10 +49,10 @@ public class CityData : ScriptableObject
     [Range(-100.0f, 100.0f)]
     public int CityTradeValue;
     [Tooltip("The level of control the state has over the city")]
-    [Range(0.0f, 100.0f)]
-    public float CityControl;
-    [Range(0.0f, 100.0f)]
-    public float CityRebelControl;
+    [Range(0, 100)]
+    public int CityControl;
+    [Range(0, 100)]
+    public int CityRebelControl;
     public bool IsInPanic;
     public bool IsTerrorAttack;
     public bool IsNaturalDisater;
@@ -64,7 +64,7 @@ public class CityData : ScriptableObject
     public bool IsBlackoutPowerLost;
     public bool IsStreetRiots;
     public CityType CityType;
-
+    public Texture2D CityOwnerFlag;
     public Tuple<SectorManager.Sectors, long> ProductionSectors;
     public List<CountryToGlobalCountry.countryInfrastructure> cityInfrastructure;
 }

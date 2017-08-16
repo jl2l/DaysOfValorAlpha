@@ -9,6 +9,7 @@ using System.Text;
 using System.Linq;
 using static CountryToGlobalCountry;
 using UnityEngine.EventSystems;
+using Newtonsoft.Json;
 
 public class MapManager : MonoBehaviour
 {
@@ -1053,20 +1054,26 @@ public class MapManager : MonoBehaviour
     }
 
     public void SelectCityOnClick(WorldMapStrategyKit.City selectedCity) {
-        var data = JsonUtility.FromJson<GenericCity>(selectedCity.attrib["data"].str);
-        var cityPanelInfo = FindObjectOfType<CityInfoPanel>();
-        cityPanelInfo.CrimeIndex = data.CityCrimeIndex;
-        cityPanelInfo.EconomicIndex = data.CityEconmicIndex;
-        cityPanelInfo.PropertyConstruction = data.CityPropertyValue;
-        cityPanelInfo.ResearchIndex = data.CityResearchIndex;
-        cityPanelInfo.TerrorIndex = data.CityTerrorLevel;
-        cityPanelInfo.TradeIndex = data.CityTradeValue;
-        cityPanelInfo.CityStatusText.text = "";
-        cityPanelInfo.CityProvinceText.text = data.provinceName;
-        cityPanelInfo.CityPopulationText.text = string.Format("{0:n0}", data.population);
-        cityPanelInfo.CityNameText.text = data.name;
-        cityPanelInfo.CityIncomeText.text = string.Format("{0:n0}M PER Day", data.population);
-        cityPanelInfo.CityControllingFlag.texture = data.flagowner;
+        var s = selectedCity.attrib["data"].str;
+       
+        if (s == null) {
+            var data = JsonUtility.FromJson<CityData>(s);
+            data = WorldManager.WorldCityData.FirstOrDefault(e => e.index == selectedCity.uniqueId || e.name == selectedCity.name);
+            var cityPanelInfo = FindObjectOfType<CityInfoPanel>();
+            cityPanelInfo.CrimeIndex = data.CityCrimeIndex;
+            cityPanelInfo.EconomicIndex = data.CityEconomicIndex;
+            cityPanelInfo.PropertyConstruction = data.CityPropertyValue;
+            cityPanelInfo.ResearchIndex = data.CityResearchIndex;
+            cityPanelInfo.TerrorIndex = data.CityTerrorLevel;
+            cityPanelInfo.TradeIndex = data.CityTradeValue;
+            cityPanelInfo.CityStatusText.text = "";
+            cityPanelInfo.CityProvinceText.text = data.provinceName;
+            cityPanelInfo.CityPopulationText.text = string.Format("{0:n0}", data.population);
+            cityPanelInfo.CityNameText.text = data.name;
+            cityPanelInfo.CityIncomeText.text = string.Format("{0:n0}M PER Day", data.population);
+            cityPanelInfo.CityControllingFlag.texture = data.CityOwnerFlag;
+        }
+       
         //var f = data.
         //WorldManager.CityStatus(SelectedCountryManager.CountryGovernment,)
     }
