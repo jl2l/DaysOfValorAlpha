@@ -296,9 +296,17 @@ public class CountryGovernment : ScriptableObject
     public List<PoliticalParties> PoliticalParties;
     public List<DemographicGroups> DemographicGroups;
     public List<ResearchItem> CountryKnownResearch;
-
-
+    public List<CountrySectors> CountryMarkets;
+    public List<SectorManager.Sectors> CountryMarketSectors;
+    public List<SectorManager.CountryResource> CountryResources;
     #endregion
 
     public CountryMilitary Military;
+    public CountryBudget Budget;
+    [Range(0.0f, 100.0f)]
+    public float AgricultureRate;
+    [Range(0.0f, 100.0f)]
+    public float IndustryRate;
+    [Range(0.0f, 100.0f)]
+    public float ServicesRate;
 }

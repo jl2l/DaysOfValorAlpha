@@ -124,7 +124,9 @@ namespace Assets
             OldWorldPower = 7,
             PopulationBoom = 8,
             InventorInovator = 9,
-            AbundantNaturalResources
+            AbundantNaturalResources,
+            HighlyDiversified,
+            NuclearPower
 
         }
         [SerializeField]
@@ -138,6 +140,8 @@ namespace Assets
             Overpopulated,
             Underpopulated,
             HeavyNationalDebt,
+            DemographicTensions,
+            PoliticalTensions,
 
         }
         [SerializeField]

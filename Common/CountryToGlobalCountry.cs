@@ -192,12 +192,14 @@ public class CountryToGlobalCountry
         public int index;
         public string name;
         public int countryIndex;
+        public float provinceTaxRate = 5f;
         public Vector2 location;
         [Range(-100.0f, 100.0f)]
         public float ProvinceControl;
         [Range(-100.0f, 100.0f)]
         public float ProvinceRebelControl;
         public Tuple<SectorManager.Sectors, long> ProductionSectors;
+        public Tuple<SectorManager.Resources, long> ProvinceResources;
         public Vector2 regionCaptialLocation;
         public Texture2D flagowner;
         public List<GenericCountryInfrastructure> provinceInfrastructure;

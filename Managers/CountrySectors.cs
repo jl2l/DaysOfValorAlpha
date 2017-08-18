@@ -12,12 +12,12 @@ public class CountrySectors : ScriptableObject
     private float highrate = 0.0012f;
     private float veryrate = 0.0012f;
     private float crazyrate = 0.0012f;
-
+   
     public float Banking;
    
     public float BankingVolatility;
 
-    public CountryToGlobalCountry.countryInfrastructure Supports = CountryToGlobalCountry.countryInfrastructure.commerical;
+    
     public float Technology;
     public Dictionary<string, float> TechnologySubsectoryList;
     public float TechnologyVolatility;

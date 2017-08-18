@@ -11,6 +11,7 @@ using System.IO;
 using static Assets.JsonCountryCIAModel;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json.Linq;
 
 public static class Helpers
 {
@@ -23,7 +24,7 @@ public static class Helpers
     public static RegionInfo GetRegionInfo(string countryName)
     {
 
-        var regions = CultureInfo.GetCultures(CultureTypes.SpecificCultures).Select(x => new RegionInfo(x.LCID));
+        var regions = CultureInfo.GetCultures(CultureTypes.SpecificCultures).Select(x => new RegionInfo(x.LCID)).ToList();
         return regions.FirstOrDefault(region => region.EnglishName.Contains(countryName));
     }
 
@@ -33,6 +34,16 @@ public static class Helpers
         return CultureInfo.GetCultures(CultureTypes.SpecificCultures).Select(x => new RegionInfo(x.LCID)).ToList();
     }
 
+    public static string GetRegionCurrency(string countryName)
+    {
+        var f = GetRegionInfo(countryName);
+        return f.CurrencyEnglishName;
+    }
+    public static string GetRegionCurrencySymbol(string countryName)
+    {
+        var f = GetRegionInfo(countryName);
+        return f.CurrencySymbol;
+    }
     // Utility functions called from OnGUI:
     public static string EntityListToString<T>(List<T> entities)
     {
@@ -71,10 +82,10 @@ public class Helper
         return new List<TimeZone>();
     }
 
-    public List<CountryCiaDbObject> CIACountryIndex()
+    public List<JObject> CIACountryIndex()
     {
         var allJsons = Directory.GetFiles(@"Assets\DoVAlpha\GovernmentsDefault\cia", "*.json", SearchOption.AllDirectories);
-        var list = new List<CountryCiaDbObject>();
+        var list = new List<JObject>();
         foreach (var file in allJsons)
         {
             var g = @"Assets/DoVAlpha /GovernmentsDefault/cia/africa/ag.json";
@@ -86,9 +97,9 @@ public class Helper
                 {
 
                     var f = JsonUtility.FromJson(jsonObj, typeof(CountryCiaDbObject));
-                    var s = JsonConvert.DeserializeObject<CountryCiaDbObject>(jsonObj);
+                    var s = JsonConvert.DeserializeObject<JObject>(jsonObj);
                     var ciaDataObj = JsonConvert.DeserializeAnonymousType<CountryCiaDbObject>(jsonObj, model);
-
+                    list.Add(s);
                 }
                 catch (Exception s)
                 {
@@ -105,7 +116,7 @@ public class Helper
         }
         else
         {
-            return new List<CountryCiaDbObject>();
+            return new List<JObject>();
         }
 
     }
@@ -133,9 +144,37 @@ public class Helper
             }
         }
     }
-    public CountryCiaDbObject GetCIAInfo(string CountryName)
+    public JObject GetCIAInfo(string CountryName)
     {
-        return CIACountryIndex().FirstOrDefault(e => e.CountryName == CountryName);
+        return CIACountryIndex().FirstOrDefault();
+    }
+
+    public JProperty GetCIAProperty(string PropertyXPath)
+    {
+        if (PropertyXPath.Length > 0)
+        {
+            var indexes = PropertyXPath.Split('.');
+            if (indexes.Length == 1)
+            {
+                foreach (var item in indexes)
+                {
+                    var Dig = CIACountryIndex().FirstOrDefault().Property(item);
+                }
+            }
+            else {
+
+            }
+           return CIACountryIndex().FirstOrDefault().Property(PropertyXPath);
+        }
+   
+        else
+        foreach (JProperty prop in CIACountryIndex().FirstOrDefault().Properties())
+        {
+            if (prop.Path == PropertyXPath) {
+                return prop;
+            }
+        }
+        return null;
     }
 
     public GameTimeZone GetTimeZoneInfo(string regionName)
@@ -156,7 +195,7 @@ public class Helper
 
         return foundZone;
     }
-    
+
     public Color ColorCell(float value)
     {
         var red = value < 50f ? 255f : Mathf.Round(256f - (value - 50f) * 5.12f);
@@ -164,14 +203,46 @@ public class Helper
         return new Color(red, green, 0, 1);
 
     }
+
+    public List<KeyValuePair<SectorManager.Sectors, string>> SubSectors()
+    {
+
+        return new List<KeyValuePair<SectorManager.Sectors, string>>()
+    {
+        new KeyValuePair<SectorManager.Sectors, string>( SectorManager.Sectors.Aerospace, "non-alcoholic beverages"),
+        new KeyValuePair<SectorManager.Sectors, string>( SectorManager.Sectors.Agriculture, "fertilizer"),
+        new KeyValuePair<SectorManager.Sectors, string>( SectorManager.Sectors.Mining, "oilfield equipment"),
+        new KeyValuePair<SectorManager.Sectors, string>( SectorManager.Sectors.Mining, "aluminum smelting"),
+        new KeyValuePair<SectorManager.Sectors, string>( SectorManager.Sectors.Telecom, "telecommunications equipment"),
+         new KeyValuePair<SectorManager.Sectors, string>( SectorManager.Sectors.Aerospace, "commercial space launch vehicles"),
+       
+    };
+    }
 }
 
 
 
+/// <summary>
+/// The country is usually backed by a reserve currency this is it
+/// </summary>
+public enum ReserveCurrency
+{
+    Gold,
+    Crypto,
+    USD,
+    EURO,
+    Yen,
+    Pound,
+    Franc,
+    IndiaRupee,
+    AustralianDollar,
+    Rand,
+    RussianRUB,
+    ChineseRMB
+}
 
-
-
-public enum CityType {
+public enum CityType
+{
 
     [Description("A rural farming village commonly found in the third world")]
     SmallVillage,
