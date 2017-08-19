@@ -124,7 +124,11 @@ namespace Assets
             OldWorldPower = 7,
             PopulationBoom = 8,
             InventorInovator = 9,
-            AbundantNaturalResources
+            AbundantNaturalResources,
+            HighlyDiversified,
+            ScienceJuggernaught,
+            NuclearPower,
+            IndustrialJuggernaught 
 
         }
         [SerializeField]
@@ -138,6 +142,13 @@ namespace Assets
             Overpopulated,
             Underpopulated,
             HeavyNationalDebt,
+            DemographicTensions,
+            PoliticalTensions,
+            CountryResourceDependant,
+            Overconsumption,
+            AgingPopulation,
+            LowInformationVoters,
+            WaterVunerable,
 
         }
         [SerializeField]

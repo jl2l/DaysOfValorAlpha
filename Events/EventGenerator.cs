@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using System.Collections;
+using System.Collections.Generic;
 
-
-[System.Serializable]
 public class EventGenerator : MonoBehaviour
 {
-
+  
     public enum WorldEventType
     {
         WorldEvent,
@@ -15,15 +15,71 @@ public class EventGenerator : MonoBehaviour
         TerroristEvent,
         CulturalEvent
     }
-    // Use this for initialization
-    void Start()
-    {
+    private Dictionary<string, UnityEvent> eventDictionary;
 
+    private static EventGenerator eventManager;
+
+    public static EventGenerator instance
+    {
+        get
+        {
+            if (!eventManager)
+            {
+                eventManager = FindObjectOfType(typeof(EventGenerator)) as EventGenerator;
+
+                if (!eventManager)
+                {
+                    Debug.LogError("There needs to be one active EventManger script on a GameObject in your scene.");
+                }
+                else
+                {
+                    eventManager.Init();
+                }
+            }
+
+            return eventManager;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    void Init()
     {
+        if (eventDictionary == null)
+        {
+            eventDictionary = new Dictionary<string, UnityEvent>();
+        }
+    }
 
+    public static void StartListening(string eventName, UnityAction listener)
+    {
+        UnityEvent thisEvent = null;
+        if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
+        {
+            thisEvent.AddListener(listener);
+        }
+        else
+        {
+            thisEvent = new UnityEvent();
+            thisEvent.AddListener(listener);
+            instance.eventDictionary.Add(eventName, thisEvent);
+        }
+    }
+
+    public static void StopListening(string eventName, UnityAction listener)
+    {
+        if (eventManager == null) return;
+        UnityEvent thisEvent = null;
+        if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
+        {
+            thisEvent.RemoveListener(listener);
+        }
+    }
+
+    public static void TriggerEvent(string eventName)
+    {
+        UnityEvent thisEvent = null;
+        if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
+        {
+            thisEvent.Invoke();
+        }
     }
 }

@@ -26,7 +26,8 @@ public class CountryLaw : ScriptableObject
 
     }
 
-
+    public CountryBudget LawEffectsBudget;
+    public SectorManager.CountryResource LawOnResource;
     public PoliticalParties LawBanningParty;
     public DemographicGroups LawBanGroup;
 }

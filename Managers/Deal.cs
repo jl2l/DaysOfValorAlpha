@@ -8,6 +8,13 @@ using System.Collections.Generic;
 public class Deal : ScriptableObject
 {
     public enum DealFor { Buy, Sell, Transfer, Hold }
+
+//    he following are not necessarily the best Forex pairs to trade, but they are the ones that have high liquidity and occupy the most foreign exchange transactions:
+//EUR/USD(Euro - US dollar)
+//USD/JPY(US dollar - yen)
+//GBP/USD(GB pound - US dollar)
+//AUD/USD(Australian dollar - US dollar)
+//USD/CHF(US dollar - Swiss franc)
     public enum DealType
     {
         Treaty,

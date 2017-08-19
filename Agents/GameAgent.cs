@@ -19,24 +19,12 @@ public class GameAgent : MonoBehaviour
     }
 
 
-    //this will consume all the events that happen to a agent, it will group them into groups which will have a limit in terms of the events once they go over a certain thre
-    //threshold the behavior will change;
-
-    GaussianMixtureModel GameAgentEscalationThreshold;
-    RANSAC<GaussianMixtureModel> GameAgentHistoricThreshold;
-
-    //RANSAC is used to filter out variables we dont care about from Agent interactions
-    public RANSAC<GeneralAgent> GameGeneralAgent;
-    public RANSAC<AdvisorAgent> GameAdvisorAgent;
-    public RANSAC<DiplomatAgent> GameDiplomatAgent;
-    public RANSAC<IntelAgent> GameIntelAgent;
-    public RANSAC<RebelCommanderAgent> GameRebelCommanderAgent;
-    public RANSAC<TerroristLeaderAgent> GameTerroristLeaderAgent;
+   
 
 
     public AgentOfType GameAgentType;
 
-    // Use this for initialization
+    // Use this for initialization of behaviors
     void Start()
     {
         switch (GameAgentType)

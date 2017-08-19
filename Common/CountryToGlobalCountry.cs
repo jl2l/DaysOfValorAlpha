@@ -24,28 +24,36 @@ public class CountryToGlobalCountry
     public class GenericCity
     {
 
-        public GenericCity(CityData data)
+        public GenericCity(CityData data = null)
         {
-            new GenericCity(data)
+            if (data == null)
             {
-                index = data.index,
-                CityControl = data.CityControl,
-                CityCrimeIndex = data.CityCrimeIndex,
-                CityEconmicIndex = data.CityEconomicIndex,
-                cityInfrastructure = data.cityInfrastructure,
-                CityPropertyValue = data.CityPropertyValue,
-                CityRebelControl = data.CityRebelControl,
-                CityResearchIndex = data.CityResearchIndex,
-                CityTerrorLevel = data.CityTerrorLevel,
-                CityTradeValue = data.CityTradeValue,
-                isCapital = data.isCapital,
-                location = data.location,
-                name = data.name,
-                CityType = data.CityType,
-                population = data.population,
-                ProductionSectors = data.ProductionSectors,
-                provinceName = data.provinceName
-            };
+                
+                new GenericCity();
+            }
+            else {
+                new GenericCity(data)
+                {
+                    index = data.index,
+                    CityControl = data.CityControl,
+                    CityCrimeIndex = data.CityCrimeIndex,
+                    CityEconmicIndex = data.CityEconomicIndex,
+                    cityInfrastructure = data.cityInfrastructure,
+                    CityPropertyValue = data.CityPropertyValue,
+                    CityRebelControl = data.CityRebelControl,
+                    CityResearchIndex = data.CityResearchIndex,
+                    CityTerrorLevel = data.CityTerrorLevel,
+                    CityTradeValue = data.CityTradeValue,
+                    isCapital = data.isCapital,
+                    location = data.location,
+                    name = data.name,
+                    CityType = data.CityType,
+                    population = data.population,
+                    ProductionSectors = data.ProductionSectors,
+                    provinceName = data.provinceName
+                };
+            }
+          
         }
         public int index;
         public string name;
@@ -59,7 +67,9 @@ public class CountryToGlobalCountry
         public int CityPropertyValue;
         public int CityResearchIndex;
         public int CityTradeValue;
+        [Range(-100.0f, 100.0f)]
         public float CityControl;
+        [Range(-100.0f, 100.0f)]
         public float CityRebelControl;
         public bool IsInPanic;
         public bool IsTerrorAttack;
@@ -71,7 +81,7 @@ public class CountryToGlobalCountry
         public bool IsUnderRebelControl;
         public bool IsBlackoutPowerLost;
         public bool IsStreetRiots;
-        public Texture2D flagowner;
+        public Texture2D flagowner = null;
         public CityType CityType;
         public Tuple<SectorManager.Sectors, long> ProductionSectors;
         public List<countryInfrastructure> cityInfrastructure;
@@ -182,10 +192,14 @@ public class CountryToGlobalCountry
         public int index;
         public string name;
         public int countryIndex;
+        public float provinceTaxRate = 5f;
         public Vector2 location;
+        [Range(-100.0f, 100.0f)]
         public float ProvinceControl;
+        [Range(-100.0f, 100.0f)]
         public float ProvinceRebelControl;
         public Tuple<SectorManager.Sectors, long> ProductionSectors;
+        public Tuple<SectorManager.Resources, long> ProvinceResources;
         public Vector2 regionCaptialLocation;
         public Texture2D flagowner;
         public List<GenericCountryInfrastructure> provinceInfrastructure;

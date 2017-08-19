@@ -44,6 +44,7 @@ public class WorldManager : MonoBehaviour
 
         }
         StartCoroutine(IntializeWorld(WorldGovernments));
+        //WMSK.instance.SetCountriesAttributes(jsonCountries);
     }
 
     // Update is called once per frame
@@ -82,24 +83,35 @@ public class WorldManager : MonoBehaviour
             newCountryManagerSetup.countryAIAgent = newCountryAgentConfig;
             newCountryManagerSetup.countryAmbassdor = newCountryAmbassdorAgent;
 
+            newCountryManagerSetup.countryBudget = gov.Budget;
+           var newCountrySectoryManager =  newCountry.AddComponent<SectorManager>();
+            newCountrySectoryManager.GamePlayerCoutryResourceList = gov.CountryResources;
 
             var countryPropertries = GameMapManager.wmslObj.GetCountry(gov.CountryOfGovernment.index);
-            countryPropertries.attrib[gov.CaptialName].str = gov.CaptialName;
+            countryPropertries.attrib.Absorb(gov.CaptialName);
 
 
             //GameMapManager.wmslObj.AddMarker2DSprite()
-            countryPropertries.attrib[gov.ContactOfHeadOfState.ContactName].str = gov.ContactOfHeadOfState.ContactName;
+            countryPropertries.attrib.Absorb(gov.ContactOfHeadOfState.ContactName);
             var citiesInCountry = GameMapManager.wmslObj.cities.Where(e => e.countryIndex == gov.CountryOfGovernment.index);
            
             if (gov.IsMasterPlayer || gov.IsHumanPlayer)
             {
 
                 citiesInCountry.ToList().ForEach(city => {
-                    var cityData = WorldCityData.FirstOrDefault(e => e.index == city.uniqueId);
 
-                    var newCityData = new CountryToGlobalCountry.GenericCity(cityData);
-
-                    city.attrib["data"].Absorb(JSONObject.Create(newCityData.ToString()));
+                    //1721336815
+                    var dataCity = WorldCityData.FirstOrDefault(cityData => cityData.index == city.uniqueId);
+                    if (city.uniqueId == 1721336815 || city.name == "New York") {
+                        var f = city.population;
+                    }
+                    if (dataCity != null) {
+                        city.attrib["data"] = JsonUtility.ToJson(dataCity);
+                    } else {
+                        city.attrib["data"] = JsonUtility.ToJson(city);
+                    }
+                    
+              
                 });
                 if (gov.IsHumanPlayer)
                 {
@@ -114,7 +126,7 @@ public class WorldManager : MonoBehaviour
                     newCountryAgentConfig.transform.SetParent(newCountry.transform);
                     newCountryAgent.transform.SetParent(newCountry.transform);
                     newCountryAmbassdor.transform.SetParent(newCountry.transform);
-
+                    newCountrySectoryManager.transform.SetParent(newCountry.transform);
                     newCountry.transform.SetParent(CountryPlayerManagerGameObject.transform);
                 }
             }

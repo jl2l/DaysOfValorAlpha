@@ -109,7 +109,27 @@ public class EditorHelper
         if (asset != null)
             asset.CountryName = "some government";
     }
+    // -------- duplicate this code block to create your own custom item type --------
+    // for more info, see the comments in "vp_CustomType.cs"
+    [MenuItem("DOV/Create New CountryResource", false, 101)]
+    public static void CreateCountryResource()
+    {
+        SectorManager.CountryResource asset = (SectorManager.CountryResource)CreateAsset("DoVAlpha/GovernmentsDefault/data", typeof(SectorManager.CountryResource));
+        if (asset != null)
+            asset.name = "some government";
+    }
+
+    // -------- duplicate this code block to create your own custom item type --------
+    // for more info, see the comments in "vp_CustomType.cs"
+    [MenuItem("DOV/Create New Country Budget", false, 101)]
+    public static void CreateCountryBudget()
+    {
+      CountryBudget asset = (CountryBudget)CreateAsset("DoVAlpha/GovernmentsDefault/data", typeof(CountryBudget));
+        if (asset != null)
+            asset.name = "some government";
+    }
     
+
     // -------- duplicate this code block to create your own custom item type --------
     // for more info, see the comments in "vp_CustomType.cs"
     [MenuItem("DOV/Create New Country Law", false, 101)]
