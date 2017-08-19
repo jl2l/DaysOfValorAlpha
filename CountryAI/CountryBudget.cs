@@ -156,14 +156,11 @@ public class CountryBudget : ScriptableObject
         //TitleOfEnvironment
         this.CountryExpenses.Environment = Convert.ToInt64(defaultAllocationBudget);
         this.CountryExpenses.EnvironmentSpendingRate = defaultSpendingRate;
-        this.CountryExpenses.ForeignAid = Convert.ToInt64(defaultAllocationBudget);
-        this.CountryExpenses.ForeignAidSpendingRate = defaultSpendingRate;
+      
         //TitleOfHealth
         this.CountryExpenses.HealthCare = Convert.ToInt64(defaultAllocationBudget);
         this.CountryExpenses.HealthCareSpendingRate = defaultSpendingRate;
-        //TitleOfInternal
-        this.CountryExpenses.InfrastructureConstruction = Convert.ToInt64(defaultAllocationBudget);
-        this.CountryExpenses.InfrastructureConstructionSpendingRate = defaultSpendingRate;
+   
         //TitleOfCulture
         this.CountryExpenses.Proganganda = Convert.ToInt64(defaultAllocationBudget);
         this.CountryExpenses.PrograngandaSpendingRate = defaultSpendingRate;
@@ -171,8 +168,7 @@ public class CountryBudget : ScriptableObject
         this.CountryExpenses.Research = Convert.ToInt64(defaultAllocationBudget);
         this.CountryExpenses.ResearchSpendingRate = defaultSpendingRate;
         //TitleOfPopulation
-        this.CountryExpenses.Telecom = Convert.ToInt64(defaultAllocationBudget);
-        this.CountryExpenses.TelecomSpendingRate = defaultSpendingRate;
+
         this.CountryExpenses.Tourism = Convert.ToInt64(defaultAllocationBudget);
         this.CountryExpenses.TourismSpendingRate = defaultSpendingRate;
         //TitleOfJustice
@@ -185,8 +181,14 @@ public class CountryBudget : ScriptableObject
         //TitleOfState
         this.CountryFixedExpenses.Diplomacy = Convert.ToInt64(defaultAllocationBudget);
         this.CountryFixedExpenses.DiplomacySpendingRate = defaultSpendingRate;
+        this.CountryExpenses.ForeignAid = Convert.ToInt64(defaultAllocationBudget);
+        this.CountryExpenses.ForeignAidSpendingRate = defaultSpendingRate;
         //TitleOfEnergy
-      
+        //TitleOfInternal
+        this.CountryExpenses.Telecom = Convert.ToInt64(defaultAllocationBudget);
+        this.CountryExpenses.TelecomSpendingRate = defaultSpendingRate;
+        this.CountryExpenses.InfrastructureConstruction = Convert.ToInt64(defaultAllocationBudget);
+        this.CountryExpenses.InfrastructureConstructionSpendingRate = defaultSpendingRate;
         this.CountryFixedExpenses.InfrastructureMainance = Convert.ToInt64(defaultAllocationBudget);
         this.CountryFixedExpenses.InfrastructureMainanceSpendingRate = defaultSpendingRate;
         if(this.CountryFixedExpenses.Intel != 0)
@@ -200,15 +202,16 @@ public class CountryBudget : ScriptableObject
         //TitleOfStatePolice
         this.CountryFixedExpenses.SecurityMilitary = Convert.ToInt64(defaultAllocationBudget);
         this.CountryFixedExpenses.SecurityMilitarySpendingRate = defaultSpendingRate;
-        this.CountryFixedExpenses.SocialWelfare = Convert.ToInt64(defaultAllocationBudget);
-        this.CountryFixedExpenses.SocialWelfareSpendingRate = defaultSpendingRate;
+   
         this.CountryFixedExpenses.UnitProduction = Convert.ToInt64(defaultAllocationBudget);
         this.CountryFixedExpenses.UnitProductionSpendingRate = defaultSpendingRate;
 
         //TitleOfTrade
         this.CountryFixedExpenses.Trade = Convert.ToInt64(defaultAllocationBudget);
         this.CountryFixedExpenses.TradeSpendingRate = defaultSpendingRate;
-   
+        this.CountryFixedExpenses.SocialWelfare = Convert.ToInt64(defaultAllocationBudget);
+        this.CountryFixedExpenses.SocialWelfareSpendingRate = defaultSpendingRate;
+
     }
     public CountryFixedExpense CountryFixedExpenses;
     public float CountryREERRate;

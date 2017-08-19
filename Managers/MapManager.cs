@@ -758,13 +758,14 @@ public class MapManager : MonoBehaviour
 
             if (OldMonth != GameDisplayDate.Month)
             {
-                WorldManager.CountryPlayerManagerGameObject.GetComponent<CountryManager>().countryBudget.ProcessBudgetMonth();
+                //WorldManager.CountryPlayerManagerGameObject.GetComponent<CountryManager>().countryBudget.ProcessBudgetMonth();
             }
             if (OldYear != GameDisplayDate.Year)
             {
-                WorldManager.CountryPlayerManagerGameObject.GetComponent<CountryManager>().countryBudget.ProcessYearBudgetRenew();
+               // WorldManager.CountryPlayerManagerGameObject.GetComponent<CountryManager>().countryBudget.ProcessYearBudgetRenew();
             }
-            WorldManager.CountryPlayerManagerGameObject.GetComponent<CountryManager>().countryBudget.ProcessBudgetDay();
+            //WorldManager.CountryPlayerManagerGameObject.GetComponent<CountryManager>().countryBudget.ProcessBudgetDay();
+            //WorldManager.CountryPlayerManagerGameObject.GetComponent<SectorManager>().Process();
         }
 
         wmslObj.timeOfDay = timeOfDay;
@@ -988,7 +989,7 @@ public class MapManager : MonoBehaviour
         {
 
             wmslObj.showProvinces = true;
-
+         
 
 
 
@@ -1002,11 +1003,15 @@ public class MapManager : MonoBehaviour
     private void WmslObj_OnCountryHighlight(int countryIndex, int regionIndex, ref bool allowHighlight)
     {
         wmslObj.showProvinces = true;
+        wmslObj.showCities = false;
+        wmslObj.showCitiesOverCountry = true;
+        wmslObj.DrawCitiesOverCountry(countryIndex);
     }
 
     private void WmslObj_OnCountryExit(int countryIndex, int regionIndex)
     {
         wmslObj.showProvinces = false;
+        wmslObj.showCitiesOverCountry = false;
         //if(GameCountryInfoPanel != null)
         //GameCountryInfoPanel.GetComponent<FadeObjectInOut>().FadeOut();
         ResetMenus();
@@ -1325,7 +1330,7 @@ public class MapManager : MonoBehaviour
         wmslObj.fitWindowWidth = true;
         // Before switching view mode, initiates fade to smooth transition effect
         Invoke("StartFade", 0.4f);
-        if (wmslObj.countryLastClicked != null)
+        if (wmslObj.countryLastClicked != -1)
         {
             var localPostion = wmslObj.GetCountry(wmslObj.countryLastClicked);
             wmslObj.FlyToLocation(localPostion.center, 1f, ZoomChange);

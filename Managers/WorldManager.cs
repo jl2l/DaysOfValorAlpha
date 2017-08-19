@@ -83,6 +83,9 @@ public class WorldManager : MonoBehaviour
             newCountryManagerSetup.countryAIAgent = newCountryAgentConfig;
             newCountryManagerSetup.countryAmbassdor = newCountryAmbassdorAgent;
 
+            newCountryManagerSetup.countryBudget = gov.Budget;
+           var newCountrySectoryManager =  newCountry.AddComponent<SectorManager>();
+            newCountrySectoryManager.GamePlayerCoutryResourceList = gov.CountryResources;
 
             var countryPropertries = GameMapManager.wmslObj.GetCountry(gov.CountryOfGovernment.index);
             countryPropertries.attrib.Absorb(gov.CaptialName);
@@ -123,7 +126,7 @@ public class WorldManager : MonoBehaviour
                     newCountryAgentConfig.transform.SetParent(newCountry.transform);
                     newCountryAgent.transform.SetParent(newCountry.transform);
                     newCountryAmbassdor.transform.SetParent(newCountry.transform);
-
+                    newCountrySectoryManager.transform.SetParent(newCountry.transform);
                     newCountry.transform.SetParent(CountryPlayerManagerGameObject.transform);
                 }
             }
