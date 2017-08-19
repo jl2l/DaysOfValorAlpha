@@ -126,7 +126,9 @@ namespace Assets
             InventorInovator = 9,
             AbundantNaturalResources,
             HighlyDiversified,
-            NuclearPower
+            ScienceJuggernaught,
+            NuclearPower,
+            IndustrialJuggernaught 
 
         }
         [SerializeField]
@@ -142,6 +144,11 @@ namespace Assets
             HeavyNationalDebt,
             DemographicTensions,
             PoliticalTensions,
+            CountryResourceDependant,
+            Overconsumption,
+            AgingPopulation,
+            LowInformationVoters,
+            WaterVunerable,
 
         }
         [SerializeField]

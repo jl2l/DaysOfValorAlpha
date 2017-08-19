@@ -21,7 +21,8 @@ public class CountryManager : MonoBehaviour
     public List<Tuple<CountryToGlobalCountry.GenericProvince, float>> CountryProvinceControlList;
     public List<Tuple<CountryToGlobalCountry.GenericCountry, float>> CountryGovernmentAlliesIndex;
     public List<Tuple<CountryToGlobalCountry.GenericCountry, float>> CountryPopulationLikeIndex;
-
+    public long CountryCash;
+    //public long 
 
     //public CountryBudget countryBudget;
 

@@ -57,6 +57,7 @@ public class MapManager : MonoBehaviour
 
     }
 
+    public GameObject Sun;
     public WMSK wmslObj;
     public WorldMapGlobe wmGlobeObj;
     public Text DebugText;
@@ -488,7 +489,7 @@ public class MapManager : MonoBehaviour
         GamePlayerCountryManager = null;
         GameLastMapDisplayMode = GameMapDisplayMode;
         GameMapDisplayMode = MapDisplayMode.InGarage;
-
+        GameDeckInfoPanel.SetActive(true);
         GamePlayerCountryManager = WorldManager.CountryPlayerManagerGameObject.transform.GetChild(0).GetComponent<CountryManager>();
         StartCoroutine(ColorForEachCountry(GameMapDisplayMode));
         var decorsToFade = wmslObj.decorator.GetDecoratorGroup(0, false);
@@ -502,6 +503,7 @@ public class MapManager : MonoBehaviour
 
         GamePlayerCountryManager = WorldManager.CountryPlayerManagerGameObject.transform.GetChild(0).GetComponent<CountryManager>();
         StartCoroutine(ColorForEachCountry(GameMapDisplayMode));
+        GameDeckInfoPanel.SetActive(true);
         DebugText.text = "DECK MODE UPDATED..";
         yield return new WaitForEndOfFrame();
     }
@@ -663,6 +665,7 @@ public class MapManager : MonoBehaviour
     {
         GameMapDisplayMode = MapDisplayMode.FlatMap;
         GameMapSpeed = MapSpeed.HourSecond;
+
         helpers = new Helper();
         wmslObj = WMSK.instance;
         //wmGlobeObj = WorldMapGlobe.instance;
@@ -670,12 +673,17 @@ public class MapManager : MonoBehaviour
         fadePlane = worldCamer.transform.Find("FadePlane").gameObject;
         fadeMaterial = fadePlane.GetComponent<Renderer>().sharedMaterial;
         viewport = GameObject.Find("Viewport");
+        wmslObj.sun = Sun;
         GameManager = FindObjectOfType<GameManager>();
         WorldManager = GameManager.GameWorldManager;
         mapCameraController = FindObjectOfType<CameraController>();
         SetPlayerCountryManager();
         // Get a reference to the viewport gameobject (we'll enable/disable it when changing modes)
         SetCamera((int)MapDisplayMode.FlatMap);
+
+        //Set the game start time based on the settings ie you playing 2017 or 1986
+
+        GameDisplayDate = new DateTime(2017, 1, 1);
     }
     public void OnGUI()
     {
@@ -739,16 +747,33 @@ public class MapManager : MonoBehaviour
         timeOfDay += ChangeMapSpeed((int)GameMapSpeed);
         var currentHour = Math.Round(timeOfDay, 0);
         var OldLocalTime = LocalTimeOfProince = GameDisplayDate;
+        var OldMonth = GameDisplayDate.Month;
+        var OldYear = GameDisplayDate.Year;
+        var OldDays = GameDisplayDate.DayOfYear;
+
         if (currentHour >= 24)
         {
             timeOfDay = 0;
             GameDisplayDate = GameDisplayDate.AddDays(1);
+
+            if (OldMonth != GameDisplayDate.Month)
+            {
+                WorldManager.CountryPlayerManagerGameObject.GetComponent<CountryManager>().countryBudget.ProcessBudgetMonth();
+            }
+            if (OldYear != GameDisplayDate.Year)
+            {
+                WorldManager.CountryPlayerManagerGameObject.GetComponent<CountryManager>().countryBudget.ProcessYearBudgetRenew();
+            }
+            WorldManager.CountryPlayerManagerGameObject.GetComponent<CountryManager>().countryBudget.ProcessBudgetDay();
         }
+
+        wmslObj.timeOfDay = timeOfDay;
         //else { GameDisplayDate = GameDisplayDate.AddHours(1); }
 
         if (CurrentPlayerGameTimeText)
         {
             CurrentPlayerGameTimeText.text = string.Format("{0}, ZULU {1}:00", GameDisplayDate.ToLongDateString(), currentHour);
+            GamePlayerCountryText.text = string.Format("{0} Government, {1} has been in power for {2} days.", GamePlayerCountryManager.CountryGovernment.NameOfGovernment, GamePlayerCountryManager.CountryGovernment.ContactOfHeadOfState.ContactName, OldDays);
         }
         //regionInfo.ti
         var dTIme = LocalTimeOfProince.AddHours(currentHour + HoverOverOffSetTime);
@@ -928,7 +953,7 @@ public class MapManager : MonoBehaviour
                 var selectedCity = wmslObj.cities[cityIndex];
                 Debug.Log("Clicked city " + wmslObj.cities[cityIndex].name);
                 SelectCityOnClick(selectedCity);
-                
+
             }
         };
 
@@ -1053,10 +1078,12 @@ public class MapManager : MonoBehaviour
 
     }
 
-    public void SelectCityOnClick(WorldMapStrategyKit.City selectedCity) {
+    public void SelectCityOnClick(WorldMapStrategyKit.City selectedCity)
+    {
         var s = selectedCity.attrib["data"].str;
-       
-        if (s == null) {
+
+        if (s == null)
+        {
             var data = JsonUtility.FromJson<CityData>(s);
             data = WorldManager.WorldCityData.FirstOrDefault(e => e.index == selectedCity.uniqueId || e.name == selectedCity.name);
             var cityPanelInfo = FindObjectOfType<CityInfoPanel>();
@@ -1073,18 +1100,18 @@ public class MapManager : MonoBehaviour
             cityPanelInfo.CityIncomeText.text = string.Format("{0:n0}M PER Day", data.population);
             cityPanelInfo.CityControllingFlag.texture = data.CityOwnerFlag;
         }
-       
+
         //var f = data.
         //WorldManager.CityStatus(SelectedCountryManager.CountryGovernment,)
     }
     public void SelectCity(int cityIndex, GenericCity SelectedCity)
     {
         var cityName = wmslObj.GetCityHierarchyName(cityIndex);
-        
+
         var cityInfoPanel = GameCityInfoPanel.GetComponent<CityInfoPanel>();
 
         var cityInfo = wmslObj.cities[cityIndex];
-        
+
         SelectedCity.index = cityInfo.uniqueId;
         SelectedCity.location = cityInfo.unity2DLocation;
         cityInfoPanel.CityNameText.text = SelectedCity.name = cityInfo.name;
@@ -1121,7 +1148,7 @@ public class MapManager : MonoBehaviour
 
     }
 
-   
+
     public void SelectOnCountry()
     {
         //AND HAS EMBASY OPEN TODO
@@ -1132,7 +1159,7 @@ public class MapManager : MonoBehaviour
             if (SelectedCountryManager != null)
             {
                 DebugText.text = string.Format("SELET {0}, {1}", SelectedCountryManager.name, SelectedCountryManager.CountryGovernment.MapLookUpName);
-              
+
                 wmslObj.FlyToCountry(SelectedCountryManager.CountryGovernment.MapLookUpName, 1f, ZoomChange);
             }
             else
