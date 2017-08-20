@@ -70,7 +70,7 @@ public class MilitaryBaseFactory
     public enum BaseSpecialize
     {
         [Description("Indirect Artilley Support")]
-        Artillery, //all artillery weapons will be better mortars defense and artillery in offensive
+        MortarArtillery, //all artillery weapons will be better mortars defense and artillery in offensive
         [Description("Indirect Missile Support")]
         Missilery, // all missiles defense and offesne will be better, reduce time for missile strikes
         [Description("Intelligence Gathering Site")]
@@ -91,6 +91,12 @@ public class MilitaryBaseFactory
         FuelStorage, //increase the sortie rate
         [Description("Airbase Air Traffic Controller")]
         ChemicalWeaponsStorage, //increase the sortie rate
+        [Description("Airbase Air Traffic Controller")]
+        NucearWeaponsStorage, //increase the sortie rate
+        [Description("Airbase Air Traffic Controller")]
+        MissileSiloSite, //increase the sortie rate
+        [Description("Airbase Air Traffic Controller")]
+        FirebaseMLRS, //increase the sortie rate
         [Description("Airbase Air Traffic Controller")]
         HighGainSat, //increase the sortie rate
         [Description("Airbase Air Traffic Controller")]
@@ -113,7 +119,12 @@ public class MilitaryBaseFactory
         Helipad, //increase the sortie rate
         [Description("Shipping containers")]
         LogisticalStorage, //increase the sortie rate
-
+        [Description("Shipping containers")]
+        KillHouseTraining, //increase the sortie rate
+        [Description("Shipping containers")]
+        BaseDefenseHescoWalls, //increase the sortie rate
+        [Description("Shipping containers")]
+        BaseDefenseConcreteWalls, //increase the sortie rate
 
     }
     public WeaponsConfigFactory weaponConfigFactory = new WeaponsConfigFactory();

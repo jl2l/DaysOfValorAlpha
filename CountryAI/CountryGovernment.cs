@@ -237,6 +237,9 @@ public class CountryGovernment : ScriptableObject
     [Tooltip("If you want to use the historic bias to build up the country allies and rivals")]
     public CountryBias GovernmnetBias;
     public Texture2D CountryFlag;
+    public Texture2D CountryMediumFlag;
+    public Texture2D CountryLargeFlag;
+    public Texture2D CountryMarker;
     public List<CountryFlawSkill> CountryFlaws;
     public List<CountryPerkSkill> CountrPerks;
     public CountrySpokeLanguage CountrySpokenLanguage;
