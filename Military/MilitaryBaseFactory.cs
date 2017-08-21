@@ -29,7 +29,7 @@ public class MilitaryBaseFactory
         [Description("Major Installation")]
         SupportBase, //supplies transfer from here to another base, and resupply reload here
         [Description("Major Installation")]
-        ColocationBase, //joint base with allied country, if you lose alliance etc this goes away
+        CooperativeSecurityLocationBase, //joint base with allied country, if you lose alliance etc this goes away
         [Description("Major Installation")]
         ForwardOperatingBase, //this is a base in an allied country that can be used to launch attacks you must move decks to forward bases
         [Description("Major Installation")]
@@ -38,6 +38,8 @@ public class MilitaryBaseFactory
         CovertSupportBase, //this is a covert facility that can be used to launch intel and covert operations, it can be anywhere, but can be detect by hostile countries intelligence services
         [Description("Major Installation")]
         ElectronicSupportBase,//this is a covert facility designed to capture signals intelligences it can be anywhere but can also be discovered and disabled.
+        [Description("Fire Support Bases have more slots for indirect fire weapons and less for barracks or logistics.")]
+        FireSupportBase
     }
 
     public enum BaseIconType
@@ -66,6 +68,20 @@ public class MilitaryBaseFactory
         RebelLog,
         RebelSig,
         RebelCovert,
+    }
+    public enum BaseDefenses
+    {
+        BarbWire,
+        RazorWire,
+        HescoSingle,
+        HescoDouble,
+        ConcreteHalf,
+        ConcreteWall,
+        ImprovisedBarricades,
+        ChainLinkFence,
+        AntiTankMines,
+        AntiPersonelMines,
+        TankObstacle
     }
     public enum BaseSpecialize
     {
@@ -124,7 +140,9 @@ public class MilitaryBaseFactory
         [Description("Shipping containers")]
         BaseDefenseHescoWalls, //increase the sortie rate
         [Description("Shipping containers")]
-        BaseDefenseConcreteWalls, //increase the sortie rate
+        BaseMGBunker
+        [Description("Shipping containers")]
+        BaseIndirectFireBunker
 
     }
     public WeaponsConfigFactory weaponConfigFactory = new WeaponsConfigFactory();
