@@ -23,6 +23,7 @@ public class DoV_Vehicle : ScriptableObject
     public Texture2D ClassIcon;
     public Texture2D MapIcon;
     public GameObject Model;
+    public GameObject LowPolyModel;
     public Texture2D MenuIcon;
 
 #if UNITY_EDITOR
@@ -46,6 +47,25 @@ public class DoV_Vehicle : ScriptableObject
     [SerializeField]
     public List<DoV_Vehicle> GroundVehicles; // if it carries tanks like a LHA
     public List<DoV_Vehicle> Aircraft; // if its a carrier or helo
+
+
+#if UNITY_EDITOR
+    [Separator] public Separator s4;
+#endif
+    public BaseAirType BaseAirType;
+    public AircraftTypeStr AircraftType;
+#if UNITY_EDITOR
+    [Separator] public Separator s2;
+#endif
+    /// <summary>
+    /// Does the unit have a turret
+    /// </summary>
+    [Tooltip("Tanks/IFV have turrets")]
+    public bool HasTurret;
+    public bool IsLandVehicle = true;
+    public BaseGroundType BaseGroundType;
+    public GroundVehicleType GroundVehicleType;
+
 
 #if UNITY_EDITOR
     [Separator] public Separator sd;
@@ -180,15 +200,8 @@ public class DoV_Vehicle : ScriptableObject
     [Tooltip("Has a fire control system increases the bonus to targeting time")]
     public bool HasFCS;
 
-    /// <summary>
-    /// Does the unit have a turret
-    /// </summary>
-    [Tooltip("Tanks/IFV have turrets")]
-    public bool HasTurret;
-    public bool IsLandVehicle = true;
-    public GroundVehicleType GroundVehicleType;
 #if UNITY_EDITOR
-    [Separator] public Separator s2;
+    [Separator] public Separator s27;
 #endif
     public bool IsInfantry;
     public bool IsCapturing;
@@ -208,9 +221,14 @@ public class DoV_Vehicle : ScriptableObject
     public float MaxResupply;
     public logisticType LogisticVehicleType;
 
+
+
+
+
 #if UNITY_EDITOR
-    [Separator] public Separator s4;
-#endif 
+    [Separator] public Separator s5;
+#endif
+    public BaseSeaType BaseSeaType;
     public SeaObjectType SeacraftType;
 
 

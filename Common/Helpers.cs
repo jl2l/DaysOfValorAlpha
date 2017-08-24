@@ -15,6 +15,18 @@ using Newtonsoft.Json.Linq;
 
 public static class Helpers
 {
+
+    public static float WeightedAverage<T>(this IEnumerable<T> records, Func<T, float> value, Func<T, float> weight)
+    {
+        float weightedValueSum = records.Sum(x => value(x) * weight(x));
+        float weightSum = records.Sum(x => weight(x));
+
+        if (weightSum != 0)
+            return weightedValueSum / weightSum;
+        else
+            throw new DivideByZeroException("Your message here");
+    }
+
     public static string ToDescription(this Enum value)
     {
         DescriptionAttribute[] da = (DescriptionAttribute[])(value.GetType().GetField(value.ToString())).GetCustomAttributes(typeof(DescriptionAttribute), false);

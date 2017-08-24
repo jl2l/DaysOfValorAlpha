@@ -16,6 +16,7 @@ public class CountryGovernment : ScriptableObject
     public List<DiplomaticEvent> GovernmentHistoryWithPlayer;
 
     public List<CountryToGlobalCountry.GenericProvince> ControlsProvincesNames;
+    public List<CountryToGlobalCountry.GenericCity> ControlsCitiesNames;
 
     public List<CountryToGlobalCountry.GenericCountry> ControlCountriesNames;
     public List<CountryToGlobalCountry.GenericCountryInfrastructure> ControlCountryCriticalInfrastructure;
@@ -254,6 +255,8 @@ public class CountryGovernment : ScriptableObject
     private void GetFromMap()
     {
         var localMap = WMSK.instance;
+        var localWorldManager = FindObjectOfType<WorldManager>();
+
         var countryIndex = localMap.GetCountryIndex(MapLookUpName);
 
         var localCountry = localMap.GetCountry(countryIndex);
@@ -272,7 +275,8 @@ public class CountryGovernment : ScriptableObject
         CaptialProvince.countryIndex = countryIndex;
         CountryOfGovernment.captialLocation = captialCity.unity2DLocation;
 
-        if (CountryFlag != null) {
+        if (CountryFlag != null)
+        {
             CaptialProvince.flagowner = CountryFlag;
             CountryOfGovernment.flagowner = CountryFlag;
         }
@@ -287,7 +291,46 @@ public class CountryGovernment : ScriptableObject
             newProvince.location.y = selectedProvince.center.y;
             ControlsProvincesNames.Add(newProvince);
         }
+
+        ControlsCitiesNames.Clear();
+        var localCities= localMap.cities.Where(e => e.countryIndex == countryIndex).ToList();
+        var cityM = new CountryToGlobalCountry();
+
+        for (int i = 0; i < localCities.Count; i++)
+        {
+            var city = localCities[i];
+            var cityData = localWorldManager.WorldCityData.FirstOrDefault(e => e.name == city.name);
+            var cityProvince = ControlsProvincesNames.FirstOrDefault(e => e.name == city.province);
+
+            if (cityData != null)
+            {
+              
+             
+                ControlsCitiesNames.Add(cityM.GenericCityFromData(cityData));
+            }
+            else
+            {
+                try
+                {
+                   
+                    var copyOfGover = this;
+                    var newGenericCity = cityM.RandomGenericCity(city, copyOfGover, cityProvince);
+                    newGenericCity.population = city.population;
+                    newGenericCity.name = city.name;
+
+                    ControlsCitiesNames.Add(newGenericCity);
+                }
+                catch (Exception di)
+                {
+                    var f = di;
+                }
+
+            }
+        }
+
     }
+
+
     public string CaptialName;
     public int FoundingYear;
     public DateTime CountryFounding;

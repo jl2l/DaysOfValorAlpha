@@ -149,11 +149,11 @@ namespace Assets
         submarine = 8
     }
 
-
+   
     /// <summary>
     /// For the Battle AI this will determine the track type and how it behaves Air will track for other Air AirGround can see both Air and Ground etc
     /// </summary>
-    
+
     public enum SensorSpectrum
     {
         Visible,
@@ -477,7 +477,19 @@ namespace Assets
         electronicwarfare,
     }
 
+
     [Serializable]
+    public enum BaseAirType
+    {
+        None,
+        Transport,
+        Fighter,
+        Bomber,
+        Rotary,
+        VTOL,
+        Drone
+    }
+        [Serializable]
     public enum AircraftTypeStr
     {
         none,
@@ -621,6 +633,20 @@ namespace Assets
     }
 
     [Serializable]
+
+    public enum BaseGroundType
+    {
+        None,
+        Log,
+        X4,
+        APC,
+        TANK,
+        Artillery,
+        Misc
+
+    }
+
+    [Serializable]
     
     public enum GroundVehicleType
     {
@@ -631,6 +657,7 @@ namespace Assets
         amphtank,
         vehicle,
         armorcar,
+        mrap,
         ifv,
         apc,
         spagun,
@@ -1086,6 +1113,20 @@ namespace Assets
         RailGun64Mj12Mw,
         RailGun128Mj24Mw,
         //particule beam
+    }
+
+    [Serializable]
+    public enum BaseSeaType
+    {
+        None,
+        Carrier,
+        DDG,
+        FFG,
+        Corvette,
+        Patrol,
+        Mine,
+        Amph,
+        Sub
     }
 
     [Serializable]

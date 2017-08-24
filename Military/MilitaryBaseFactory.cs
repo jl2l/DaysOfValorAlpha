@@ -140,7 +140,7 @@ public class MilitaryBaseFactory
         [Description("Shipping containers")]
         BaseDefenseHescoWalls, //increase the sortie rate
         [Description("Shipping containers")]
-        BaseMGBunker
+        BaseMGBunker,
         [Description("Shipping containers")]
         BaseIndirectFireBunker
 

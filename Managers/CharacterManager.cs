@@ -16,7 +16,7 @@ public class CharacterManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        PlayerContactGenerator = new ContactGenerator();
     }
 
     // Update is called once per frame
@@ -26,9 +26,9 @@ public class CharacterManager : MonoBehaviour
     }
 
     public void GetCharactersByProvince() { }
-    public void CreateCharacter(ContactGenerator.ContactType contactType)
+    public Contact CreateCharacter(ContactGenerator.ContactType contactType, string countryName, string provinceHomeland)
     {
-
+        return PlayerContactGenerator.GenerateContact(countryName, provinceHomeland);
     }
     public void CreateHostileActor() { }
 

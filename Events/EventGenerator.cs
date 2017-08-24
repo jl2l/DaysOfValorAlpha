@@ -13,11 +13,15 @@ public class EventGenerator : MonoBehaviour
         IntelEvent,
         NewsEvent,
         TerroristEvent,
-        CulturalEvent
+        CulturalEvent,
+        UprisingEvent,
+        SocialRipple
     }
     private Dictionary<string, UnityEvent> eventDictionary;
 
     private static EventGenerator eventManager;
+
+   
 
     public static EventGenerator instance
     {

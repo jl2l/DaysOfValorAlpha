@@ -149,6 +149,7 @@ namespace Assets
             AgingPopulation,
             LowInformationVoters,
             WaterVunerable,
+            HighCrime
 
         }
         [SerializeField]

@@ -82,7 +82,7 @@ public class MilitaryBase : ScriptableObject
     public MilitaryBaseFactory.BaseType GameBasetype;
     public List<MilitaryBaseFactory.BaseSpecialize> GameBaseSkills;
     public List<WeaponStationType> GameBaseWeapons;
-    public List<BaseDefenses> GameBaseDefenses;
+    public List<MilitaryBaseFactory.BaseDefenses> GameBaseDefenses;
     public List<DeckDataItem> GameBaseDeck;
  
 }
