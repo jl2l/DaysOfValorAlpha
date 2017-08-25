@@ -14,6 +14,20 @@ public class CityInfoPanel : MonoBehaviour {
     public Text CityIncomeText;
     public RawImage CityControllingFlag;
 
+    public GameObject CityStatusInfoPanel;
+    public GameObject CityStatsInfoPanel;
+    public GameObject CityEconomicInfoPanel;
+    public Text CityNoIntel;
+    public Text CityNoStatInfo;
+    public Text CityNoEconomicInfo;
+
+    public Slider CityCrimeIndex;
+    public Slider CityTerrorIndex;
+    public Slider CityEconomicIndex;
+    public Slider CityPropertyConstruction;
+    public Slider CityResearchIndex;
+    public Slider CityTradeIndex;
+
     public int TerrorIndex;
     public int CrimeIndex;
     public int EconomicIndex;

@@ -1087,10 +1087,19 @@ public class MapManager : MonoBehaviour
     {
         var s = selectedCity.attrib["data"].str;
 
+
+        //first does this city our city then show the player city data which is live
+        //if its not the players then it might be another world governments WorldCountryManagement find it in here
+        //if its not in there then get the historic data from either the  WorldManager.WorldCityData or auto generate it and add it to the list of world cities that 
+        //you can click on a city and spawn the data for it into the memory
+
+
+      
+
         if (s == null)
         {
             var data = JsonUtility.FromJson<CityData>(s);
-            data = WorldManager.WorldCityData.FirstOrDefault(e => e.index == selectedCity.uniqueId || e.name == selectedCity.name);
+            data = WorldManager.WorldCityData.FirstOrDefault(e => e.index == selectedCity.uniqueId  && e.name == selectedCity.name);
             var cityPanelInfo = FindObjectOfType<CityInfoPanel>();
             cityPanelInfo.CrimeIndex = data.CityCrimeIndex;
             cityPanelInfo.EconomicIndex = data.CityEconomicIndex;
@@ -1116,6 +1125,19 @@ public class MapManager : MonoBehaviour
         var cityInfoPanel = GameCityInfoPanel.GetComponent<CityInfoPanel>();
 
         var cityInfo = wmslObj.cities[cityIndex];
+
+        var countrygovernment = WorldManager.WorldCountryManagement.FirstOrDefault(country => country.CountryGovernment.CountryOfGovernment.index == cityInfo.countryIndex);
+        if(countrygovernment != null)
+        {
+            var countryCities = countrygovernment.CountryCityControlList.FirstOrDefault(city => city.Item1.index == cityInfo.uniqueId);
+
+
+            if (countryCities != null)
+            {
+
+            }
+        }
+        
 
         SelectedCity.index = cityInfo.uniqueId;
         SelectedCity.location = cityInfo.unity2DLocation;

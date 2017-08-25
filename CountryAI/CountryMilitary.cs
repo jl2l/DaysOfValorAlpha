@@ -34,6 +34,7 @@ public class CountryMilitary : ScriptableObject
     public List<NavalGroup> CountryMilitaryNavy;
 
     public List<MilitaryInventory> CountryMilitaryInventory;
+    public List<StrategicWeapon> CountryStrategicForces;
 
     List<MilitaryAction> MilitaryActionList;
     public Texture2D MilitaryCountryBattleFlag;

@@ -78,7 +78,17 @@ public class EditorHelper
         if (asset != null)
             asset.ArmyName = "some army";
     }
+    // -------- duplicate this code block to create your own custom item type --------
+    // for more info, see the comments in "vp_CustomType.cs"
+    [MenuItem("DOV/Create StrategicWeapon", false, 101)]
+    public static void CreateStrategicWeapon()
+    {
+        StrategicWeapon asset = (StrategicWeapon)CreateAsset("DoVAlpha/GovernmentsDefault/data", typeof(StrategicWeapon));
+        if (asset != null)
+            asset.WeaponName = "some WMD";
+    }
 
+    
     // -------- duplicate this code block to create your own custom item type --------
     // for more info, see the comments in "vp_CustomType.cs"
     [MenuItem("DOV/Create New Terrost Group", false, 101)]
@@ -88,7 +98,15 @@ public class EditorHelper
         if (asset != null)
             asset.GroupName = "some terror group";
     }
-    
+    // -------- duplicate this code block to create your own custom item type --------
+    // for more info, see the comments in "vp_CustomType.cs"
+    [MenuItem("DOV/Create New Rebel Group", false, 101)]
+    public static void CreateRebelGroup()
+    {
+        RebelGroup asset = (RebelGroup)CreateAsset("DoVAlpha/GovernmentsDefault/data", typeof(RebelGroup));
+        if (asset != null)
+            asset.GroupName = "some rebel group";
+    }
     // -------- duplicate this code block to create your own custom item type --------
     // for more info, see the comments in "vp_CustomType.cs"
     [MenuItem("DOV/Create New Military Base", false, 101)]

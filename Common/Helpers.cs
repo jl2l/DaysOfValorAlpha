@@ -12,6 +12,7 @@ using static Assets.JsonCountryCIAModel;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
+using Accord.Statistics.Distributions.Univariate;
 
 public static class Helpers
 {
@@ -230,6 +231,9 @@ public class Helper
        
     };
     }
+
+
+    public BinomialDistribution DemographicDistribution;
 }
 
 

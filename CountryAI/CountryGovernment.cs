@@ -195,7 +195,10 @@ public class CountryGovernment : ScriptableObject
     public long RawPopulation;
     private void UpdatePopulations()
     {
-
+        var helper = new Helper();
+        helper.DemographicDistribution = new Accord.Statistics.Distributions.Univariate.BinomialDistribution();
+        //take the distrubtion of this into the political parties so you get a dis of white republicans black democrats and asian indendants etc
+        //helper.DemographicDistribution.Generate()
         DemographicGroups.ForEach(e =>
         {
             double newPopulation = (e.Population / 100) * RawPopulation;
@@ -234,6 +237,12 @@ public class CountryGovernment : ScriptableObject
     [Tooltip(" The baseline len of the government at the start of the game, Closer to 0 left wing 1 rightwing")]
     [Range(-1.0f, 1.0f)]
     public float GovernmentIdeologyIndex;
+    [Tooltip(" is a state governed as a single power in which the central government is ultimately supreme or a federation of states (ie the US or Russia, Canada, Brazil, India, Argentina etc)")]
+    public bool IsUnitaryState;
+    [Range(0f, 10.00f)]
+    public float FeedomIndex;
+    public CountryFreedomIndex CountryFreedomIndex;
+
     public CountryGovernmentTypes GovernmentType;
     [Tooltip("If you want to use the historic bias to build up the country allies and rivals")]
     public CountryBias GovernmnetBias;

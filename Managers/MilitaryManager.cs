@@ -12,7 +12,7 @@ public class MilitaryManager : MonoBehaviour
 {
     public List<Tuple<CountryGovernment, List<DeckDataItem>, Vector2>> GameActiveMilitaryList;
     public List<Tuple<string, List<DeckDataItem>, Vector4>> PlayersMilitaryDeployments;
-    public List<StrategicForce> PlayerStrategicForces;
+    public List<StrategicWeapon> PlayerStrategicForces;
     public List<MilitaryBase> PlayerMilitaryBases;
     public CountryMilitary PlayerMilitary;
     public MilitaryBaseFactory PlayerMilitaryBase;
