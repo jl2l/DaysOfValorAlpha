@@ -245,9 +245,23 @@ public class CountryGovernment : ScriptableObject
     public List<CountryPerkSkill> CountrPerks;
     public CountrySpokeLanguage CountrySpokenLanguage;
     public BudgetSize CountrBugetScale;
+    [ContextMenuItem("Get History and Bias", "GetRivals")]
+
     public List<string> Allies;
+
     public List<string> Rivals;
+    private void GetRivals()
+    {
+       var HistoricalBias= CountryRelationsFactory.StubCountryBiasList().FirstOrDefault(e => e.Item2 == MapLookUpName);
+     
+        GovernmentType = HistoricalBias.Item5;
+        GovernmnetBias = HistoricalBias.Item1;
+        Allies = HistoricalBias.Item3.ToList();
+        Rivals = HistoricalBias.Item4.ToList();
+    }
     public CountryToGlobalCountry.GenericProvince CaptialProvince;
+   
+
 
     [ContextMenuItem("Fil From World Map", "GetFromMap")]
     public CountryToGlobalCountry.GenericCountry CountryOfGovernment;
@@ -289,11 +303,14 @@ public class CountryGovernment : ScriptableObject
             newProvince.countryIndex = countryIndex;
             newProvince.location.x = selectedProvince.center.x;
             newProvince.location.y = selectedProvince.center.y;
+            newProvince.flagowner = CountryFlag;
+            newProvince.ProvinceRebelControl = 0;
+
             ControlsProvincesNames.Add(newProvince);
         }
 
         ControlsCitiesNames.Clear();
-        var localCities= localMap.cities.Where(e => e.countryIndex == countryIndex).ToList();
+        var localCities = localMap.cities.Where(e => e.countryIndex == countryIndex).ToList();
         var cityM = new CountryToGlobalCountry();
 
         for (int i = 0; i < localCities.Count; i++)
@@ -304,21 +321,24 @@ public class CountryGovernment : ScriptableObject
 
             if (cityData != null)
             {
-              
-             
-                ControlsCitiesNames.Add(cityM.GenericCityFromData(cityData));
+
+                var newCity = cityM.GenericCityFromData(cityData);
+                cityProvince.ProvinceCities.Add(newCity);
+                ControlsCitiesNames.Add(newCity);
+
             }
             else
             {
                 try
                 {
-                   
+
                     var copyOfGover = this;
                     var newGenericCity = cityM.RandomGenericCity(city, copyOfGover, cityProvince);
                     newGenericCity.population = city.population;
                     newGenericCity.name = city.name;
-
+                    cityProvince.ProvinceCities.Add(newGenericCity);
                     ControlsCitiesNames.Add(newGenericCity);
+
                 }
                 catch (Exception di)
                 {
@@ -326,6 +346,7 @@ public class CountryGovernment : ScriptableObject
                 }
 
             }
+
         }
 
     }
@@ -340,7 +361,18 @@ public class CountryGovernment : ScriptableObject
 
     public List<CountryLaw> Laws;
     public List<PoliticalParties> PoliticalParties;
+    [ContextMenuItem("Caluate From PopulationGroups", "BuildPopulationGroups")]
     public List<DemographicGroups> DemographicGroups;
+
+    private void BuildPopulationGroups()
+    {
+        var countrPopulation = RawPopulation;
+        DemographicGroups.ForEach(group =>
+        {
+            var populationPercenatge = (long)((group.Population / 100) * countrPopulation);
+            group.Numbers = populationPercenatge;
+        });
+    }
     public List<ResearchItem> CountryKnownResearch;
     public List<CountrySectors> CountryMarkets;
     public List<SectorManager.Sectors> CountryMarketSectors;

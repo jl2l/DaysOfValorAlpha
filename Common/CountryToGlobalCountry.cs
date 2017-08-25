@@ -166,7 +166,7 @@ public class CountryToGlobalCountry
         var sec = GenerateRandomSectors(cityInGovernment);
         var type = GetCityType(city);
         var iscap = (cityInGovernment.CaptialName == city.name);
-
+        var isregioncap = (city.cityClass == CITY_CLASS.REGION_CAPITAL);
 
         return new GenericCity()
         {
@@ -181,6 +181,7 @@ public class CountryToGlobalCountry
             CityTerrorLevel = totalCityTerrorLevel,
             CityTradeValue = totalCityTradeValue,
             isCapital = iscap,
+            isRegionalCaptial = isregioncap,
             location = city.unity2DLocation,
             name = city.name,
             CityType = type,
@@ -255,6 +256,7 @@ public class CountryToGlobalCountry
         public CityType CityType;
         public List<Tuple<SectorManager.Sectors, long>> ProductionSectors;
         public List<countryInfrastructure> cityInfrastructure;
+        public bool isRegionalCaptial;
     }
 
     [Serializable]
@@ -386,6 +388,11 @@ public class CountryToGlobalCountry
         public List<RebelGroup> LocalRebelGroups;
         public List<TerroristGroup> LocalTerroristGroups;
         public List<GenericCity> ProvinceCities;
+        [Range(0.0f, 100.0f)]
+        public List<float> ProvincePoliticalParties;
+        [Range(0.0f, 100.0f)]
+        public List<float> ProvinceDeomgraphicGroups;
+
         public bool IsUprising;
         public bool UprisingStarted;
         public bool UprsiningEnded;

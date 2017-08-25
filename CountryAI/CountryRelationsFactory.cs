@@ -40,6 +40,9 @@ namespace Assets
             NotPermitted,
             InPower,
             Outlawed,
+            ForcedLabor,
+            InterimCamp,
+            DeathCamp
         }
 
         public string[] G20ListStrings =
@@ -515,9 +518,9 @@ namespace Assets
         public CountryGovernment BuildNewNonPlayerGovernment(string CountryName, bool OverWrite)
         {
             ContactGenerator cgm = new ContactGenerator();
-            GlobalWarGameDbContext gwDb = new GlobalWarGameDbContext();
+      
 
-            var bias = gwDb.GetCountryBiasDetailsByName(CountryName);
+            var bias = CountryHistoricBias(CountryName);
             var countryMapData = map.GetCountry(CountryName);
             var genericCountry = new GenericCountry();
             genericCountry.index = countryMapData.mainRegionIndex;
@@ -567,7 +570,11 @@ namespace Assets
             };
         }
 
-
+        /// <summary>
+        /// ///  1 is bias, 2 is MapLookUpName 3 is Allies 4 Rivials 5 is Government type
+        /// </summary>
+        /// <param name="countryName"></param>
+        /// <returns></returns>
         public Tuple<CountryRelationsFactory.CountryBias, string, string[], string[], CountryRelationsFactory.CountryGovernmentTypes> CountryHistoricBias(string countryName)
         {
 
@@ -576,6 +583,11 @@ namespace Assets
 
 
         //this is to seed the intially relations matrix countries will have there bias and then there current allies, rivials, and governments defaults
+
+            /// <summary>
+            ///  1 is bias, 2 is MapLookUpName 3 is Allies 4 Rivials 5 is Government type
+            /// </summary>
+            /// <returns></returns>
         public static List<Tuple<CountryRelationsFactory.CountryBias, string, string[], string[], CountryRelationsFactory.CountryGovernmentTypes>> StubCountryBiasList()
         {
             var rnd = new UnityEngine.Random();
@@ -584,8 +596,8 @@ namespace Assets
             internalRegionFirst = new List<Tuple<CountryRelationsFactory.CountryBias, string, string[], string[], CountryRelationsFactory.CountryGovernmentTypes>>
             {
                 new Tuple<CountryBias, string,  string[], string[],CountryGovernmentTypes>(CountryRelationsFactory.CountryBias.islamInstable, "Afghanistan",new string[] {"China", "United States of America",  "Russia"},new string[] {"United States of America", "China", "India" }, CountryRelationsFactory.CountryGovernmentTypes.IslamicRepublic),
-                new Tuple<CountryRelationsFactory.CountryBias, string, string[],string[],CountryRelationsFactory.CountryGovernmentTypes>(CountryRelationsFactory.CountryBias.formersoviet, "Albania",new string[] {"China", "United States of America",  "Russia"},new string[] {"China", "United States of America",  "Russia"}, CountryRelationsFactory.CountryGovernmentTypes.IslamicRepublic),
-                new Tuple<CountryRelationsFactory.CountryBias, string, string[],string[],CountryRelationsFactory.CountryGovernmentTypes>(CountryRelationsFactory.CountryBias.islamStable, "Algeria",new string[] {"China", "United States of America",  "Russia"},new string[] {"China", "United States of America",  "Russia"}, CountryRelationsFactory.CountryGovernmentTypes.IslamicRepublic),
+                new Tuple<CountryRelationsFactory.CountryBias, string, string[],string[],CountryRelationsFactory.CountryGovernmentTypes>(CountryRelationsFactory.CountryBias.formersoviet, "Albania",new string[] {"China", "United States of America",  "Russia"},new string[] {"China", "United States of America",  "Russia"}, CountryRelationsFactory.CountryGovernmentTypes.ParliamentaryDemocracy),
+                new Tuple<CountryRelationsFactory.CountryBias, string, string[],string[],CountryRelationsFactory.CountryGovernmentTypes>(CountryRelationsFactory.CountryBias.formereuro, "Algeria",new string[] {"China", "United States of America",  "Russia"},new string[] {"China", "United States of America",  "Russia"}, CountryRelationsFactory.CountryGovernmentTypes.IslamicRepublic),
                 new Tuple<CountryRelationsFactory.CountryBias, string, string[],string[],CountryRelationsFactory.CountryGovernmentTypes>(CountryRelationsFactory.CountryBias.africaninstable, "Angola",new string[] {"China", "United States of America",  "Russia"},new string[] {"China", "United States of America",  "Russia"}, CountryRelationsFactory.CountryGovernmentTypes.IslamicRepublic),
                 new Tuple<CountryRelationsFactory.CountryBias, string, string[],string[],CountryRelationsFactory.CountryGovernmentTypes>(CountryRelationsFactory.CountryBias.formereuro, "Antigua and Barbuda",new string[] {"China", "United States of America",  "Russia"},new string[] {"China", "United States of America",  "Russia"}, CountryRelationsFactory.CountryGovernmentTypes.IslamicRepublic),
                 new Tuple<CountryRelationsFactory.CountryBias, string, string[],string[],CountryRelationsFactory.CountryGovernmentTypes>(CountryRelationsFactory.CountryBias.southamericandemocracy, "Argentina",new string[] {"China", "United States of America",  "Russia"},new string[] {"Brazil", "United States of America", "China" }, CountryRelationsFactory.CountryGovernmentTypes.ConstitutionalDemocracy),
