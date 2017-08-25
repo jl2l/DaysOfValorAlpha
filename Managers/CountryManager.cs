@@ -68,23 +68,42 @@ public class CountryManager : MonoBehaviour
         return newGroup;
     }
 
+
+    public RebelCommanderAgent CreateNewRebelLeader(CountryToGlobalCountry.GenericProvince provinceHomeland)
+    {
+        var baseContact = countryCharacterGenerator.CreateCharacter(ContactGenerator.ContactType.terroristleader, CountryGovernment.MapLookUpName, provinceHomeland.name);
+
+        var newLeader = new RebelCommanderAgent()
+        {
+
+        };
+        return newLeader;
+    }
+    public RebelGroup CreateRebelGroup(CountryToGlobalCountry.GenericProvince provinceHomeland)
+    {
+
+        var newLeader = CreateNewRebelLeader(provinceHomeland);
+
+        var newGroup = new RebelGroup()
+        {
+
+        };
+
+        return newGroup;
+    }
     private void CreateSubGroup(Tuple<CountryToGlobalCountry.GenericProvince, float> province, CountryGovernment countryGovernment)
     {
 
-        //MilitaryGovernmentTrustLevel
-        //GovernmentMilitaryTrustLevel
-        //PoliticalStablity
-        //PoliticalCorruption
-        //PopulationTrustLevel
+       
         throw new NotImplementedException();
     }
    
 
 
 
-    public float GetCityCrimeAverageIndexAcrossEmpire(List<CountryToGlobalCountry.GenericCity> CountryCityControlList)
+    public int GetCityCrimeAverageIndexAcrossEmpire(List<CountryToGlobalCountry.GenericCity> CountryCityControlList)
     {
-        return 0;
+        return (int)CountryCityControlList.Average(e => e.CityCrimeIndex);
         //var
        //return this.GetCityCrimeAverageIndexAcrossEmpire.WeightedAverage(x => x.Value, x => x.Length);
     }
@@ -99,18 +118,41 @@ public class CountryManager : MonoBehaviour
         {
             //the first province to start the rebelltion!!!
 
-            if (province.Item1.ProvinceRebelControl == 100f && CountryGovernment.IsInTotalControlOfCountry)
-            {
-                //the governmentis no longer in total countrol
-                CountryGovernment.IsInTotalControlOfCountry = false;
-               
+            //if (province.Item1.ProvinceRebelControl == 100f)
+            //{
+            //    //the governmentis no longer in total countrol
+            //    CountryGovernment.IsInTotalControlOfCountry = false;
 
-                CreateSubGroup(province, CountryGovernment);
+
+            //    CreateSubGroup(province, CountryGovernment);
+            //}
+            //or quality of life in the province sucks so much they have no choice but to fight
+            if (province.Item1.provinceEconomicDevelopment == 0)
+            {
+
+            }
+            if (province.Item1.provinceHumanSecurity == 0)
+            {
+
+            }
+            if (province.Item1.provinceRuleOfLaw == 0)
+            {
+
+            }
+            if (province.Item1.provinceCulturalValue == 0)
+            {
+
             }
 
-
-            if (province.Item1.IsUprising && province.Item1.UprisingStarted)
+            if (province.Item1.IsUprising && province.Item1.UprisingStarted && CountryGovernment.IsInTotalControlOfCountry)
             {
+                //need to figure out which parties are forming rebel groups and who is becomeing a terrorist group
+                //the politcal parties was made illegal or outlawed
+                //MilitaryGovernmentTrustLevel
+                //GovernmentMilitaryTrustLevel
+                //PoliticalStablity
+                //PoliticalCorruption
+                //PopulationTrustLevel
                 if (CountryPoliticalParties.Any(party =>
                 {
                     if (party.LawStatus == CountryRelationsFactory.CountryLegalStatus.Illegal ||
@@ -121,9 +163,27 @@ public class CountryManager : MonoBehaviour
                     return false;
                 }))
                 {
+                    //the poolitcal parties were made illegal now form a rebel group from them.
+                }
+
+                //if the demographics groups are afriad or angry enough to fight back
+                if(CountryPopulationGroups.Any(group => {
+                    if(group.Anger > 1f)
+                    {
+                        province.Item1.StartUpRisingEvent(province.Item1, group);
+                    }
+                    if (group.Fear > 1f)
+                    {
+                        province.Item1.StartUpRisingEvent(province.Item1, group);
+                    }
+                    return false;
+                }))
+                {
+                   
 
                 }
 
+                
 
             }
 

@@ -393,7 +393,10 @@ public class CountryToGlobalCountry
         {
             return new UprisingEvent();
         }
-
+        public UprisingEvent StartUpRisingEvent(GenericProvince uprisingProvince, DemographicGroups partyToNewUprisingGroup)
+        {
+            return new UprisingEvent();
+        }
     }
 
     public WPM.WorldMapGlobe _WPM = WPM.WorldMapGlobe.instance;
