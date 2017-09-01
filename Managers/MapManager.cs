@@ -10,13 +10,14 @@ using System.Linq;
 using static CountryToGlobalCountry;
 using UnityEngine.EventSystems;
 using Newtonsoft.Json;
+using UnityEngine.SceneManagement;
 
 public class MapManager : MonoBehaviour
 {
 
     public enum MapSelected
     {
-
+        None,
         Country,
         Province,
         City,
@@ -31,7 +32,12 @@ public class MapManager : MonoBehaviour
         PassengerPlane
     }
 
-
+    enum MapMoveUNIT_TYPE
+    {
+        TANK = 1, //only over land
+        SHIP = 2, //only over water
+        AIRPLANE = 3 //over either
+    }
     public enum MapSpeed
     {
         HourSecond, //default
@@ -71,7 +77,7 @@ public class MapManager : MonoBehaviour
     public MapDisplayMode GameLastMapDisplayMode;
     public MapDisplayMode GameMapDisplayMode;
     public MapSpeed GameMapSpeed;
-    public List<MapSelected> GameMapSelectedTypes;
+    public MapSelected GameMapSelectedType;
     public DateTime GameDisplayDate;
     public DateTime LocalTimeOfProince;
     public Text LocalTimeZone;
@@ -82,6 +88,7 @@ public class MapManager : MonoBehaviour
     private double HoverOverOffSetTime;
 
 
+    public Text WorldMapHintInfo;
     public Text WorldHoverOverInfo;
     public GameObject GameButtonCountryInfo;
     public GameObject GameButtonCountryVassal;
@@ -121,6 +128,7 @@ public class MapManager : MonoBehaviour
     public GameObject GameResearchInfoPanel;
     public GameObject GameDefconInfoPanel;
     public GameObject GameInfrastructureInfoPanel;
+    public GameObject GameMilitaryOperationsInfoPanel;
     #endregion
     #region UI Country Relations
 
@@ -209,6 +217,10 @@ public class MapManager : MonoBehaviour
     public IEnumerator DrawPlayerBases()
     {
         int BaseId = 0;
+        if (GameManager == null)
+        {
+            yield return new WaitForEndOfFrame();
+        }
         if (GameManager.GameMilitaryManager == null)
         {
             yield return new WaitForEndOfFrame();
@@ -365,7 +377,7 @@ public class MapManager : MonoBehaviour
         //StartCoroutine(SetSideBar(SelectedCountryManager));
         // Before switching view mode, initiates fade to smooth transition effect
         Invoke("StartFade", 2f);
-        
+
         // After 1 second of flight, switch to normal mode. You could also check current zoomLevel in the Update() method and change accordingly.
         Invoke("DisableViewport", 1f);
 
@@ -396,7 +408,7 @@ public class MapManager : MonoBehaviour
         SetMapGeoview();
         // Before switching view mode, initiates fade to smooth transition effect
         Invoke("StartFade", 2f);
-      
+
         // After 2.5 seconds of flight, switch to viewport mode. You could also check current zoomLevel in the Update() method and change accordingly.
         Invoke("EnableViewport", 1f);
         GamePlayerCountryManager = WorldManager.CountryPlayerManagerGameObject.transform.GetChild(0).GetComponent<CountryManager>();
@@ -750,13 +762,20 @@ public class MapManager : MonoBehaviour
     // Use this for initialization
     public void Start()
     {
-        GameMapDisplayMode = MapDisplayMode.FlatMap;
-        GameMapSpeed = MapSpeed.HourSecond;
-
+        GameManager = FindObjectOfType<GameManager>();
         helpers = new Helper();
         wmslObj = WMSK.instance;
-        GameManager = FindObjectOfType<GameManager>();
+
         WorldManager = GameManager.GameWorldManager;
+
+        SetPlayerCountryManager();
+
+
+
+
+
+
+
         mapCameraController = FindObjectOfType<CameraController>();
 
         //wmGlobeObj = WorldMapGlobe.instance;
@@ -769,14 +788,15 @@ public class MapManager : MonoBehaviour
 
 
 
-        SetPlayerCountryManager();
+
 
 
         //Set the game start time based on the settings ie you playing 2017 or 1986
 
         GameDisplayDate = new DateTime(2017, 1, 1);
-
-        
+        GameMapDisplayMode = MapDisplayMode.FlatMap;
+        GameMapSpeed = MapSpeed.HourSecond;
+        GameMapSelectedType = MapSelected.None;
     }
     public void OnGUI()
     {
@@ -827,6 +847,11 @@ public class MapManager : MonoBehaviour
             ClearCurrentSelection();
         }
 
+        if (Input.GetKeyDown(KeyCode.R) && GameMapSelectedType == MapSelected.AirTransport)
+        {
+            CancelFlightFollow();
+        }
+
         UpdateMapTime();
         ConfigMapState(GameMapDisplayMode);
     }
@@ -867,9 +892,18 @@ public class MapManager : MonoBehaviour
         if (CurrentPlayerGameTimeText)
         {
             CurrentPlayerGameTimeText.text = string.Format("{0}, ZULU {1}:00", GameDisplayDate.ToLongDateString(), currentHour);
-            GamePlayerCountryText.text = string.Format("{0} Government, {1} has been in power for {2} days.", 
-                GamePlayerCountryManager.CountryGovernment.NameOfGovernment, 
-                GamePlayerCountryManager.CountryGovernment.ContactOfHeadOfState.ContactName, OldDays);
+            if (GamePlayerCountryManager != null)
+            {
+
+                if (OldDays != GameDisplayDate.DayOfYear)
+                {
+                    GamePlayerCountryText.text = string.Format("{0} Government, {1} has been in power for {2} days.",
+                                                 GamePlayerCountryManager.CountryGovernment.NameOfGovernment,
+                                                 GamePlayerCountryManager.CountryGovernment.ContactOfHeadOfState.ContactName, OldDays);
+                }
+
+            }
+
         }
         //regionInfo.ti
         var dTIme = LocalTimeOfProince.AddHours(currentHour + HoverOverOffSetTime);
@@ -1016,6 +1050,7 @@ public class MapManager : MonoBehaviour
                 ColorUtility.TryParseHtmlString("#494560D6", out decorator.fillColor);
                 wmslObj.decorator.SetCountryDecorator(0, GamePlayerCountryManager.CountryGovernment.MapLookUpName, decorator);
                 GamePlayerCountryText.text = GamePlayerCountryManager.CountryGovernment.NameOfGovernment;
+                DebugText.text = "Country Player Manager Set" + GamePlayerCountryManager.CountryGovernment.NameOfGovernment;
             }
         }
 
@@ -1031,8 +1066,7 @@ public class MapManager : MonoBehaviour
         {
 
             SelectCity(cityIndex, SelectedCity);
-
-            Debug.Log("Entered city " + wmslObj.cities[cityIndex].name);
+            DebugText.text = "Entered city " + wmslObj.cities[cityIndex].name;
         };
 
         wmslObj.OnCityExit += (int cityIndex) =>
@@ -1059,7 +1093,7 @@ public class MapManager : MonoBehaviour
                 var selectedCity = wmslObj.cities[cityIndex];
                 GameLastMapDisplayMode = GameMapDisplayMode;
                 GameMapDisplayMode = MapDisplayMode.DetailCityMode;
-                Debug.Log("Clicked city " + wmslObj.cities[cityIndex].name);
+                DebugText.text = "Clicked city " + wmslObj.cities[cityIndex].name;
                 SelectCityOnClick(selectedCity);
 
             }
@@ -1072,7 +1106,7 @@ public class MapManager : MonoBehaviour
 
         wmslObj.OnProvinceExit += (int provinceIndex, int regionIndex) =>
         {
-            //Debug.Log("Exited province " + wmslObj.provinces[provinceIndex].name);
+            DebugText.text = "Exited province " + wmslObj.provinces[provinceIndex].name;
             GameMapDisplayMode = GameLastMapDisplayMode;
             ResetMenus();
             SetAll(new List<GameObject>() { GameCountryInfoPanel
@@ -1084,12 +1118,13 @@ public class MapManager : MonoBehaviour
             GameMapDisplayMode = GameLastMapDisplayMode;
             if (buttonIndex == 0)
             {
-               //sticky province until exit province or country
+                //sticky province until exit province or country
             }
             if (buttonIndex == 1)
             {
                 //wmslObj.FlyToCountry(countryIndex,);
                 wmslObj.SetZoomLevel(wmslObj.GetCountryRegionZoomExtents(regionIndex), 1.5f);
+                SelectProvinceOnClick(provinceIndex);
                 SelectOnCountry();
             }
         };
@@ -1166,7 +1201,7 @@ public class MapManager : MonoBehaviour
                 break;
         }
     }
-    
+
     public void SelectCityOnClick(WorldMapStrategyKit.City selectedCity)
     {
         var s = selectedCity.attrib["data"].str;
@@ -1198,7 +1233,7 @@ public class MapManager : MonoBehaviour
             cityPanelInfo.CityProductionReport.text = string.Format("{0:n0}M PER Day", data.population);
             cityPanelInfo.CityControllingFlag.texture = data.CityOwnerFlag;
         }
-
+        GameMapSelectedType = MapSelected.City;
         //var f = data.
         //WorldManager.CityStatus(SelectedCountryManager.CountryGovernment,)
     }
@@ -1281,6 +1316,11 @@ public class MapManager : MonoBehaviour
         GameCityInfoPanel.GetComponent<FadeObjectInOut>().FadeIn();
     }
 
+
+    public void SelectProvinceOnClick(int provindeIndex)
+    {
+        GameMapSelectedType = MapSelected.Province;
+    }
     public void SelectProvince(int provinceIndex, int regionIndex, GenericProvince SelectedProvince)
     {
 
@@ -1303,7 +1343,7 @@ public class MapManager : MonoBehaviour
                 SelectedProvince = newProvince;
                 SelectedCountryManager.CountryGovernment.ControlsProvincesNames.Add(newProvince);
                 provinceUI.ProvinceControllingFlag.texture = SelectedProvince.flagowner;
-               // helpers.LoadFlagFromCountryName(selectedProvince.countryIndex);
+                // helpers.LoadFlagFromCountryName(selectedProvince.countryIndex);
             }
         }
         else
@@ -1317,7 +1357,7 @@ public class MapManager : MonoBehaviour
             newProvince.location.y = selectedProvince.center.y;
             SelectedProvince = newProvince;
 
-         
+
         }
 
 
@@ -1337,7 +1377,7 @@ public class MapManager : MonoBehaviour
         if (wmslObj.countryHighlighted != null)
         {
             ResetMenus();
-          
+
 
             SelectedCountryManager = WorldManager.WorldCountryManagement.FirstOrDefault(e => e.CountryGovernment.CountryOfGovernment.name == wmslObj.countryHighlighted.name);
             if (SelectedCountryManager != null)
@@ -1350,6 +1390,7 @@ public class MapManager : MonoBehaviour
                 countryInfoPanel.CountryNationals.text = SelectedCountryManager.CountryGovernment.TitleOfPopulation;
                 countryInfoPanel.CountryFounding.text = SelectedCountryManager.CountryGovernment.FoundingYear.ToString();
                 countryInfoPanel.CaptialName.text = SelectedCountryManager.CountryGovernment.CaptialName;
+                GameMapSelectedType = MapSelected.Country;
             }
             else
             {
@@ -1360,13 +1401,14 @@ public class MapManager : MonoBehaviour
             }
 
             SetPanelsByModeOnClick();
-            
+
         }
         else
         {
             // relations
             DebugText.text = "NO RELATIONS OPEN EMBASSY";
         }
+
     }
 
 
@@ -1386,8 +1428,9 @@ public class MapManager : MonoBehaviour
             GameShipInfoPanel,
             GameDeckInfoPanel,
             GameDefconInfoPanel,
-            GameInfrastructureInfoPanel
-            
+            GameInfrastructureInfoPanel,
+            GameMilitaryOperationsInfoPanel
+
         }, false);
     }
 
@@ -1519,6 +1562,153 @@ public class MapManager : MonoBehaviour
 
     #endregion
 
+
+    #region Military Movement
+    //GameMilitaryOperationsInfoPanel
+
+    public void CancelFlightFollow()
+    {
+        var flights = FindObjectOfType<GameObjectAnimator>().follow = false;
+        GameMapSelectedType = MapSelected.None;
+
+    }
+
+
+    public void DeployTransport()
+    {
+        var menuInfo = GameMilitaryOperationsInfoPanel.GetComponent<MilitaryOperationInfoPanel>();
+
+        GameObjectAnimator airplane = new GameObjectAnimator();
+        //first get the destinations and what we are transporting
+        //then hide the menu
+        //then create airplane and flight plan
+        //then zoom into the plane taking off and display button to "deselect" the transport view
+        //update the flight data
+        //landing the flight and trigger end event
+
+        // Destroy existing airplane
+        // if (airplane != null) DestroyImmediate(airplane.gameObject);
+
+        menuInfo.MilitaryTransportAirPanel.SetActive(false);
+        // Location for airplane
+        Vector2 position = wmslObj.GetCity("New York", "United States of America").unity2DLocation;
+
+        // Create ship
+        GameObject airplaneGO = Instantiate(Resources.Load<GameObject>("Airplane/Airplane"));
+        airplaneGO.transform.localScale = WorldMapStrategyKit.Misc.Vector3one * 0.25f;
+        airplane = airplaneGO.WMSK_MoveTo(position);
+        airplane.type = (int)MapMoveUNIT_TYPE.AIRPLANE;              // this is completely optional, just used in the demo scene to differentiate this unit from other tanks and ships
+        airplane.terrainCapability = TERRAIN_CAPABILITY.Any;  // ignores path-finding and can use a straight-line from start to destination
+        airplane.pivotY = 0.5f; // model is not ground based (which has a pivoty = 0, the default value, so setting the pivot to 0.5 will center vertically the model)
+        airplane.autoRotation = true;  // auto-head to destination when moving
+        airplane.rotationSpeed = 0.25f;  // speed of the rotation of auto-head to destination
+        airplane.follow = true;
+        WorldMapHintInfo.gameObject.SetActive(true);
+        WorldMapHintInfo.text = "Click E to stop  following the flight";
+        GameMapSelectedType = MapSelected.AirTransport;
+        // Go to airplane location and wait for launch
+        wmslObj.FlyToLocation(position, 1.5f, 0.05f);
+        StartCoroutine(StartFlight(airplane));
+
+    }
+
+    IEnumerator StartFlight(GameObjectAnimator airplane)
+    {
+        airplane.arcMultiplier = 5f;     // this is the arc for the plane trajectory
+        airplane.easeType = EASE_TYPE.SmootherStep;    // make it an easy-in-out movement
+
+        Vector2 destination = wmslObj.GetCity("Paris", "France").unity2DLocation;
+        airplane.MoveTo(destination, 150f);
+        airplane.OnMoveEnd += (GameObjectAnimator anim) =>
+        {
+
+            anim.follow = false;
+            WorldMapHintInfo.gameObject.SetActive(false);
+            WorldMapHintInfo.text = string.Empty;
+            if (airplane != null) DestroyImmediate(airplane.gameObject);
+
+        };    // once the movement has finished, stop following the unit
+
+        yield return new WaitForEndOfFrame();
+    }
+    private AsyncOperation GetAirStrikeAsync = null;
+
+    IEnumerator StartAirstrike(GameObjectAnimator airplane)
+    {
+        airplane.arcMultiplier = 5f;     // this is the arc for the plane trajectory
+        airplane.easeType = EASE_TYPE.SmootherStep;    // make it an easy-in-out movement
+
+        Vector2 destination = wmslObj.GetCity("Paris", "France").unity2DLocation;
+        airplane.MoveTo(destination, 10f);
+        StartCoroutine("CoLoadNextScene");
+        airplane.OnMoveEnd += (GameObjectAnimator anim) =>
+        {
+           
+           
+            anim.follow = false;
+            WorldMapHintInfo.gameObject.SetActive(false);
+            WorldMapHintInfo.text = string.Empty;
+            
+            if (airplane != null) DestroyImmediate(airplane.gameObject);
+
+            if (GetAirStrikeAsync != null)
+                if (GetAirStrikeAsync.progress >= 0.9f)
+                {
+                    //Scene loaded! Do fades then set allowSceneActivation to true when done to switch scenes.
+                    GetAirStrikeAsync.allowSceneActivation = true;
+                }
+
+        };    // once the movement has finished, stop following the unit
+
+        yield return new WaitForEndOfFrame();
+    }
+
+    IEnumerator CoLoadNextScene()
+    {
+        GetAirStrikeAsync = SceneManager.LoadSceneAsync(6);
+        GetAirStrikeAsync.allowSceneActivation = false;
+        yield return GetAirStrikeAsync;
+    }
+
+
+    public void DeployAirStrike()
+    {
+        var menuInfo = GameMilitaryOperationsInfoPanel.GetComponent<MilitaryOperationInfoPanel>();
+
+        GameObjectAnimator airplane = new GameObjectAnimator();
+        //first get the destinations and what we are transporting
+        //then hide the menu
+        //then create airplane and flight plan
+        //then zoom into the plane taking off and display button to "deselect" the transport view
+        //update the flight data
+        //landing the flight and trigger end event
+
+        // Destroy existing airplane
+        // if (airplane != null) DestroyImmediate(airplane.gameObject);
+
+        menuInfo.MilitaryTransportAirPanel.SetActive(false);
+        // Location for airplane
+        Vector2 position = wmslObj.GetCity("New York", "United States of America").unity2DLocation;
+
+        // Create ship
+        GameObject airplaneGO = Instantiate(Resources.Load<GameObject>("Airplane/Airplane"));
+        airplaneGO.transform.localScale = WorldMapStrategyKit.Misc.Vector3one * 0.25f;
+        airplane = airplaneGO.WMSK_MoveTo(position);
+        airplane.type = (int)MapMoveUNIT_TYPE.AIRPLANE;              // this is completely optional, just used in the demo scene to differentiate this unit from other tanks and ships
+        airplane.terrainCapability = TERRAIN_CAPABILITY.Any;  // ignores path-finding and can use a straight-line from start to destination
+        airplane.pivotY = 0.5f; // model is not ground based (which has a pivoty = 0, the default value, so setting the pivot to 0.5 will center vertically the model)
+        airplane.autoRotation = true;  // auto-head to destination when moving
+        airplane.rotationSpeed = 0.25f;  // speed of the rotation of auto-head to destination
+        airplane.follow = true;
+        WorldMapHintInfo.gameObject.SetActive(true);
+        WorldMapHintInfo.text = "Click E to recall bombers";
+        GameMapSelectedType = MapSelected.AirTransport;
+        // Go to airplane location and wait for launch
+        wmslObj.FlyToLocation(position, 1.5f, 0.05f);
+        StartCoroutine(StartAirstrike(airplane));
+    }
+    
+    #endregion
 
     public void SetMapGeoview()
     {
