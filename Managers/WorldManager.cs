@@ -27,7 +27,7 @@ public class WorldManager : MonoBehaviour
     public Sprite FOBIcon;
     public Sprite OPIcon;
     public Sprite Infrastructure;
-
+    public List<CountryToGlobalCountry.GenericCountryInfrastructure> WorldInfrastructureList;
     public GameObject CountryAIManagerGameObject;
     public GameObject CountryHumanManagerGameObject;
     public GameObject CountryPlayerManagerGameObject;
@@ -53,7 +53,26 @@ public class WorldManager : MonoBehaviour
 
     }
 
+    public List<Tuple<CountryToGlobalCountry.GenericProvince, float>> InitalizeControlProvinceList(List<CountryToGlobalCountry.GenericProvince> provinces)
+    {
+        var list = new List<Tuple<CountryToGlobalCountry.GenericProvince, float>>();
 
+        provinces.ForEach(city =>
+        {
+            list.Add(new Tuple<CountryToGlobalCountry.GenericProvince, float>(city, 100f));
+        });
+        return list;
+    }
+
+    public List<Tuple<CountryToGlobalCountry.GenericCity, float>> InitalizeControlCityList(List<CountryToGlobalCountry.GenericCity> cities) {
+        var list = new List<Tuple<CountryToGlobalCountry.GenericCity, float>>();
+
+        cities.ForEach(city =>
+        {
+            list.Add(new Tuple<CountryToGlobalCountry.GenericCity, float>(city, 100f));
+        });
+        return list;
+    }
 
     public void InitalizeRefrenceCity(string cityName, CountryToGlobalCountry.GenericCity cityData ) { }
 
@@ -76,6 +95,9 @@ public class WorldManager : MonoBehaviour
             newCountryManagerSetup.CountryLaws = gov.Laws;
             newCountryManagerSetup.CountryPoliticalParties = gov.PoliticalParties;
             newCountryManagerSetup.CountryPopulationGroups = gov.DemographicGroups;
+            newCountryManagerSetup.CountryCityControlList = InitalizeControlCityList(gov.ControlsCitiesNames);
+            newCountryManagerSetup.CountryProvinceControlList = InitalizeControlProvinceList(gov.ControlsProvincesNames);
+            newCountryManagerSetup.CountryGovernment.CountryFounding = new DateTime(newCountryManagerSetup.CountryGovernment.FoundingDay, newCountryManagerSetup.CountryGovernment.FoundingMonth, newCountryManagerSetup.CountryGovernment.FoundingYear);
 
             var newCountryAgentConfig = newCountryAgent.AddComponent<CountryAgent>();
             var newCountryAmbassdorAgent = newCountryAmbassdor.AddComponent<GameAgent>();
@@ -94,7 +116,7 @@ public class WorldManager : MonoBehaviour
             //GameMapManager.wmslObj.AddMarker2DSprite()
             countryPropertries.attrib.Absorb(gov.ContactOfHeadOfState.ContactName);
             var citiesInCountry = GameMapManager.wmslObj.cities.Where(e => e.countryIndex == gov.CountryOfGovernment.index);
-           
+           //TODO THIS MIGHT GET REPLACED WITH THE GENERIC DATA INSTEAD
             if (gov.IsMasterPlayer || gov.IsHumanPlayer)
             {
 

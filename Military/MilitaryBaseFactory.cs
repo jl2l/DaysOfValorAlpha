@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Assets;
 using System.ComponentModel;
 
-public class MilitaryBaseFactory 
+public class MilitaryBaseFactory
 {
     [MenuItem("Tools/MyTool/Do It in C#")]
     static void DoIt()
@@ -142,8 +142,21 @@ public class MilitaryBaseFactory
         [Description("Shipping containers")]
         BaseMGBunker,
         [Description("Shipping containers")]
-        BaseIndirectFireBunker
-
+        BaseIndirectFireBunker,
+        [Description("Shipping containers")]
+        ShootingRanging,
+        [Description("Shipping containers")]
+        SpecialOperationsCenter,
+        [Description("Shipping containers")]
+        PXStore,
+        [Description("Shipping containers")]
+        LaundryServices,
+        [Description("Shipping containers")]
+        WasteManagement,
+        [Description("Shipping containers")]
+        WaterDesalinator,
+        [Description("Shipping containers")]
+        PowerGeneratorWindTurbine,
     }
     public WeaponsConfigFactory weaponConfigFactory = new WeaponsConfigFactory();
 
@@ -166,7 +179,7 @@ public class MilitaryBaseFactory
     }
     public MilitaryBase CreateMilitaryBase(GameObject gameObject)
     {
-       // var newBase = gameObject.AddComponent<MilitaryBase>();
+        // var newBase = gameObject.AddComponent<MilitaryBase>();
 
         return new MilitaryBase();
     }

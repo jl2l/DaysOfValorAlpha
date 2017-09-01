@@ -74,7 +74,7 @@ public class EditorHelper
     [MenuItem("DOV/Create New Military", false, 101)]
     public static void CreateMilitary()
     {
-        CountryMilitary asset = (CountryMilitary)CreateAsset("DoVAlpha/GovernmentsDefault/data", typeof(CountryMilitary));
+        CountryMilitary asset = (CountryMilitary)CreateAsset("DoVAlpha/GovernmentsDefault/data/militaries", typeof(CountryMilitary));
         if (asset != null)
             asset.ArmyName = "some army";
     }
@@ -83,7 +83,7 @@ public class EditorHelper
     [MenuItem("DOV/Create StrategicWeapon", false, 101)]
     public static void CreateStrategicWeapon()
     {
-        StrategicWeapon asset = (StrategicWeapon)CreateAsset("DoVAlpha/GovernmentsDefault/data", typeof(StrategicWeapon));
+        StrategicWeapon asset = (StrategicWeapon)CreateAsset("DoVAlpha/GovernmentsDefault/data/militaries/", typeof(StrategicWeapon));
         if (asset != null)
             asset.WeaponName = "some WMD";
     }
@@ -112,7 +112,7 @@ public class EditorHelper
     [MenuItem("DOV/Create New Military Base", false, 101)]
     public static void CreateMilitaryBase()
     {
-        MilitaryBase asset = (MilitaryBase)CreateAsset("DoVAlpha/GovernmentsDefault/data", typeof(MilitaryBase));
+        MilitaryBase asset = (MilitaryBase)CreateAsset("DoVAlpha/GovernmentsDefault/data/bases", typeof(MilitaryBase));
         if (asset != null)
             asset.BaseName = "some army";
     }
@@ -125,16 +125,16 @@ public class EditorHelper
     {
         CountrySectors asset = (CountrySectors)CreateAsset("DoVAlpha/GovernmentsDefault/data", typeof(CountrySectors));
         if (asset != null)
-            asset.CountryName = "some government";
+            asset.CountryName = "some sector";
     }
     // -------- duplicate this code block to create your own custom item type --------
     // for more info, see the comments in "vp_CustomType.cs"
     [MenuItem("DOV/Create New CountryResource", false, 101)]
     public static void CreateCountryResource()
     {
-        SectorManager.CountryResource asset = (SectorManager.CountryResource)CreateAsset("DoVAlpha/GovernmentsDefault/data", typeof(SectorManager.CountryResource));
+        SectorManager.CountryResource asset = (SectorManager.CountryResource)CreateAsset("DoVAlpha/GovernmentsDefault/data/resources", typeof(SectorManager.CountryResource));
         if (asset != null)
-            asset.name = "some government";
+            asset.name = "some resource";
     }
 
     // -------- duplicate this code block to create your own custom item type --------
@@ -153,7 +153,7 @@ public class EditorHelper
     [MenuItem("DOV/Create New Country Law", false, 101)]
     public static void CreateCountryLaw()
     {
-        CountryLaw asset = (CountryLaw)CreateAsset("DoVAlpha/GovernmentsDefault/data/laws/", typeof(CountryLaw));
+        CountryLaw asset = (CountryLaw)CreateAsset("DoVAlpha/GovernmentsDefault/data/laws", typeof(CountryLaw));
         if (asset != null)
             asset.LawName = "Some Law";
     }
@@ -162,7 +162,7 @@ public class EditorHelper
     [MenuItem("DOV/Create New Political Party", false, 101)]
     public static void CreatePoliticalParty()
     {
-        PoliticalParties asset = (PoliticalParties)CreateAsset("DoVAlpha/GovernmentsDefault/data/politicals/", typeof(PoliticalParties));
+        PoliticalParties asset = (PoliticalParties)CreateAsset("DoVAlpha/GovernmentsDefault/data/politicals", typeof(PoliticalParties));
         if (asset != null)
             asset.PartyName = "some party";
     }
@@ -172,7 +172,7 @@ public class EditorHelper
     [MenuItem("DOV/Create New Demographic", false, 101)]
     public static void CreateDemogroup()
     {
-        DemographicGroups asset = (DemographicGroups)CreateAsset("DoVAlpha/GovernmentsDefault/data/demogroups/", typeof(DemographicGroups));
+        DemographicGroups asset = (DemographicGroups)CreateAsset("DoVAlpha/GovernmentsDefault/data/demogroups", typeof(DemographicGroups));
         if (asset != null)
             asset.GroupName = "Some group";
     }
@@ -182,7 +182,7 @@ public class EditorHelper
     [MenuItem("DOV/Create New Generic Country Infrastructure", false, 101)]
     public static void CreateGenericCountryInfrastructure()
     {
-        CountryToGlobalCountry.GenericCountryInfrastructure asset = (CountryToGlobalCountry.GenericCountryInfrastructure)CreateAsset("DoVAlpha/GovernmentsDefault/data/cities/", typeof(CountryToGlobalCountry.GenericCountryInfrastructure));
+        CountryToGlobalCountry.GenericCountryInfrastructure asset = (CountryToGlobalCountry.GenericCountryInfrastructure)CreateAsset("DoVAlpha/GovernmentsDefault/data/infrastructure/", typeof(CountryToGlobalCountry.GenericCountryInfrastructure));
         if (asset != null)
             asset.DisplayName = "Some group";
     }
@@ -278,11 +278,20 @@ public class EditorHelper
             asset.ContactName = "a name";
     }
 
+    // -------- duplicate this code block to create your own custom item type --------
+    // for more info, see the comments in "vp_CustomType.cs"
+    [MenuItem("DOV/Create New Research Item", false, 101)]
+    public static void CreateNewResearch()
+    {
+        ResearchItem asset = (ResearchItem)CreateAsset("DoVAlpha/GovernmentsDefault/data/research/", typeof(ResearchItem));
+        if (asset != null)
+            asset.ResearchName = "a name";
+    }
 
-    
+
     /// 
-	/// </summary>
-	public static Object CreateAsset(string path, System.Type type)
+    /// </summary>
+    public static Object CreateAsset(string path, System.Type type)
     {
 
         if (!System.IO.Directory.Exists("Assets/" + path))

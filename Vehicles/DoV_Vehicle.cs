@@ -54,6 +54,10 @@ public class DoV_Vehicle : ScriptableObject
 #endif
     public BaseAirType BaseAirType;
     public AircraftTypeStr AircraftType;
+    public float FlightSpeed;
+    public bool IsStealth;
+    public bool IsAirTransport;
+
 #if UNITY_EDITOR
     [Separator] public Separator s2;
 #endif

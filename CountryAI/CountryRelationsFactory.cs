@@ -107,6 +107,12 @@ namespace Assets
             StatePolice,
             StateSecertService,
             Population,
+            Tourism,
+            Transportation,
+            Commerce,
+            Treasury,
+            Interior
+
 
         }
         [SerializeField]

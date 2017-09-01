@@ -1049,7 +1049,9 @@ namespace Assets
         MIRV,
         LaserProof,
         HighAngleOfAttack,
-        NonLethal
+        NonLethal,
+        LaserGuided,
+        DataLink
     }
 
     [Serializable]

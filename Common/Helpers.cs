@@ -36,8 +36,10 @@ public static class Helpers
 
     public static RegionInfo GetRegionInfo(string countryName)
     {
-
         var regions = CultureInfo.GetCultures(CultureTypes.SpecificCultures).Select(x => new RegionInfo(x.LCID)).ToList();
+
+        regions.OrderBy(pet => pet.EnglishName);
+
         return regions.FirstOrDefault(region => region.EnglishName.Contains(countryName));
     }
 
@@ -89,7 +91,15 @@ public class Helper
         // {"ID":13,"ZoneName":"Africa/Cairo","Country":"Cairo","RuleName":"Egypt","GmtOffset":7200,"Format":"EEST","StandardName":"Egypt Standard Time"},
     }
 
+    public Texture2D LoadFlagFromCountryName(string countryName)
+    {
 
+        var twocode = GetTwoCountryCodeFromName(countryName).ToLower();
+        var countTewoCode = string.Format("UI/icons/Flags/png100px/{0}", twocode);
+        var g = Resources.Load<Texture2D>("UI/icons/Flags/png100px/ar");
+      var texture =  Resources.Load(countTewoCode) as Texture2D;
+        return texture;
+    }
     public List<TimeZone> GameTimeZones()
     {
         return new List<TimeZone>();
@@ -134,9 +144,27 @@ public class Helper
 
     }
 
-    public string GetTwoCountryCodeFromName(string countrName)
+    public string GetTwoCountryCodeFromName(string countryName)
     {
-        return Helpers.GetRegionInfo(countrName).TwoLetterISORegionName;
+        if (countryName == "United States of America")
+        {
+            return "us";
+        }
+        if (countryName == "Hati")
+        {
+            return "ht";
+        }
+
+        var region = Helpers.GetRegionInfo(countryName);
+        if(region == null)
+        {
+            Console.Write(countryName);
+        }
+        else
+        {
+            return region.TwoLetterISORegionName;
+        }
+        return string.Empty;
     }
 
     public void GetCIAInfoFromFile(string regionName, out CountryCiaDbObject ciaObject)
@@ -286,6 +314,10 @@ public enum CityType
     GovernmentCaptial,
     [Description("A rural farming village commonly found in the third world")]
     MegaCity,
+    [Description("A rural farming village commonly found in the third world")]
+    RemoteVillage,
+    [Description("A rural farming village commonly found in the third world")]
+    SmallTownMiddleEastern
 }
 
 

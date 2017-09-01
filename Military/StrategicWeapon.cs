@@ -23,6 +23,8 @@ public class StrategicWeapon : ScriptableObject
     public bool IsMIRV;
     public bool IsCruiseMissile;
     public bool IsHypersonic;
+    public bool IsStrategicBomber;
+
     public int Decoys;
     public int Warheads;
     public int MaxWarheads;

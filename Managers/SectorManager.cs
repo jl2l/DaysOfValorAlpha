@@ -36,10 +36,11 @@ public class SectorManager : MonoBehaviour
 
 public enum Sectors
     {
-        [Description("Aerospace")]
+        [Description("The Aerospace industry consists of companies engaged in the production of spacecrafts and commercial military and private aircrafts.")]
         Aerospace,
         Banking,
         ConsumerGoods,
+        [Description("The Defense industry also includes manufacturers of military equipment, such as tanks and related vehicles, bombs, missiles, associated navigational and guidance systems, artillery, ammunition and other related weaponry.")]
         Defense,
         Energy,
         Manufacturing,
@@ -51,7 +52,8 @@ public enum Sectors
         Telecom,
         Technology,
         Transport,
-        Agriculture
+        Agriculture,
+        Insurance
     }
 
     public List<KeyValuePair<Sectors, string>> SubSectors;
@@ -80,6 +82,30 @@ public enum Sectors
         FinishedGoods,
         Services
     }
+
+    public enum MarketFreedom
+    {
+        [Description("The Country has no industries in this sector.")]
+        NoMarket,
+        [Description("The Country has no industries in this sector.")]
+        IllegalMonopoly,
+        [Description("The Country has no industries in this sector.")]
+        Monopoly,
+        [Description("A true free market which allows international countries to purchase into the markets of other countries.")]
+        FreeInternationalMarket,
+        [Description("A free market between regional economica partners, there are protections in place to prevent international buyers damaging the market.")]
+        FreeRegionMarket,
+        [Description("A emerging market is very violated, it can generate large profits but might also create issues later.")]
+        EmergingMarket,
+        [Description("Government regulated markets the government will prevent excessive profiteering and enforce laws preventing price abuse")]
+        GovernmentRegulatedMarket,
+        [Description("The mix of government and private sector the government shares less risk but is subject to businesses working against each other. ")]
+        PublicPrivateControlled,
+        [Description("The state government corporation which acts on behalf of the government in the market sector")]
+        StateControlled
+
+    }
+
   
     public enum Resources
     {

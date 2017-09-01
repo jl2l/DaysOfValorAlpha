@@ -56,26 +56,26 @@ public class EventGenerator : MonoBehaviour
     public static void StartListening(string eventName, UnityAction listener)
     {
         UnityEvent thisEvent = null;
-        if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
-        {
-            thisEvent.AddListener(listener);
-        }
-        else
-        {
-            thisEvent = new UnityEvent();
-            thisEvent.AddListener(listener);
-            instance.eventDictionary.Add(eventName, thisEvent);
-        }
+        //if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
+        //{
+        //    thisEvent.AddListener(listener);
+        //}
+        //else
+        //{
+        //    thisEvent = new UnityEvent();
+        //    thisEvent.AddListener(listener);
+        //    instance.eventDictionary.Add(eventName, thisEvent);
+        //}
     }
 
     public static void StopListening(string eventName, UnityAction listener)
     {
-        if (eventManager == null) return;
-        UnityEvent thisEvent = null;
-        if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
-        {
-            thisEvent.RemoveListener(listener);
-        }
+        //if (eventManager == null) return;
+        //UnityEvent thisEvent = null;
+        //if (instance.eventDictionary.TryGetValue(eventName, out thisEvent))
+        //{
+        //    thisEvent.RemoveListener(listener);
+        //}
     }
 
     public static void TriggerEvent(string eventName)

@@ -10,16 +10,24 @@ public class CityInfoPanel : MonoBehaviour {
     public Text CityNameText;
     public Text CityProvinceText;
     public Text CityPopulationText;
-    public Text CityStatusText;
-    public Text CityIncomeText;
+    public Text CityStateText;
+    public Text CityHoverOverStat;
     public RawImage CityControllingFlag;
 
-    public GameObject CityStatusInfoPanel;
     public GameObject CityStatsInfoPanel;
-    public GameObject CityEconomicInfoPanel;
+    public GameObject CitySelectedPanel;
+    public GameObject CityInfrastructurePanel;
+
     public Text CityNoIntel;
     public Text CityNoStatInfo;
-    public Text CityNoEconomicInfo;
+    public Text CityNoProductionInfo;
+    public Text CityNoLocalNewsInfo;
+    public Text CityNoRumorInfo;
+    public Text CityIntelReport;
+    public Text CityLocalNews;
+    public Text CityProductionReport;
+    public Text CityRumorReport;
+
 
     public Slider CityCrimeIndex;
     public Slider CityTerrorIndex;
@@ -28,6 +36,8 @@ public class CityInfoPanel : MonoBehaviour {
     public Slider CityResearchIndex;
     public Slider CityTradeIndex;
 
+
+  
     public int TerrorIndex;
     public int CrimeIndex;
     public int EconomicIndex;
@@ -44,6 +54,7 @@ public class CityInfoPanel : MonoBehaviour {
     public bool IsUnderNoFlyZone;
     public bool IsUnderRebelControl;
     public bool IsBlackoutPowerLost;
+    public bool IsInternetBlackOut;
     public bool IsStreetRiots;
     // Use this for initialization
     void Start () {

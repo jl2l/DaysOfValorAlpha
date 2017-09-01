@@ -21,47 +21,86 @@ public class CountryToGlobalCountry
         public List<GenericProvince> listofGenericProvinces;
     }
 
-    public CityType GetCityType(City city)
+
+    public enum MapLevelType
     {
-        if (city.population > 1000000)
+        
+        City,
+        Province,
+        State,
+        World
+    }
+
+    /// <summary>
+    /// Generate a city type based of the population or something other stats
+    /// </summary>
+    /// <param name="city"></param>
+    /// <param name="province"></param>
+    /// <param name="gov"></param>
+    /// <param name="map"></param>
+    /// <returns></returns>
+    public CityType GetCityType(City city, GenericProvince province, CountryGovernment gov, WMSK map)
+    {
+        if (city.population > 10000000 && (city.cityClass != CITY_CLASS.COUNTRY_CAPITAL || city.cityClass != CITY_CLASS.REGION_CAPITAL))
         {
             return CityType.MegaCity;
         }
-        else if (city.population > 500000)
+        else if (city.population > 5000000 && (city.cityClass != CITY_CLASS.COUNTRY_CAPITAL || city.cityClass != CITY_CLASS.REGION_CAPITAL))
         {
             return CityType.LargeCity;
         }
-        else if (city.population > 500000)
+        else if (city.population > 1000000 && (city.cityClass != CITY_CLASS.COUNTRY_CAPITAL || city.cityClass != CITY_CLASS.REGION_CAPITAL))
         {
-            return CityType.LargeCity;
+            return CityType.City;
+        }
+        else if (city.cityClass == CITY_CLASS.REGION_CAPITAL)
+        {
+            return CityType.RegionalCaptial;
+        }
+        else if (city.cityClass == CITY_CLASS.COUNTRY_CAPITAL)
+        {
+            return CityType.GovernmentCaptial;
         }
         else if (city.population > 500000)
         {
-            return CityType.LargeCity;
+            return CityType.SmallCity;
         }
-        else if (city.population > 500000)
+        else if (city.population > 50000)
         {
-            return CityType.LargeCity;
+            if(gov.CustomRegionName == "Western European" || gov.CustomRegionName == "Eastern European")
+            {
+                return CityType.SmallTownEuropean;
+            }
+            if (gov.CustomRegionName == "Eastern Asia")
+            {
+                return CityType.SmallTownAsia;
+            }
+            if (gov.CustomRegionName == "Western Asia"  || gov.CustomRegionName == "North Africa")
+            {
+                return CityType.SmallTownMiddleEastern;
+            }
+             if (gov.CustomRegionName == "Africa" || gov.CustomRegionName == "West Africa")
+            {
+                return CityType.SmallTownAfrica;
+            }
+          
         }
-        else if (city.population > 500000)
+        else if (city.population > 10000)
         {
-            return CityType.LargeCity;
+            if (map.ContainsWater(city.unity2DLocation))
+            {
+                return CityType.FishingVillage;
+            }
+            return CityType.SmallVillage;
         }
-        else if (city.population > 500000)
+        else if (city.population > 100)
         {
-            return CityType.LargeCity;
-        }
-        else if (city.population > 500000)
-        {
-            return CityType.LargeCity;
-        }
-        else if (city.population > 500000)
-        {
-            return CityType.LargeCity;
-        }
-        else if (city.population > 500000)
-        {
-            return CityType.LargeCity;
+            if (map.ContainsWater(city.unity2DLocation))
+            {
+                return CityType.FishingVillage;
+            }
+
+            return CityType.RemoteVillage;
         }
         return CityType.City;
     }
@@ -94,13 +133,108 @@ public class CountryToGlobalCountry
         return randomSectors;
     }
 
-    public List<countryInfrastructure> RandomList()
+    public List<GenericCountryInfrastructure> RandomList()
     {
-        var randomList = new List<countryInfrastructure>();
-        randomList.Add(countryInfrastructure.airport);
+        var randomList = new List<GenericCountryInfrastructure>();
+        //var news = GenericCountryInfrastructure;
+        //andomList.Add(.airport);
 
         return randomList;
     }
+    public long SetMarketRate(SectorManager.MarketFreedom marketFreedom, CountryGovernment cityInGovernment, long budgetValue)
+    {
+        switch (marketFreedom)
+        {
+            case SectorManager.MarketFreedom.NoMarket:
+            case SectorManager.MarketFreedom.FreeInternationalMarket:
+            case SectorManager.MarketFreedom.FreeRegionMarket:
+            case SectorManager.MarketFreedom.EmergingMarket:
+            case SectorManager.MarketFreedom.GovernmentRegulatedMarket:
+            case SectorManager.MarketFreedom.PublicPrivateControlled:
+            case SectorManager.MarketFreedom.StateControlled:
+            case SectorManager.MarketFreedom.IllegalMonopoly:
+            case SectorManager.MarketFreedom.Monopoly:
+            default:
+                return budgetValue;
+        }
+    }
+
+    /// <summary>
+    /// this gets the budget funding for a market sector, basic the money the government uses a subity for the industry, the government backstops profit losses and min income from the 
+    /// sector based on the public funding, ie they are there own customer so Aerospace Public Funding is 500M, the Industry generates 1.5B in profits, the first 500M isn't actually profit
+    /// so it wont be counte as income, the 1B will be taxed and produce income for the state, the benefit of Public is to gurantee against lose, if the 500M and the industrial collapses
+    /// and loses 1.5B dollars the government absorbs the first 500M of the lost so it is only 1B dollars now if the states Public budget is 500M and they industry only does 300M in profit
+    /// then there is no negative impact and the funding is reallocated into the next quarters budget as a surplus
+    /// </summary>
+    /// <param name="sector"></param>
+    /// <param name="marketFreedom"></param>
+    /// <param name="cityInGovernment"></param>
+    /// <param name="budget"></param>
+    /// <returns></returns>
+    public long SetSectorPublicBudget(SectorManager.Sectors sector, SectorManager.MarketFreedom marketFreedom, CountryGovernment cityInGovernment, CountryBudget budget)
+    {
+        switch (sector)
+        {
+            case SectorManager.Sectors.Aerospace:
+                SetMarketRate(marketFreedom, cityInGovernment, budget.CountryExpenses.Aerospace);
+                break;
+            case SectorManager.Sectors.Banking:
+                SetMarketRate(marketFreedom, cityInGovernment, budget.CountryFixedExpenses.DebtPayment);
+                break;
+            case SectorManager.Sectors.Insurance:
+                SetMarketRate(marketFreedom, cityInGovernment, budget.CountryFixedExpenses.DebtPayment);
+                break;
+            case SectorManager.Sectors.ConsumerGoods:
+                SetMarketRate(marketFreedom, cityInGovernment, budget.CountryExpenses.Commerce);
+                break;
+            case SectorManager.Sectors.Defense:
+                SetMarketRate(marketFreedom, cityInGovernment, budget.CountryFixedExpenses.SecurityMilitary);
+                break;
+            case SectorManager.Sectors.Energy:
+                SetMarketRate(marketFreedom, cityInGovernment, budget.CountryExpenses.Energy);
+                break;
+            case SectorManager.Sectors.Manufacturing:
+                SetMarketRate(marketFreedom, cityInGovernment, budget.CountryFixedExpenses.UnitProduction);
+                break;
+            case SectorManager.Sectors.Mining:
+                SetMarketRate(marketFreedom, cityInGovernment, budget.CountryExpenses.InfrastructureConstruction);
+                break;
+            case SectorManager.Sectors.Pharma:
+                SetMarketRate(marketFreedom, cityInGovernment, budget.CountryExpenses.HealthCare);
+                break;
+            case SectorManager.Sectors.RealEstate:
+                SetMarketRate(marketFreedom, cityInGovernment, budget.CountryFixedExpenses.UnitProduction);
+                break;
+            case SectorManager.Sectors.Health:
+                SetMarketRate(marketFreedom, cityInGovernment, budget.CountryExpenses.HealthCare);
+                break;
+            case SectorManager.Sectors.Tourism:
+                SetMarketRate(marketFreedom, cityInGovernment, budget.CountryExpenses.Tourism);
+                break;
+            case SectorManager.Sectors.Telecom:
+                SetMarketRate(marketFreedom, cityInGovernment, budget.CountryExpenses.Telecom);
+                break;
+            case SectorManager.Sectors.Technology:
+                SetMarketRate(marketFreedom, cityInGovernment, budget.CountryExpenses.Research);
+                break;
+            case SectorManager.Sectors.Transport:
+                SetMarketRate(marketFreedom, cityInGovernment, budget.CountryFixedExpenses.InfrastructureMainance);
+                break;
+            case SectorManager.Sectors.Agriculture:
+                SetMarketRate(marketFreedom, cityInGovernment, budget.CountryExpenses.Agriculture);
+                break;
+            default:
+                return 0;
+        }
+        return 0;
+    }
+
+    public float DetermineWaterSupply(int popluation, CountryGovernment cityInGovernment, GenericProvince province)
+    {
+        return 0;
+    }
+
+
     public float DetermineBaseCrimeRate(int popluation, CountryGovernment cityInGovernment)
     {
 
@@ -152,7 +286,7 @@ public class CountryToGlobalCountry
     /// <param name="cityInGovernment"></param>
     /// <param name="province"></param>
     /// <returns></returns>
-    public GenericCity RandomGenericCity(City city, CountryGovernment cityInGovernment, GenericProvince province)
+    public GenericCity RandomGenericCity(City city, CountryGovernment cityInGovernment, GenericProvince province, WMSK map)
     {
 
         int totalCrimeIndex = (int)((double)DetermineBaseCrimeRate(city.population, cityInGovernment) * 100);
@@ -164,7 +298,7 @@ public class CountryToGlobalCountry
         int totalCityTerrorLevel = (int)((double)DetermineBaseCrimeRate(city.population, cityInGovernment) * 100);
         int totalCityTradeValue = (int)((double)DetermineBaseCrimeRate(city.population, cityInGovernment) * 100);
         var sec = GenerateRandomSectors(cityInGovernment);
-        var type = GetCityType(city);
+        var type = GetCityType(city, province, cityInGovernment, map);
         var iscap = (cityInGovernment.CaptialName == city.name);
         var isregioncap = (city.cityClass == CITY_CLASS.REGION_CAPITAL);
 
@@ -206,7 +340,6 @@ public class CountryToGlobalCountry
                 CityControl = data.CityControl,
                 CityCrimeIndex = data.CityCrimeIndex,
                 CityEconomicIndex = data.CityEconomicIndex,
-                cityInfrastructure = data.cityInfrastructure,
                 CityPropertyValue = data.CityPropertyValue,
                 CityRebelControl = data.CityRebelControl,
                 CityResearchIndex = data.CityResearchIndex,
@@ -255,21 +388,60 @@ public class CountryToGlobalCountry
         public Texture2D flagowner = null;
         public CityType CityType;
         public List<Tuple<SectorManager.Sectors, long>> ProductionSectors;
-        public List<countryInfrastructure> cityInfrastructure;
+        public List<GenericCountryInfrastructure> cityInfrastructure;
         public bool isRegionalCaptial;
     }
 
+    public enum EffectOnStateProvinceOrCity
+    {
+        CityTerrorLevel,
+        CityCrimeIndex,
+        CityEconomicIndex,
+        CityPropertyValue,
+        CityResearchIndex,
+        CityTradeValue,
+        urbanRate,
+        provinceTaxRate,
+        provinceRuleOfLaw,
+        provinceCulturalValue,
+        provinceHumanSecurity,
+        provinceEconomicDevelopment,
+        SantiationIndex,
+        WaterSupplyIndex,
+        FoodSUpplyIndex,
+        MedicalCareIndex,
+        ElectricitySupplyIndex,
+        InternetAccessIndex
+    }
+
+    [Serializable]
+    public class InfrastructureEffect
+    {
+        public EffectOnStateProvinceOrCity Effect;
+        [Range(-100.0f, 100.0f)]
+        public float EffectRate;
+
+    }
+
+
+        
     [Serializable]
     public class GenericCountryInfrastructure : ScriptableObject
     {
         public int index;
         public string DisplayName;
+        public MapLevelType mapType;
         public countryInfrastructure type;
         public bool IsCritical;
-        public float FundingCost;
+        public long FundingCost;
         public Vector2 location;
-        public Texture2D flagowner;
+        public Texture2D icon;
+        public Texture2D marker;
+        public GameObject model;
+       
         public Assets.CountryRelationsFactory.CountryMinstries responsibleMinstry;
+        public List<InfrastructureEffect> Effect;
+
     }
 
 
@@ -368,12 +540,31 @@ public class CountryToGlobalCountry
         public int index;
         public string name;
         public int countryIndex;
+        public long population;
+        [Range(0f, 100.0f)]
+        public float urbanRate;
+        [Range(0f, 100.0f)]
         public float provinceTaxRate = 5f;
-
+        [Range(0f, 100.0f)]
         public float provinceRuleOfLaw;
+        [Range(0f, 100.0f)]
         public float provinceCulturalValue;
+        [Range(0f, 100.0f)]
         public float provinceHumanSecurity;
+        [Range(0f, 100.0f)]
         public float provinceEconomicDevelopment;
+        [Range(0f, 100.0f)]
+        public float SantiationIndex;
+        [Range(0f, 100.0f)]
+        public float WaterSupplyIndex;
+        [Range(0f, 100.0f)]
+        public float FoodSUpplyIndex;
+        [Range(0f, 100.0f)]
+        public float MedicalCareIndex;
+        [Range(0f, 100.0f)]
+        public float ElectricitySupplyIndex;
+        [Range(0f, 100.0f)]
+        public float InternetAccessIndex;
 
         public Vector2 location;
         [Range(-100.0f, 100.0f)]
