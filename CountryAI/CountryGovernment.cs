@@ -304,6 +304,7 @@ public class CountryGovernment : ScriptableObject
 
     private void GetFromMap()
     {
+        var cityM = new CountryToGlobalCountry();
         var localMap = WMSK.instance;
         var localWorldManager = FindObjectOfType<WorldManager>();
 
@@ -336,28 +337,19 @@ public class CountryGovernment : ScriptableObject
         {
             var selectedProvince = localCountry.provinces[i];
             var newProvince = new CountryToGlobalCountry.GenericProvince(selectedProvince.name);
-            newProvince.index = selectedProvince.uniqueId;
-
-            newProvince.countryIndex = countryIndex;
-            newProvince.location.x = selectedProvince.center.x;
-            newProvince.location.y = selectedProvince.center.y;
-            newProvince.flagowner = CountryFlag;
-            newProvince.ProvinceRebelControl = 0;
-            var provincePopulation = localMap.cities.Where(e => e.countryIndex == countryIndex && e.province == selectedProvince.name).Select(e => e.population).Sum();
+           
+            var provinceCities = localMap.cities.Where(e => e.countryIndex == countryIndex && e.province == selectedProvince.name);
+            var provincePopulation = provinceCities.Select(e => e.population).Sum();
             var ruralPopulation = (int)(provincePopulation * (UrbanPopulationRate - 100f) / 100);
 
             provincePopulation = provincePopulation + ruralPopulation;
-            newProvince.population = provincePopulation;
-            newProvince.urbanRate = UrbanPopulationRate;
-            //add the infrastructure first and then the rates
 
-
-            ControlsProvincesNames.Add(newProvince);
+            ControlsProvincesNames.Add(cityM.RandomProvince(provincePopulation, selectedProvince, this));
         }
 
         ControlsCitiesNames.Clear();
         var localCities = localMap.cities.Where(e => e.countryIndex == countryIndex).ToList();
-        var cityM = new CountryToGlobalCountry();
+       
 
         for (int i = 0; i < localCities.Count; i++)
         {
@@ -384,6 +376,10 @@ public class CountryGovernment : ScriptableObject
                     cityProvince.ProvinceCities = new List<CountryToGlobalCountry.GenericCity>();
                     newGenericCity.population = city.population;
                     newGenericCity.name = city.name;
+                    if(city.cityClass == CITY_CLASS.REGION_CAPITAL)
+                    {
+                        cityProvince.regionCaptialLocation = city.unity2DLocation;
+                    }
                     cityProvince.ProvinceCities.Add(newGenericCity);
                     ControlsCitiesNames.Add(newGenericCity);
 

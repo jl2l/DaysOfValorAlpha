@@ -95,9 +95,10 @@ public class WorldManager : MonoBehaviour
             newCountryManagerSetup.CountryLaws = gov.Laws;
             newCountryManagerSetup.CountryPoliticalParties = gov.PoliticalParties;
             newCountryManagerSetup.CountryPopulationGroups = gov.DemographicGroups;
+            newCountryManagerSetup.countryMilitary = gov.Military;
             newCountryManagerSetup.CountryCityControlList = InitalizeControlCityList(gov.ControlsCitiesNames);
             newCountryManagerSetup.CountryProvinceControlList = InitalizeControlProvinceList(gov.ControlsProvincesNames);
-            newCountryManagerSetup.CountryGovernment.CountryFounding = new DateTime(newCountryManagerSetup.CountryGovernment.FoundingDay, newCountryManagerSetup.CountryGovernment.FoundingMonth, newCountryManagerSetup.CountryGovernment.FoundingYear);
+            newCountryManagerSetup.CountryGovernment.CountryFounding = new DateTime(newCountryManagerSetup.CountryGovernment.FoundingYear, newCountryManagerSetup.CountryGovernment.FoundingMonth, newCountryManagerSetup.CountryGovernment.FoundingDay);
 
             var newCountryAgentConfig = newCountryAgent.AddComponent<CountryAgent>();
             var newCountryAmbassdorAgent = newCountryAmbassdor.AddComponent<GameAgent>();

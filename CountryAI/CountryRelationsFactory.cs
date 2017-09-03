@@ -152,7 +152,9 @@ namespace Assets
             HighlyDiversified,
             ScienceJuggernaught,
             NuclearPower,
-            IndustrialJuggernaught
+            IndustrialJuggernaught,
+            CounterTerrorismExperts,
+            PunchAboveWeight
 
         }
         [SerializeField]
@@ -173,9 +175,13 @@ namespace Assets
             AgingPopulation,
             LowInformationVoters,
             WaterVunerable,
+            CurrencyDevalue,
             HighCrime,
             IllictDrugTrade,
-            HumanTrafficing
+            HumanTrafficing,
+            Terrorism,
+            LocalRebels,
+            NarcoState
 
         }
         [SerializeField]

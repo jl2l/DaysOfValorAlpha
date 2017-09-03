@@ -27,6 +27,8 @@ public class ProvinceInfoPanel : MonoBehaviour
     public Slider ProvinceRuleOfLaw;
     public Slider ProvinceEconomicActivity;
     public Slider ProvinceCulturalValue;
+    public Slider EscalationIndex;
+
 
     public int TerrorIndex;
     public int CrimeIndex;
@@ -37,22 +39,22 @@ public class ProvinceInfoPanel : MonoBehaviour
 
     public UICircle SanitationLevel;
     public float SantiationIndex;
-
+    public Text SanitationText;
     public UICircle WaterSupply;
     public float WaterSupplyIndex;
-
+    public Text WaterSupplyIndexText;
     public UICircle FoodSupply;
     public float FoodSUpplyIndex;
-
+    public Text FoodSUpplyIndexText;
     public UICircle MedicalCare;
     public float MedicalCareIndex;
-
+    public Text MedicalCareIndexText;
     public UICircle ElectricitySupply;
     public float ElectricitySupplyIndex;
-
+    public Text ElectricitySupplyText;
     public UICircle InternetAccess;
     public float InternetAccessIndex;
-
+    public Text InternetAccessText;
 
     public bool IsInPanic;
     public bool IsTerrorAttack;

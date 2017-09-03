@@ -287,37 +287,44 @@ public enum ReserveCurrency
 
 public enum CityType
 {
-
-    [Description("A rural farming village commonly found in the third world")]
+    [Description("an isolated dwelling would only have 1 or 2 buildings or families in it. It would have negligible services, if any.")]
+    Remote,
+    [Description("a hamlet has a tiny population (<100) and very few (if any) services, and few buildings")]
+    Hamlet,
+    [Description("a village is a human settlement or community that is larger than a hamlet but, smaller than a town. A village generally does not have many services, most likely a church or only a small shop or post office. The population of a village varies however, the average population can range from hundreds to thousands.")]
     SmallVillage,
-    [Description("A rural farming village commonly found in the third world")]
-    FishingVillage,
-    [Description("A rural farming village commonly found in the third world")]
+    [Description("a village is a human settlement or community that is larger than a hamlet but, smaller than a town. A village generally does not have many services, most likely a church or only a small shop or post office. The population of a village varies however, the average population can range from hundreds to thousands.")]
+    Village,
+    [Description("a town has a population of 1,000 to 20,000")]
     SmallTown,
-    [Description("A rural farming village commonly found in the third world")]
+    [Description("a town has a population of 1,000 to 20,000")]
     SmallTownEuropean,
-    [Description("A rural farming village commonly found in the third world")]
+    [Description("a town has a population of 1,000 to 20,000")]
     SmallTownAmericas,
-    [Description("A rural farming village commonly found in the third world")]
+    [Description("a town has a population of 1,000 to 20,000")]
     SmallTownAsia,
-    [Description("A rural farming village commonly found in the third world")]
+    [Description("a town has a population of 1,000 to 20,000")]
     SmallTownAfrica,
-    [Description("A rural farming village commonly found in the third world")]
+    [Description("a town has a population of 1,000 to 20,000")]
+    SmallTownMiddleEastern,
+    [Description("a large town has a population of 20,000 to 100,000")]
+    Town,
+    [Description("a city would have abundant services, but not as many as a large city. The population of a city is between 100,000 and 300,000 people.")]
     SmallCity,
-    [Description("A rural farming village commonly found in the third world")]
+    [Description("a city with a large population and many services. The population is <1 million people but over 300,000 people")]
     City,
-    [Description("A rural farming village commonly found in the third world")]
+    [Description("a city with a large population and many services. The population is <1 million people but over 300,000 people")]
     LargeCity,
+    [Description("a large city and its suburbs consisting of multiple cities and towns. The population is usually one to three million.")]
+    Metropolis,
     [Description("A rural farming village commonly found in the third world")]
     RegionalCaptial,
     [Description("A rural farming village commonly found in the third world")]
     GovernmentCaptial,
-    [Description("A rural farming village commonly found in the third world")]
-    MegaCity,
-    [Description("A rural farming village commonly found in the third world")]
-    RemoteVillage,
-    [Description("A rural farming village commonly found in the third world")]
-    SmallTownMiddleEastern
+    [Description(" a group of conurbations, consisting of more than ten million people each.")]
+    MegaCity
+   
+    
 }
 
 

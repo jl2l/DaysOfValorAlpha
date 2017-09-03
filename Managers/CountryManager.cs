@@ -18,6 +18,7 @@ public class CountryManager : MonoBehaviour
     public CountryAgent countryAIAgent;
     public CountryRelationsFactory countryFactory;
     public CountryBudget countryBudget;
+    public CountryMilitary countryMilitary;
     public List<Tuple<CountryToGlobalCountry.GenericCity, float>> CountryCityControlList;
     public List<Tuple<CountryToGlobalCountry.GenericProvince, float>> CountryProvinceControlList;
     public List<Tuple<CountryToGlobalCountry.GenericCountry, float>> CountryGovernmentAlliesIndex;

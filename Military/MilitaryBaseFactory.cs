@@ -81,7 +81,11 @@ public class MilitaryBaseFactory
         ChainLinkFence,
         AntiTankMines,
         AntiPersonelMines,
-        TankObstacle
+        TankObstacle,
+        GroundSensor,
+        ElectronicPassive,
+        AutomatedDefense,
+        GuardDogs
     }
     public enum BaseSpecialize
     {
@@ -157,6 +161,17 @@ public class MilitaryBaseFactory
         WaterDesalinator,
         [Description("Shipping containers")]
         PowerGeneratorWindTurbine,
+        [Description("Shipping containers")]
+        Airstrip,
+        [Description("Shipping containers")]
+        LargeAirstrip,
+        [Description("Shipping containers")]
+        MunitionsBunker,
+        [Description("Shipping containers")]
+        UndergroundMunitonsBunker,
+        [Description("Shipping containers")]
+        UndergroundFuelStorage
+
     }
     public WeaponsConfigFactory weaponConfigFactory = new WeaponsConfigFactory();
 

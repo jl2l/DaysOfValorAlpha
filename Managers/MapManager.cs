@@ -60,7 +60,8 @@ public class MapManager : MonoBehaviour
         IntelView,
         TradeView,
         DefconView,
-        DetailCityMode
+        DetailCityMode,
+        DetailedProvinceMode
 
     }
 
@@ -219,7 +220,7 @@ public class MapManager : MonoBehaviour
         int BaseId = 0;
         if (GameManager == null)
         {
-            yield return new WaitForEndOfFrame();
+            GameManager = FindObjectOfType<GameManager>();
         }
         if (GameManager.GameMilitaryManager == null)
         {
@@ -284,7 +285,7 @@ public class MapManager : MonoBehaviour
 
         GameMilitaryBaseInfoPanel.SetActive(true);
         string delimiter = ",";
-        GameManager.GameMilitaryManager.GameMilitaryBaseSelectedInfo.text = string.Format("{0}, {1}", militaryBase.BaseData.BaseName, militaryBase.BaseData.BaseInProvinceName.name);
+        GameManager.GameMilitaryManager.GameMilitaryBaseSelectedInfo.text = string.Format("{0}, {1}", militaryBase.BaseData.BaseName, militaryBase.BaseData.BaseInProvinceName);
         GameManager.GameMilitaryManager.GameBaseMaxSize.value = militaryBase.GameBaseMaxSize;
         GameManager.GameMilitaryManager.GameBaseMaxSizeText.text = militaryBase.GameBaseMaxSize.ToString();
         GameManager.GameMilitaryManager.GameBaseStrength.value = militaryBase.GameBaseStrength;
@@ -1073,7 +1074,8 @@ public class MapManager : MonoBehaviour
         {
             if (GameMapDisplayMode == MapDisplayMode.DetailCityMode)
             {
-
+                SetAll(new List<GameObject>() { GameCityInfoPanel
+        }, true);
             }
             else
             {
@@ -1108,7 +1110,16 @@ public class MapManager : MonoBehaviour
         {
             DebugText.text = "Exited province " + wmslObj.provinces[provinceIndex].name;
             GameMapDisplayMode = GameLastMapDisplayMode;
-            ResetMenus();
+            if (GameMapDisplayMode == MapDisplayMode.DetailCityMode)
+            {
+                SetAll(new List<GameObject>() { GameCityInfoPanel
+        }, true);
+            }
+            else
+            {
+                ResetMenus();
+            }
+         
             SetAll(new List<GameObject>() { GameCountryInfoPanel
         }, true);
         };
@@ -1360,11 +1371,18 @@ public class MapManager : MonoBehaviour
 
         }
 
+        if(SelectedProvince!= null)
+        {
+            provinceUI.ProvinceNameText.text = SelectedProvince.name;
+            provinceUI.ProvinceRuleOfLaw.value = provinceUI.provinceRuleOfLaw = SelectedProvince.provinceRuleOfLaw;
+            provinceUI.ProvinceHumanSecurity.value = provinceUI.provinceHumanSecurity = SelectedProvince.provinceHumanSecurity;
+            provinceUI.ProvinceEconomicActivity.value = provinceUI.provinceEconomicDevelopment = SelectedProvince.provinceEconomicDevelopment;
+            provinceUI.ProvinceCulturalValue.value = provinceUI.provinceCulturalValue = SelectedProvince.provinceCulturalValue;
 
-        provinceUI.ProvinceNameText.text = SelectedProvince.name;
+        }
 
 
-        provinceUI.PopulationText.text = string.Format("{0:n0}", SelectedProvince.population);
+        // provinceUI.PopulationText.text = string.Format("{0:n0}", SelectedProvince.population);
         SetPanelsByModeOnClick();
 
     }

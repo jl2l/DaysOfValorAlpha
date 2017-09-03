@@ -18,7 +18,15 @@ public class EditorHelper
         if (asset != null)
             asset.DisplayName = "custom";
     }
-
+    // -------- duplicate this code block to create your own custom item type --------
+    // for more info, see the comments in "vp_CustomType.cs"
+    [MenuItem("DOV/Create Stock Deck", false, 101)]
+    public static void CreateItemDeck()
+    {
+        DeckDataItem asset = (DeckDataItem)CreateAsset(countryFlag + "weapon/configs", typeof(DeckDataItem));
+        if (asset != null)
+            asset.DeckName = "custom deck name";
+    }
     // -------- duplicate this code block to create your own custom item type --------
     // for more info, see the comments in "vp_CustomType.cs"
     [MenuItem("DOV/Create Weapon Config", false, 101)]

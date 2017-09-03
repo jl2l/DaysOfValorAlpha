@@ -41,19 +41,7 @@ public class CountryToGlobalCountry
     /// <returns></returns>
     public CityType GetCityType(City city, GenericProvince province, CountryGovernment gov, WMSK map)
     {
-        if (city.population > 10000000 && (city.cityClass != CITY_CLASS.COUNTRY_CAPITAL || city.cityClass != CITY_CLASS.REGION_CAPITAL))
-        {
-            return CityType.MegaCity;
-        }
-        else if (city.population > 5000000 && (city.cityClass != CITY_CLASS.COUNTRY_CAPITAL || city.cityClass != CITY_CLASS.REGION_CAPITAL))
-        {
-            return CityType.LargeCity;
-        }
-        else if (city.population > 1000000 && (city.cityClass != CITY_CLASS.COUNTRY_CAPITAL || city.cityClass != CITY_CLASS.REGION_CAPITAL))
-        {
-            return CityType.City;
-        }
-        else if (city.cityClass == CITY_CLASS.REGION_CAPITAL)
+        if (city.cityClass == CITY_CLASS.REGION_CAPITAL)
         {
             return CityType.RegionalCaptial;
         }
@@ -61,12 +49,40 @@ public class CountryToGlobalCountry
         {
             return CityType.GovernmentCaptial;
         }
-        else if (city.population > 500000)
+        //over 10 million
+        if (city.population > 10000001)
         {
+            return CityType.MegaCity;
+        }
+        else if (city.population <= 3000001 && city.population >= 1000000)
+        {
+            //between 10 million and 3 million
+            return CityType.Metropolis;
+        }
+        else if (city.population <= 1000001 && city.population >= 3000000)
+        {
+            //between 3 million and 1 million
+            return CityType.LargeCity;
+        }
+        else if (city.population <= 300001 && city.population >= 1000000)
+        {
+
+            //between 1 million and 300k
+            return CityType.City;
+        }
+        else if (city.population <= 300000 && city.population >= 100001)
+        {
+            //between 300k and 100k
             return CityType.SmallCity;
         }
-        else if (city.population > 50000)
+        else if (city.population <= 100000 && city.population >= 20001)
         {
+            //100k to 20k
+            return CityType.Town;
+        }
+        else if (city.population <= 20000 && city.population >= 1001)
+        {
+            //from 20k to 1k
             if(gov.CustomRegionName == "Western European" || gov.CustomRegionName == "Eastern European")
             {
                 return CityType.SmallTownEuropean;
@@ -83,26 +99,26 @@ public class CountryToGlobalCountry
             {
                 return CityType.SmallTownAfrica;
             }
-          
+
+            return CityType.SmallTown;
+
         }
-        else if (city.population > 10000)
+        else if (city.population <= 1000 && city.population >= 501)
         {
-            if (map.ContainsWater(city.unity2DLocation))
-            {
-                return CityType.FishingVillage;
-            }
+            //1k or less
+            return CityType.Village;
+        }
+        else if (city.population <= 151 && city.population >= 500)
+        {
             return CityType.SmallVillage;
         }
-        else if (city.population > 100)
-        {
-            if (map.ContainsWater(city.unity2DLocation))
-            {
-                return CityType.FishingVillage;
-            }
 
-            return CityType.RemoteVillage;
-        }
-        return CityType.City;
+        if (city.population < 150)
+        {
+            //150 or less
+            return CityType.Hamlet;
+        }        
+        return CityType.Remote;
     }
 
 
@@ -234,8 +250,283 @@ public class CountryToGlobalCountry
         return 0;
     }
 
+   /// <summary>
+   /// draft v1 of teror index
+   /// </summary>
+   /// <param name="population"></param>
+   /// <param name="cityType"></param>
+   /// <param name="cityInGovernment"></param>
+   /// <param name="province"></param>
+   /// <param name="cityData"></param>
+   /// <returns></returns>
+    public int DetermineBaseTerrorIndex(int population, CityType cityType, CountryGovernment cityInGovernment, GenericProvince province, CityData cityData = null)
+    {
+        float baseTerrorIndex = 0;
+        switch (cityType)
+        {
+            case CityType.Remote:
+            case CityType.Hamlet:
+                baseTerrorIndex = 0;
+                break;
+            case CityType.SmallVillage:
+            case CityType.Village:
+            case CityType.SmallTown:
+            case CityType.SmallTownEuropean:
+            case CityType.SmallTownAmericas:
+            case CityType.SmallTownAsia:
+                baseTerrorIndex = 0;
+                break;
+            case CityType.SmallTownAfrica:
+                baseTerrorIndex = 2;
+                break;
+            case CityType.SmallTownMiddleEastern:
+                baseTerrorIndex = 2;
+                break;
+            case CityType.Town:
+                baseTerrorIndex = 0;
+                break;
+            case CityType.SmallCity:
+            case CityType.City:
+            case CityType.LargeCity:
+                baseTerrorIndex = 2;
+                break;
+            case CityType.Metropolis:
+            case CityType.RegionalCaptial:
+            case CityType.GovernmentCaptial:
+            case CityType.MegaCity:
+                baseTerrorIndex = 5;
+                break;
+            default:
+                break;
+        }
 
-    public float DetermineBaseCrimeRate(int popluation, CountryGovernment cityInGovernment)
+        if (cityData)
+        {
+            IEnumerable<InfrastructureEffect> attributes = cityData.cityInfrastructure.SelectMany(x => x.Effect).Where(x => x.Effect == EffectOnStateProvinceOrCity.CityTerrorLevel);
+            baseTerrorIndex += (int)attributes.Sum(g=>g.EffectRate);
+        }
+        else
+        {
+
+            //are there any rebel groups?
+            if (province.LocalRebelGroups != null && province.LocalRebelGroups.Any())
+            {
+                //if the rebels control more then 50% of province the terror level is going to be way high
+                if(province.ProvinceRebelControl > 50f)
+                {
+                    //are there training camps?
+                    baseTerrorIndex += province.RebelCamps ? 50f : 0f;
+                }
+                else
+                {
+                    //for each rebel group in the province increases terror level 5%
+                    baseTerrorIndex += (province.LocalRebelGroups.Count() * 0.02f);
+                }
+            }
+            //are there any terrorist groups?
+            if (province.LocalTerroristGroups != null && province.LocalTerroristGroups.Any())
+            {
+                //are there training camps?
+                baseTerrorIndex += province.TerroristCamps ? 50f : 0f;
+                //for each terror group in the province increases terror level 5%
+                baseTerrorIndex += (province.LocalTerroristGroups.Count() * 0.02f);
+            }
+
+            //PopulationTrustLevel level low population doesnt trust the government allows for
+            if (cityInGovernment.PopulationTrustLevel <= 5f)
+            {
+                baseTerrorIndex += 2f;
+            }
+
+            //is government a IsRebelGroup or TerrorGroup then it it be very high
+            if (cityInGovernment.IsRebelGroup || cityInGovernment.IsTerroristGroup)
+            {
+                baseTerrorIndex += 12f;
+            }
+
+            //high GNI and HDI
+            if (cityInGovernment.HDI > 0.5f)
+            {
+                baseTerrorIndex += 0.5f;
+            }
+            if (cityInGovernment.Gini > 0.5f)
+            {
+                baseTerrorIndex += 0.25f;
+            }
+
+            //ubranization
+            if (cityInGovernment.UrbanizationRate > 0.4f)
+            {
+                if (cityInGovernment.UrbanizationRate > 0.6f)
+                {
+                    if (cityInGovernment.UrbanizationRate > 0.7f)
+                    {
+                        baseTerrorIndex += 0.25f;
+                    }
+                    baseTerrorIndex += 0.25f;
+                }
+                baseTerrorIndex += 0.25f;
+            }
+
+            //OpenBorderImmigration
+            if (cityInGovernment.OpenBorderEmmigration)
+            {
+                baseTerrorIndex += 0.25f;
+
+            }
+
+            //whats the SoftPowerScore lows this index
+            if (cityInGovernment.SoftPowerScore > 30)
+            {
+                baseTerrorIndex -= 10f;
+
+            }
+
+            //CountryFreedomIndex CountryFlaws
+            switch (cityInGovernment.CountryFreedomIndex)
+            {
+                case Assets.CountryRelationsFactory.CountryFreedomIndex.FullDemocracy:
+                    baseTerrorIndex -= 20f;
+                    break;
+                case Assets.CountryRelationsFactory.CountryFreedomIndex.FlawedDemocracy:
+                    baseTerrorIndex -= 15f;
+                    break;
+                case Assets.CountryRelationsFactory.CountryFreedomIndex.HybridRegime:
+                    baseTerrorIndex -= 1f;
+                    break;
+                case Assets.CountryRelationsFactory.CountryFreedomIndex.Authoritarian:
+                    baseTerrorIndex += 5f;
+                    break;
+            }
+
+            if(cityInGovernment.CountryFlaws.Any(flaw=>
+            (flaw == Assets.CountryRelationsFactory.CountryFlawSkill.Terrorism) || 
+            (flaw == Assets.CountryRelationsFactory.CountryFlawSkill.NarcoState) ||
+            (flaw == Assets.CountryRelationsFactory.CountryFlawSkill.HighCrime)||
+            (flaw == Assets.CountryRelationsFactory.CountryFlawSkill.LocalRebels))
+                )
+                {
+                baseTerrorIndex += 5f;
+            }
+            //CountrPerks
+            if (cityInGovernment.CountrPerks.Any(perk =>
+                 (perk == Assets.CountryRelationsFactory.CountryPerkSkill.CounterTerrorismExperts) ||
+                 (perk == Assets.CountryRelationsFactory.CountryPerkSkill.PunchAboveWeight) ||
+                 (perk == Assets.CountryRelationsFactory.CountryPerkSkill.Superpower) 
+                 )){
+                baseTerrorIndex -= 5f;
+            } 
+              //GovernmnetBias
+
+            switch (cityInGovernment.GovernmnetBias)
+            {
+                case Assets.CountryRelationsFactory.CountryBias.westerndemocracy:
+                case Assets.CountryRelationsFactory.CountryBias.europeandemocracy:
+                case Assets.CountryRelationsFactory.CountryBias.europeansocialdemocracy:
+                    baseTerrorIndex -= 10f;
+                    break;
+                case Assets.CountryRelationsFactory.CountryBias.formersoviet:
+                case Assets.CountryRelationsFactory.CountryBias.formersovietAuthoratian:
+                case Assets.CountryRelationsFactory.CountryBias.formereuro:
+                case Assets.CountryRelationsFactory.CountryBias.formercommonwealth:
+                    baseTerrorIndex -= 5f;
+                    break;
+                case Assets.CountryRelationsFactory.CountryBias.africanstable:
+                    baseTerrorIndex += 2f;
+                    break;
+                case Assets.CountryRelationsFactory.CountryBias.africaninstable:
+                    baseTerrorIndex += 5f;
+                    break;
+                case Assets.CountryRelationsFactory.CountryBias.notchinaAsian:
+                    baseTerrorIndex += 3f;
+                    break;
+                case Assets.CountryRelationsFactory.CountryBias.chinaAndAllies:
+                case Assets.CountryRelationsFactory.CountryBias.russiaAndAllies:
+                case Assets.CountryRelationsFactory.CountryBias.islamStable:
+                    baseTerrorIndex += 5f;
+                    break;
+                case Assets.CountryRelationsFactory.CountryBias.islamInstable:
+                    baseTerrorIndex += 15f;
+                    break;
+                case Assets.CountryRelationsFactory.CountryBias.southamericandemocracy:
+                    baseTerrorIndex += 2f;
+                    break;
+                case Assets.CountryRelationsFactory.CountryBias.southamericansocialist:
+                    baseTerrorIndex += 5f;
+                    break;
+                case Assets.CountryRelationsFactory.CountryBias.superpower:
+                    baseTerrorIndex += 5f;
+                    break;
+                case Assets.CountryRelationsFactory.CountryBias.regionalpower:
+                    baseTerrorIndex += 5f;
+                    break;
+                case Assets.CountryRelationsFactory.CountryBias.citystateisland:
+                    baseTerrorIndex -= 15f;
+                    break;
+                case Assets.CountryRelationsFactory.CountryBias.civilwar:
+                    baseTerrorIndex += 5f;
+                    break;
+                default:
+                    break;
+            }
+            switch (cityInGovernment.GovernmentType)
+            {
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.AbsoluteMonarchy:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.Anarchy:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.Authoritarian:
+                    baseTerrorIndex += 5f;
+                    break;
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.NonGoverningOverseas:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.Ecclesiastical:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.Commonwealth:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.Communist:
+                    baseTerrorIndex -= 15f;
+                    break;
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.ParliamentaryConstitutionalMonarchy:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.Socialism:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.Confederacy:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.Constitutional:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.ConstitutionalDemocracy:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.ConstitutionalMonarchy:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.Democracy:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.DemocraticRepublic:
+                    baseTerrorIndex -= 5f;
+                    break;
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.PresidentialAuthoritarian:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.Theocracy:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.AuthoritarianDemocracy:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.Totalitarian:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.Sultanate:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.Oligarchy:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.Dictatorship:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.IslamicRepublic:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.Monarchy:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.Emirate:
+                    baseTerrorIndex += 5f;
+                    break;
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.Republic:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.Federal:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.FederalRepublic:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.ParliamentaryDemocracy:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.ParliamentaryGovernment:
+                    baseTerrorIndex -= 10f;
+                    break;
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.MilitaryJunta:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.Presidential:
+                    break;
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.SpecialAdministrativeRegion:
+                case Assets.CountryRelationsFactory.CountryGovernmentTypes.NoGovernmentInPower:
+                    baseTerrorIndex += 30f;
+                    break;
+            }
+            //is government in control?
+            baseTerrorIndex += cityInGovernment.IsInTotalControlOfCountry ? -0.5f : 0;
+        }
+
+        return (int)baseTerrorIndex;
+    }
+
+    public float DetermineBaseCrimeRate(int population, CityType cityType, CountryGovernment cityInGovernment, GenericProvince province)
     {
 
         var baseCrimeRate = 0.03f;
@@ -258,6 +549,8 @@ public class CountryToGlobalCountry
         ////    LowInformationVoters,
         ////    WaterVunerable,
         //cityInGovernment.HDI
+        // 23.2 victimizations per 1,000 persons 
+        
 
         if (cityInGovernment.CountryFlaws.Any(e => (e == Assets.CountryRelationsFactory.CountryFlawSkill.DrugProblems || e == Assets.CountryRelationsFactory.CountryFlawSkill.HighCrime)))
         {
@@ -273,8 +566,82 @@ public class CountryToGlobalCountry
             }
 
         }
-
+        switch (cityType)
+        {
+            case CityType.Remote:
+            case CityType.Hamlet:
+            case CityType.SmallVillage:
+            case CityType.Village:
+                baseCrimeRate += ((population / 1000) / 1.4f) / 1000;
+                break;
+            case CityType.SmallTown:
+            case CityType.SmallTownEuropean:
+            case CityType.SmallTownAmericas:
+            case CityType.SmallTownAsia:
+                baseCrimeRate += ((population / 1000) / 1f) / 1000;
+                break;
+            case CityType.SmallTownAfrica:
+            case CityType.SmallTownMiddleEastern:
+                baseCrimeRate += ((population / 1000) / 3f) / 1000;
+                break;
+            case CityType.Town:
+                baseCrimeRate += ((population / 1000) / 6f) / 1000;
+                break;
+            case CityType.SmallCity:
+            case CityType.City:
+                baseCrimeRate += ((population / 1000) / 9f) / 1000;
+                break;
+            case CityType.LargeCity:
+            case CityType.Metropolis:
+            case CityType.RegionalCaptial:
+            case CityType.GovernmentCaptial:
+            case CityType.MegaCity:
+                baseCrimeRate += ((population / 1000) / 12f) / 1000;
+                break;
+        }
         return baseCrimeRate;
+    }
+
+
+    public float DeterminePropertyValue(int population, CityType cityType, CountryGovernment cityInGovernment, GenericProvince province)
+    {
+        return 100;
+    }
+
+    [Serializable]
+    public class GenericCity
+    {
+        public int index;
+        public string name;
+        public string provinceName;
+        public long population;
+        public Vector2 location;
+        public bool isCapital;
+        public int CityTerrorLevel;
+        public int CityCrimeIndex;
+        public int CityEconomicIndex;
+        public int CityPropertyValue;
+        public int CityResearchIndex;
+        public int CityTradeValue;
+        [Range(-100.0f, 100.0f)]
+        public float CityControl;
+        [Range(-100.0f, 100.0f)]
+        public float CityRebelControl;
+        public bool IsInPanic;
+        public bool IsTerrorAttack;
+        public bool IsNaturalDisater;
+        public bool IsUnderQuarintine;
+        public bool IsUnderStateOfEmergency;
+        public bool IsUnderMarshalLaw;
+        public bool IsUnderNoFlyZone;
+        public bool IsUnderRebelControl;
+        public bool IsBlackoutPowerLost;
+        public bool IsStreetRiots;
+        public Texture2D flagowner = null;
+        public CityType CityType;
+        public List<Tuple<SectorManager.Sectors, long>> ProductionSectors;
+        public List<GenericCountryInfrastructure> cityInfrastructure;
+        public bool isRegionalCaptial;
     }
 
     /// <summary>
@@ -288,18 +655,21 @@ public class CountryToGlobalCountry
     /// <returns></returns>
     public GenericCity RandomGenericCity(City city, CountryGovernment cityInGovernment, GenericProvince province, WMSK map)
     {
-
-        int totalCrimeIndex = (int)((double)DetermineBaseCrimeRate(city.population, cityInGovernment) * 100);
-        int totalCityEconmicIndex = (int)((double)DetermineBaseCrimeRate(city.population, cityInGovernment) * 100);
-        int totalCityInfrastructure = (int)((double)DetermineBaseCrimeRate(city.population, cityInGovernment) * 100);
-        int totalCityPropertyValue = (int)((double)DetermineBaseCrimeRate(city.population, cityInGovernment) * 100);
-        int totalCityRebelControl = (int)((double)DetermineBaseCrimeRate(city.population, cityInGovernment) * 100);
-        int totalCityResearchIndex = (int)((double)DetermineBaseCrimeRate(city.population, cityInGovernment) * 100);
-        int totalCityTerrorLevel = (int)((double)DetermineBaseCrimeRate(city.population, cityInGovernment) * 100);
-        int totalCityTradeValue = (int)((double)DetermineBaseCrimeRate(city.population, cityInGovernment) * 100);
-        var sec = GenerateRandomSectors(cityInGovernment);
         var type = GetCityType(city, province, cityInGovernment, map);
-        var iscap = (cityInGovernment.CaptialName == city.name);
+
+        int totalCrimeIndex = (int)((double)DetermineBaseCrimeRate(city.population, type, cityInGovernment, province) * 100);
+        int totalCityEconmicIndex = 100; //determined by the resources and trade deals infrastcutre which increases this activity
+        int totalCityPropertyValue = (int)(double)DeterminePropertyValue(city.population, type, cityInGovernment, province); ; //determined by the populations ubraization rate, and resources
+        int totalCityRebelControl = 0; //determine by the rule of law and the crime rate
+        int totalCityResearchIndex = 100; //determined by the province infrastructure and city infrasture and 
+        //cal based on infrasturue or size
+        int totalCityTerrorLevel = 0;
+            
+            //(int)((double)DetermineBaseTerrorIndex(city.population, type, cityInGovernment, province) * 100);
+        int totalCityTradeValue = 100;
+        var sec = GenerateRandomSectors(cityInGovernment);
+       
+        var iscap = (city.cityClass == CITY_CLASS.COUNTRY_CAPITAL);
         var isregioncap = (city.cityClass == CITY_CLASS.REGION_CAPITAL);
 
         return new GenericCity()
@@ -356,42 +726,49 @@ public class CountryToGlobalCountry
         }
 
     }
-    [Serializable]
-    public class GenericCity
-    {
-        public int index;
-        public string name;
-        public string provinceName;
-        public long population;
-        public Vector2 location;
-        public bool isCapital;
-        public int CityTerrorLevel;
-        public int CityCrimeIndex;
-        public int CityEconomicIndex;
-        public int CityPropertyValue;
-        public int CityResearchIndex;
-        public int CityTradeValue;
-        [Range(-100.0f, 100.0f)]
-        public float CityControl;
-        [Range(-100.0f, 100.0f)]
-        public float CityRebelControl;
-        public bool IsInPanic;
-        public bool IsTerrorAttack;
-        public bool IsNaturalDisater;
-        public bool IsUnderQuarintine;
-        public bool IsUnderStateOfEmergency;
-        public bool IsUnderMarshalLaw;
-        public bool IsUnderNoFlyZone;
-        public bool IsUnderRebelControl;
-        public bool IsBlackoutPowerLost;
-        public bool IsStreetRiots;
-        public Texture2D flagowner = null;
-        public CityType CityType;
-        public List<Tuple<SectorManager.Sectors, long>> ProductionSectors;
-        public List<GenericCountryInfrastructure> cityInfrastructure;
-        public bool isRegionalCaptial;
-    }
+    
 
+    public GenericProvince RandomProvince(long provincePopulation, Province province, CountryGovernment gov)
+    {
+        return new GenericProvince(province.name)
+        {
+            
+            countryIndex = gov.CountryOfGovernment.index,
+            ElectricitySupplyIndex = gov.HDI * 100,
+            flagowner = gov.CountryFlag,
+            FoodSUpplyIndex = 100,
+            index = province.uniqueId,
+            InternetAccessIndex = 100,
+            IsUprising = false,
+            LocalRebelGroups = new List<RebelGroup>(),
+            LocalTerroristGroups = new List<TerroristGroup>(),
+            location = province.center,
+            MedicalCareIndex = 100,
+            name = province.name,
+            population = provincePopulation,
+            ProductionSectors = null,
+            ProvinceControl = 100,
+            provinceCulturalValue = 100,
+            ProvinceDeomgraphicGroups = gov.DemographicGroups.Select(e => e.Population).ToList(),
+            provinceEconomicDevelopment = 100,
+            provinceHumanSecurity = 100,
+            ProvincePoliticalParties = gov.PoliticalParties.Select(e => e.PowerPercent).ToList(),
+            ProvinceRebelControl = 0,
+            provinceInfrastructure = new List<GenericCountryInfrastructure>(),
+            provinceRuleOfLaw = 100,
+            provinceTaxRate = 6f,
+            RebelCamps = false,
+            SantiationIndex = 100,
+            TerroristCamps = false,
+            UprisingStarted = false,
+            UprsiningEnded = true,
+            WaterSupplyIndex = 100,
+            urbanRate = gov.UrbanizationRate
+
+
+        };
+    }
+   
     public enum EffectOnStateProvinceOrCity
     {
         CityTerrorLevel,
@@ -577,12 +954,15 @@ public class CountryToGlobalCountry
         public Texture2D flagowner;
         public List<GenericCountryInfrastructure> provinceInfrastructure;
         public List<RebelGroup> LocalRebelGroups;
+        public bool RebelCamps;
         public List<TerroristGroup> LocalTerroristGroups;
+        public bool TerroristCamps;
         public List<GenericCity> ProvinceCities;
         [Range(0.0f, 100.0f)]
         public List<float> ProvincePoliticalParties;
         [Range(0.0f, 100.0f)]
         public List<float> ProvinceDeomgraphicGroups;
+ 
 
         public bool IsUprising;
         public bool UprisingStarted;

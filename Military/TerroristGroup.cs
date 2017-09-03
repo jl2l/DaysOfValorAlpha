@@ -10,6 +10,7 @@ using Assets;
     public TerroristLeaderAgent Leader;
     public string GroupName;
     public int GroupMembers;
+    public int NumberOfCamps;
     public long OperationBuget;
     public float OperationCost;
     public float ThreatLevel;

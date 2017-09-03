@@ -33,6 +33,10 @@ public class CountryMilitary : ScriptableObject
 
     public List<NavalGroup> CountryMilitaryNavy;
 
+
+    public List<DeckDataItem> CountryMilitaryUnits;
+
+
     public List<MilitaryInventory> CountryMilitaryInventory;
     public List<StrategicWeapon> CountryStrategicForces;
 

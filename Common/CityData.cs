@@ -66,5 +66,5 @@ public class CityData : ScriptableObject
     public CityType CityType;
     public Texture2D CityOwnerFlag;
     public List<Tuple<SectorManager.Sectors, long>> ProductionSectors;
-    public List<CountryToGlobalCountry.countryInfrastructure> cityInfrastructure;
+    public List<CountryToGlobalCountry.GenericCountryInfrastructure> cityInfrastructure;
 }

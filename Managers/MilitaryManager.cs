@@ -70,7 +70,7 @@ public class MilitaryManager : MonoBehaviour
         GameDeckManager.PlayerDecks.ForEach(PlayerDeck =>{
 
         });
-
+        PlayerMilitaryBases = PlayerMilitary.MilitaryBases;
        // PlayerMilitaryBases = PlayerMilitaryBase.DefaultList(GamePlayerMilitaryBaseContainer);
         //PlayerMilitaryList = new List<Tuple<List<DeckDataItem>, Vector2>>(GameDeckManager.PlayerDecks,)
     }
