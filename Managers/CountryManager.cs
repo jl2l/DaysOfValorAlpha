@@ -19,10 +19,10 @@ public class CountryManager : MonoBehaviour
     public CountryRelationsFactory countryFactory;
     public CountryBudget countryBudget;
     public CountryMilitary countryMilitary;
-    public List<Tuple<CountryToGlobalCountry.GenericCity, float>> CountryCityControlList;
-    public List<Tuple<CountryToGlobalCountry.GenericProvince, float>> CountryProvinceControlList;
-    public List<Tuple<CountryToGlobalCountry.GenericCountry, float>> CountryGovernmentAlliesIndex;
-    public List<Tuple<CountryToGlobalCountry.GenericCountry, float>> CountryPopulationLikeIndex;
+    public List<CountryToGlobalCountry.GenericCity> CountryCityControlList;
+    public List<CountryToGlobalCountry.GenericProvince> CountryProvinceControlList;
+    public List<CountryToGlobalCountry.GenericCountry> CountryGovernmentAlliesIndex;
+    public List<float> CountryPopulationLikeAcrossProvincesIndex;
     public List<RebelGroup> GovernmentRebelGroups;
     public List<TerroristGroup> GovernmentTerroristGroups;
     public long CountryCash;
@@ -128,24 +128,24 @@ public class CountryManager : MonoBehaviour
             //    CreateSubGroup(province, CountryGovernment);
             //}
             //or quality of life in the province sucks so much they have no choice but to fight
-            if (province.Item1.provinceEconomicDevelopment == 0)
+            if (province.provinceEconomicDevelopment == 0)
             {
 
             }
-            if (province.Item1.provinceHumanSecurity == 0)
+            if (province.provinceHumanSecurity == 0)
             {
 
             }
-            if (province.Item1.provinceRuleOfLaw == 0)
+            if (province.provinceRuleOfLaw == 0)
             {
 
             }
-            if (province.Item1.provinceCulturalValue == 0)
+            if (province.provinceCulturalValue == 0)
             {
 
             }
 
-            if (province.Item1.IsUprising && province.Item1.UprisingStarted && CountryGovernment.IsInTotalControlOfCountry)
+            if (province.IsUprising && province.UprisingStarted && CountryGovernment.IsInTotalControlOfCountry)
             {
                 //need to figure out which parties are forming rebel groups and who is becomeing a terrorist group
                 //the politcal parties was made illegal or outlawed
@@ -159,7 +159,7 @@ public class CountryManager : MonoBehaviour
                     if (party.LawStatus == CountryRelationsFactory.CountryLegalStatus.Illegal ||
              party.LawStatus == CountryRelationsFactory.CountryLegalStatus.Outlawed)
                     {
-                        province.Item1.StartUpRisingEvent(province.Item1, party);
+                        province.StartUpRisingEvent(province, party);
                     }
                     return false;
                 }))
@@ -171,11 +171,11 @@ public class CountryManager : MonoBehaviour
                 if(CountryPopulationGroups.Any(group => {
                     if(group.Anger > 1f)
                     {
-                        province.Item1.StartUpRisingEvent(province.Item1, group);
+                        province.StartUpRisingEvent(province, group);
                     }
                     if (group.Fear > 1f)
                     {
-                        province.Item1.StartUpRisingEvent(province.Item1, group);
+                        province.StartUpRisingEvent(province, group);
                     }
                     return false;
                 }))

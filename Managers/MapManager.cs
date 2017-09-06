@@ -1119,7 +1119,7 @@ public class MapManager : MonoBehaviour
             {
                 ResetMenus();
             }
-         
+
             SetAll(new List<GameObject>() { GameCountryInfoPanel
         }, true);
         };
@@ -1130,31 +1130,24 @@ public class MapManager : MonoBehaviour
             if (buttonIndex == 0)
             {
                 //sticky province until exit province or country
+                SelectProvinceOnClick(provinceIndex, regionIndex, SelectedProvince);
             }
             if (buttonIndex == 1)
             {
                 //wmslObj.FlyToCountry(countryIndex,);
                 wmslObj.SetZoomLevel(wmslObj.GetCountryRegionZoomExtents(regionIndex), 1.5f);
-                SelectProvinceOnClick(provinceIndex);
                 SelectOnCountry();
             }
         };
 
         wmslObj.OnCountryClick += (int countryIndex, int regionIndex, int buttonIndex) =>
         {
-
             wmslObj.showProvinces = true;
-
             if (buttonIndex == 1)
             {
-                //sticky the country until you exit it
-                //wmslObj.FlyToCountry(countryIndex,);
                 wmslObj.SetZoomLevel(wmslObj.GetCountryRegionZoomExtents(regionIndex), 1.5f);
                 SelectOnCountry();
             }
-
-
-
         };
 
         wmslObj.OnCountryExit += WmslObj_OnCountryExit;
@@ -1270,13 +1263,13 @@ public class MapManager : MonoBehaviour
             var countrygovernment = WorldManager.WorldCountryManagement.FirstOrDefault(country => country.CountryGovernment.CountryOfGovernment.index == cityInfo.countryIndex);
             if (countrygovernment != null)
             {
-                var countryCities = countrygovernment.CountryCityControlList.FirstOrDefault(city => city.Item1.index == cityInfo.uniqueId);
+                var countryCities = countrygovernment.CountryCityControlList.FirstOrDefault(city => city.index == cityInfo.uniqueId);
 
                 //if we have intel network etc
 
                 if (countryCities != null)
                 {
-                    SelectedCity = countryCities.Item1;
+                    SelectedCity = countryCities;
 
                     cityInfoPanel.CityCrimeIndex.value = cityInfoPanel.CrimeIndex = SelectedCity.CityCrimeIndex;
                     cityInfoPanel.CityTerrorIndex.value = cityInfoPanel.TerrorIndex = SelectedCity.CityTerrorLevel;
@@ -1317,7 +1310,7 @@ public class MapManager : MonoBehaviour
         }
 
         //get it from wahtever slected city was before
-        cityInfoPanel.CityNameText.text = SelectedCity.name;
+        cityInfoPanel.CityNameText.text = string.Format("{0} {1}", SelectedCity.name, SelectedCity.isCapital ? "[Captial]" :string.Empty, SelectedCity.isCapital ? "[Province Captial]" : string.Empty);
         cityInfoPanel.CityProvinceText.text = SelectedCity.provinceName;
         cityInfoPanel.CityStateText.text = wmslObj.countryHighlighted.name;
         cityInfoPanel.CityPopulationText.text = string.Format("{0:n0}", SelectedCity.population);
@@ -1328,16 +1321,20 @@ public class MapManager : MonoBehaviour
     }
 
 
-    public void SelectProvinceOnClick(int provindeIndex)
+    public void SelectProvinceOnClick(int provindeIndex, int regionIndex, GenericProvince SelectedProvince)
     {
+        DebugText.text = "Clicked province " + wmslObj.provinces[provindeIndex].name;
         GameMapSelectedType = MapSelected.Province;
+        SelectProvince(provindeIndex, regionIndex, SelectedProvince);
     }
     public void SelectProvince(int provinceIndex, int regionIndex, GenericProvince SelectedProvince)
     {
 
         //  wmslObj.getpr
         GameProvinceInfoPanel.SetActive(true);
+        var cm = new CountryToGlobalCountry();
         var provinceUI = GameProvinceInfoPanel.GetComponent<ProvinceInfoPanel>();
+        var controlLevel = 100f;
         if (SelectedProvince != null && SelectedCountryManager != null)
         {
             SelectedProvince = SelectedCountryManager.CountryGovernment.ControlsProvincesNames.FirstOrDefault(e => e.index == provinceIndex && e.countryIndex == regionIndex);
@@ -1359,31 +1356,102 @@ public class MapManager : MonoBehaviour
         }
         else
         {
-            //it doesn't exist so add it to the world list
+
             var selectedProvince = wmslObj.provinces[provinceIndex];
-            var newProvince = new CountryToGlobalCountry.GenericProvince(selectedProvince.name);
-            newProvince.index = selectedProvince.uniqueId;
-            newProvince.countryIndex = regionIndex;
-            newProvince.location.x = selectedProvince.center.x;
-            newProvince.location.y = selectedProvince.center.y;
-            SelectedProvince = newProvince;
+            //check if the player owns this or if it exists in the list of known provinces
+            var gameManager = FindObjectOfType<GameManager>();
+            var playerCountryManager = gameManager.GameWorldManager.CountryPlayerManagerGameObject.GetComponentInChildren<CountryManager>();
+            provinceUI.ProvinceMilitary.text = GetTotalMilitaryInProvince(playerCountryManager, selectedProvince.uniqueId);
+            if (playerCountryManager.CountryProvinceControlList.Count > 0)
+            {
+                SelectedProvince = playerCountryManager.CountryProvinceControlList.FirstOrDefault(e => e.index == selectedProvince.uniqueId);
+                if (SelectedProvince.ProvinceCities.Count == 1)
+                {
+                    SelectedProvince.ProvinceCities = playerCountryManager.CountryCityControlList.Where(e => e.provinceName == selectedProvince.name).ToList();
+                }
+                controlLevel = playerCountryManager.CountryProvinceControlList.FirstOrDefault(e => e.index == selectedProvince.uniqueId).ProvinceControl;
+            }
+            else if(gameManager.GameWorldManager.CountryAIManagerGameObject != null && SelectedProvince == null)
+            {
+                //check if the AI provinces exists
+                var AICountryManagers = gameManager.GameWorldManager.CountryAIManagerGameObject.GetComponents<CountryManager>().ToList();
+                if (SelectedProvince == null && AICountryManagers != null)
+                {
+                    SelectedProvince = AICountryManagers.FirstOrDefault(e =>
+                    e.CountryGovernment.CountryOfGovernment.index == selectedProvince.countryIndex).CountryProvinceControlList.FirstOrDefault(prov =>
+                    prov.index == selectedProvince.uniqueId);
+                    controlLevel = AICountryManagers.FirstOrDefault(e =>
+                    e.CountryGovernment.CountryOfGovernment.index == selectedProvince.countryIndex).CountryProvinceControlList.FirstOrDefault(prov =>
+                    prov.index == selectedProvince.uniqueId).ProvinceControl;
+                    SelectedProvince.ProvinceCities = AICountryManagers.FirstOrDefault(e =>
+                     e.CountryGovernment.CountryOfGovernment.index == selectedProvince.countryIndex).CountryCityControlList.Where(prov =>
+                     prov.index == selectedProvince.uniqueId).ToList();
+                    provinceUI.ProvinceMilitary.text = GetTotalMilitaryInProvince(AICountryManagers.FirstOrDefault(e =>
+                    e.CountryGovernment.CountryOfGovernment.index == selectedProvince.countryIndex), selectedProvince.uniqueId);
+                }
+            }
 
-
+            if (SelectedProvince == null)
+            {
+                //it doesn't exit in the game yet so lets check from the seed data
+                SelectedProvince = playerCountryManager.CountryGovernment.ControlsProvincesNames.FirstOrDefault(province => province.index == selectedProvince.uniqueId && province.countryIndex == selectedProvince.countryIndex);
+                if (SelectedProvince == null)
+                {
+                    var listOfCities = wmslObj.cities.Where(e => e.countryIndex == selectedProvince.countryIndex && e.province == selectedProvince.name);
+                    //it doesn't exist so add it to the world list temporary
+                    var newProvince = cm.RandomProvince(listOfCities, selectedProvince, playerCountryManager.CountryGovernment);
+                    newProvince.index = selectedProvince.uniqueId;
+                    newProvince.countryIndex = selectedProvince.countryIndex;
+                    newProvince.location.x = selectedProvince.center.x;
+                    newProvince.location.y = selectedProvince.center.y;
+                    SelectedProvince = newProvince;
+                    provinceUI.ProvinceMilitary.text = "Unknown.";
+                }
+            }
         }
 
-        if(SelectedProvince!= null)
+        if (SelectedProvince != null)
         {
             provinceUI.ProvinceNameText.text = SelectedProvince.name;
             provinceUI.ProvinceRuleOfLaw.value = provinceUI.provinceRuleOfLaw = SelectedProvince.provinceRuleOfLaw;
             provinceUI.ProvinceHumanSecurity.value = provinceUI.provinceHumanSecurity = SelectedProvince.provinceHumanSecurity;
             provinceUI.ProvinceEconomicActivity.value = provinceUI.provinceEconomicDevelopment = SelectedProvince.provinceEconomicDevelopment;
             provinceUI.ProvinceCulturalValue.value = provinceUI.provinceCulturalValue = SelectedProvince.provinceCulturalValue;
-
+            provinceUI.CityTotal.text = GetTotalCities(SelectedProvince.ProvinceCities);
+            provinceUI.PopulationText.text = string.Format("{0} people",SelectedProvince.population);
         }
 
 
         // provinceUI.PopulationText.text = string.Format("{0:n0}", SelectedProvince.population);
         SetPanelsByModeOnClick();
+
+    }
+    private string GetTotalMilitaryInProvince(CountryManager countryInfo, long provinceIndex)
+    {
+        //Major Military Bases; 4 
+        // Local Defense Forces: 3 BCTs
+        //get a list of military bases in the province;
+        //get a list of military units
+        var listofBases = countryInfo.countryMilitary.MilitaryBases.Where(milbase => milbase.BaseInProvinceIndex == provinceIndex).ToList();
+        var totalPeople = listofBases.Sum(e => e.BaseStrength);
+        return string.Format("Major Airbases; {0} Major Naval Bases; {1} Major Military Bases: {2}; Minor Military {3}; Blacksites {4}; Total Military Personnel {5};", 
+            listofBases.Count(e=>e.GameBasetype == MilitaryBaseFactory.BaseType.MajorAirBase), 
+            listofBases.Count(e => e.GameBasetype == MilitaryBaseFactory.BaseType.MajorNavalBase), 
+            listofBases.Count(e => e.GameBasetype == MilitaryBaseFactory.BaseType.MajorInstallation),
+            listofBases.Count(e => (e.GameBasetype != MilitaryBaseFactory.BaseType.MajorAirBase) || (e.GameBasetype != MilitaryBaseFactory.BaseType.MajorNavalBase) || (e.GameBasetype != MilitaryBaseFactory.BaseType.MajorInstallation)),
+            listofBases.Count(e => e.GameBasetype == MilitaryBaseFactory.BaseType.CovertSupportBase), totalPeople
+            );
+    }
+    private string GetTotalCities(List<GenericCity> provinceCities)
+    {
+
+        var totalMegaCities = provinceCities.Count(e => (e.CityType == CityType.MegaCity) || (e.CityType == CityType.Metropolis) || (e.CityType == CityType.LargeCity || (e.CityType == CityType.City) || (e.CityType == CityType.SmallCity)));// 2
+        var totalTowns = provinceCities.Count(e => (e.CityType == CityType.Town) || (e.CityType == CityType.SmallTown) || (e.CityType == CityType.SmallTownAmericas || (e.CityType == CityType.SmallTownEuropean) || (e.CityType == CityType.SmallTownMiddleEastern)));
+        var totalVillages = provinceCities.Count(e => (e.CityType == CityType.Village) || (e.CityType == CityType.SmallVillage) || (e.CityType == CityType.Hamlet || (e.CityType == CityType.Remote)));
+
+        //1 Major City (NEw York) 8 Smaller Sisyes
+        return string.Format("{0} Cities; {1} Towns; {2} Villages;", totalMegaCities, totalTowns, totalVillages);
+
 
     }
 
@@ -1661,12 +1729,12 @@ public class MapManager : MonoBehaviour
         StartCoroutine("CoLoadNextScene");
         airplane.OnMoveEnd += (GameObjectAnimator anim) =>
         {
-           
-           
+
+
             anim.follow = false;
             WorldMapHintInfo.gameObject.SetActive(false);
             WorldMapHintInfo.text = string.Empty;
-            
+
             if (airplane != null) DestroyImmediate(airplane.gameObject);
 
             if (GetAirStrikeAsync != null)
@@ -1725,7 +1793,7 @@ public class MapManager : MonoBehaviour
         wmslObj.FlyToLocation(position, 1.5f, 0.05f);
         StartCoroutine(StartAirstrike(airplane));
     }
-    
+
     #endregion
 
     public void SetMapGeoview()

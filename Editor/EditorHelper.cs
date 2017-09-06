@@ -29,6 +29,16 @@ public class EditorHelper
     }
     // -------- duplicate this code block to create your own custom item type --------
     // for more info, see the comments in "vp_CustomType.cs"
+    [MenuItem("DOV/Create Special Operations Unit", false, 101)]
+    public static void CreateSpecialOperations()
+    {
+        SpecialOperationsTeam asset = (SpecialOperationsTeam)CreateAsset(countryFlag + "weapon/configs", typeof(SpecialOperationsTeam));
+        if (asset != null)
+            asset.TeamName = "SEALs";
+    }
+    
+    // -------- duplicate this code block to create your own custom item type --------
+    // for more info, see the comments in "vp_CustomType.cs"
     [MenuItem("DOV/Create Weapon Config", false, 101)]
     public static void CreateItemWeaponConfig()
     {

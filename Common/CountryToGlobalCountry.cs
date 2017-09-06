@@ -39,7 +39,7 @@ public class CountryToGlobalCountry
     /// <param name="gov"></param>
     /// <param name="map"></param>
     /// <returns></returns>
-    public CityType GetCityType(City city, GenericProvince province, CountryGovernment gov, WMSK map)
+    public CityType GetCityType(City city, Province province, CountryGovernment gov, WMSK map)
     {
         if (city.cityClass == CITY_CLASS.REGION_CAPITAL)
         {
@@ -526,7 +526,7 @@ public class CountryToGlobalCountry
         return (int)baseTerrorIndex;
     }
 
-    public float DetermineBaseCrimeRate(int population, CityType cityType, CountryGovernment cityInGovernment, GenericProvince province)
+    public float DetermineBaseCrimeRate(int population, CityType cityType, CountryGovernment cityInGovernment, Province province)
     {
 
         var baseCrimeRate = 0.03f;
@@ -603,7 +603,7 @@ public class CountryToGlobalCountry
     }
 
 
-    public float DeterminePropertyValue(int population, CityType cityType, CountryGovernment cityInGovernment, GenericProvince province)
+    public float DeterminePropertyValue(int population, CityType cityType, CountryGovernment cityInGovernment, Province province)
     {
         return 100;
     }
@@ -638,6 +638,7 @@ public class CountryToGlobalCountry
         public bool IsBlackoutPowerLost;
         public bool IsStreetRiots;
         public Texture2D flagowner = null;
+        public Texture2D CityTypeIcon;
         public CityType CityType;
         public List<Tuple<SectorManager.Sectors, long>> ProductionSectors;
         public List<GenericCountryInfrastructure> cityInfrastructure;
@@ -653,7 +654,7 @@ public class CountryToGlobalCountry
     /// <param name="cityInGovernment"></param>
     /// <param name="province"></param>
     /// <returns></returns>
-    public GenericCity RandomGenericCity(City city, CountryGovernment cityInGovernment, GenericProvince province, WMSK map)
+    public GenericCity RandomGenericCity(City city, CountryGovernment cityInGovernment, Province province, WMSK map)
     {
         var type = GetCityType(city, province, cityInGovernment, map);
 
@@ -728,11 +729,17 @@ public class CountryToGlobalCountry
     }
     
 
-    public GenericProvince RandomProvince(long provincePopulation, Province province, CountryGovernment gov)
+    public GenericProvince RandomProvince(IEnumerable<City> provinceCities, Province province, CountryGovernment gov)
     {
+        var provincePopulation = provinceCities.Select(e => e.population).Sum();
+        var ruralPopulation = (int)(provincePopulation * (gov.UrbanPopulationRate - 100f) / 100);
+
+        provincePopulation = provincePopulation + ruralPopulation;
+        var listOfCities = new List<GenericCity>();
+        provinceCities.ToList().ForEach(city => {  listOfCities.Add(RandomGenericCity(city, gov, province, WMSK.instance)); });
         return new GenericProvince(province.name)
         {
-            
+            ProvinceCities = listOfCities,
             countryIndex = gov.CountryOfGovernment.index,
             ElectricitySupplyIndex = gov.HDI * 100,
             flagowner = gov.CountryFlag,

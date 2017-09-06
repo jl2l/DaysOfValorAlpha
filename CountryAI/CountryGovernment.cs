@@ -153,7 +153,7 @@ public class CountryGovernment : ScriptableObject
         TitleOfHealth = string.Format(min, TitleOfHealth);
         TitleOfStatePolice = string.Format(min, TitleOfStatePolice);
         TitleOfStateSecertService = string.Format(min, TitleOfStateSecertService);
-     
+
     }
 
     [Header("National Power")]
@@ -337,19 +337,16 @@ public class CountryGovernment : ScriptableObject
         {
             var selectedProvince = localCountry.provinces[i];
             var newProvince = new CountryToGlobalCountry.GenericProvince(selectedProvince.name);
-           
+
             var provinceCities = localMap.cities.Where(e => e.countryIndex == countryIndex && e.province == selectedProvince.name);
-            var provincePopulation = provinceCities.Select(e => e.population).Sum();
-            var ruralPopulation = (int)(provincePopulation * (UrbanPopulationRate - 100f) / 100);
 
-            provincePopulation = provincePopulation + ruralPopulation;
 
-            ControlsProvincesNames.Add(cityM.RandomProvince(provincePopulation, selectedProvince, this));
+            ControlsProvincesNames.Add(cityM.RandomProvince(provinceCities, selectedProvince, this));
         }
 
         ControlsCitiesNames.Clear();
         var localCities = localMap.cities.Where(e => e.countryIndex == countryIndex).ToList();
-       
+
 
         for (int i = 0; i < localCities.Count; i++)
         {
@@ -372,17 +369,29 @@ public class CountryGovernment : ScriptableObject
                 {
 
                     var copyOfGover = this;
-                    var newGenericCity = cityM.RandomGenericCity(city, copyOfGover, cityProvince, localMap);
-                    cityProvince.ProvinceCities = new List<CountryToGlobalCountry.GenericCity>();
-                    newGenericCity.population = city.population;
-                    newGenericCity.name = city.name;
-                    if(city.cityClass == CITY_CLASS.REGION_CAPITAL)
+                    var selectedProvince = localCountry.provinces.ToList().FirstOrDefault(e => e.name == cityProvince.name);
+                    var newGenericCity = cityM.RandomGenericCity(city, copyOfGover, selectedProvince, localMap);
+                    if (city.cityClass == CITY_CLASS.COUNTRY_CAPITAL)
                     {
+                        newGenericCity.isCapital = true;
+                    }
+
+                    if (city.cityClass == CITY_CLASS.REGION_CAPITAL)
+                    {
+                        newGenericCity.isRegionalCaptial = true;
                         cityProvince.regionCaptialLocation = city.unity2DLocation;
                     }
-                    cityProvince.ProvinceCities.Add(newGenericCity);
                     ControlsCitiesNames.Add(newGenericCity);
 
+                    //if (cityProvince.ProvinceCities == null)
+                    //{
+                    //    cityProvince.ProvinceCities = new List<CountryToGlobalCountry.GenericCity>();
+                    //    cityProvince.ProvinceCities.Add(newGenericCity);
+                    //}
+                    //else
+                    //{
+                    //    cityProvince.ProvinceCities.Add(newGenericCity);
+                    //}
                 }
                 catch (Exception di)
                 {

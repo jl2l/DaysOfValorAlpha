@@ -86,39 +86,41 @@ namespace WorldMapStrategyKit
                 citiestoDraw = map.cities.Where(e => e.countryIndex == map.countryHighlightedIndex).ToList();
             else if(countryIndex != 0)
             citiestoDraw = map.cities.Where(e => e.countryIndex == countryIndex).ToList();
-
+           
             int cityCount = citiestoDraw.Count();
+            //var go = gameManager.GameWorldManager.CountryPlayerManagerGameObject.GetComponentInChildren<CountryGovernment>();
             foreach (var city in citiestoDraw)
             {
               
                     GameObject cityObj, cityParent;
                     Material mat;
-                    switch (city.cityClass)
+             
+                switch (city.cityClass)
                     {
 
                         case CITY_CLASS.COUNTRY_CAPITAL:
                         var cap = Resources.Load<GameObject>("WMSK/Prefabs/CityCapitalCountrySpot");
                             cityObj = Instantiate(cap);
-                            mat = citiesCountryCapitalMat;
-
-                            cityParent = countryCapitals;
-                           // mat.color = gameManager.GameWorldManager.CityStatus(gameManager.GamePlayerCountryManager.CountryGovernment,
-                                // new CountryToGlobalCountry.GenericCity(gameManager.GameWorldManager.WorldCityData.FirstOrDefault(e => e.index == city.uniqueId)), city);
-                            break;
+                        citiesCountryCapitalMat.color = Colors.PuceRed;
+                        mat = citiesCountryCapitalMat;
+                        
+                                cityParent = countryCapitals;
+                       // mat.color = gameManager.GameWorldManager.CityStatus(go, city);
+                        break;
                         case CITY_CLASS.REGION_CAPITAL:
                             cityObj = Instantiate(Resources.Load<GameObject>("WMSK/Prefabs/CityCapitalRegionSpot"));
-                           mat = citiesRegionCapitalMat;
+                        citiesRegionCapitalMat.color = Colors.DeepAquamarine;
+                        mat = citiesRegionCapitalMat;
                             cityParent = regionCapitals;
-                           // mat.color = gameManager.GameWorldManager.CityStatus(gameManager.GamePlayerCountryManager.CountryGovernment,
-                              //   new CountryToGlobalCountry.GenericCity(gameManager.GameWorldManager.WorldCityData.FirstOrDefault(e => e.index == city.uniqueId)), city);
-                            break;
+                       // mat.color = gameManager.GameWorldManager.CityStatus(go, city);
+                        break;
                         default:
                             cityObj = Instantiate(Resources.Load<GameObject>("WMSK/Prefabs/CitySpot"));
+                        citiesNormalMat.color = Colors.PurpleNavy;
                             mat = citiesNormalMat;
                             cityParent = normalCities;
-                            //mat.color = gameManager.GameWorldManager.CityStatus(gameManager.GamePlayerCountryManager.CountryGovernment,
-                               //  new CountryToGlobalCountry.GenericCity(gameManager.GameWorldManager.WorldCityData.FirstOrDefault(e => e.index == city.uniqueId)), city);
-                            break;
+                        //mat.color = gameManager.GameWorldManager.CityStatus(go, city);
+                        break;
                     }
 
                     cityObj.name = city.name.ToString();
@@ -128,7 +130,10 @@ namespace WorldMapStrategyKit
                     cityObj.transform.localPosition = city.unity2DLocation;
                     Renderer rr = cityObj.GetComponent<Renderer>();
                     if (rr != null)
-                        rr.sharedMaterial = mat;
+                {
+                    rr.sharedMaterial = mat;
+                }
+                     
 
                     numCitiesDrawn++;
                     visibleCount++;

@@ -12,8 +12,14 @@ public class CityInfoPanel : MonoBehaviour {
     public Text CityPopulationText;
     public Text CityStateText;
     public Text CityHoverOverStat;
-    public RawImage CityControllingFlag;
+    public Text CityBudgetText;
+    public Text CityExpensesText;
+    public Text CityRebelControl;
 
+    public RawImage CityControllingFlag;
+    public RawImage CityTypeIcon;
+
+    public GameObject CitySectorChart;
     public GameObject CityStatsInfoPanel;
     public GameObject CitySelectedPanel;
     public GameObject CityInfrastructurePanel;
