@@ -68,9 +68,23 @@ public class CountryBudget : ScriptableObject
         [Range(-100.0f, 100.0f)]
         public float TourismSpendingRate;
         public long Tourism;
-
+        [Tooltip("The likelness the weapon will hit its target ")]
+        [Range(-100.0f, 100.0f)]
         public long Agriculture;
         public float AgricultureSpendingRate;
+
+        [Tooltip("The likelness the weapon will hit its target ")]
+        [Range(-100.0f, 100.0f)]
+        public long Aerospace;
+        public float AerospaceSpendingRate;
+        [Tooltip("The likelness the weapon will hit its target ")]
+        [Range(-100.0f, 100.0f)]
+        public long Commerce;
+        public float CommerceSpendingRate;
+        [Tooltip("The likelness the weapon will hit its target ")]
+        [Range(-100.0f, 100.0f)]
+        public long Energy;
+        public float EnergySpendingRate;
     }
     [System.Serializable]
     public class CountryFixedExpense
@@ -221,6 +235,10 @@ public class CountryBudget : ScriptableObject
     public float CenteralBankRate;
     public float PerCapitaIncome;
     public long GNP;
+    public long CashReserves;
+    public bool HasSoverignWealthFund;
+    public long WealthFundInvestment;
+    public float WealthFundRate;
     /// <summary>
     /// The rate that the person incomes of the average person increases and increases the overall wealth of the country
     /// </summary>

@@ -8,6 +8,7 @@ using System.Text;
 using UnityEngine;
 using WorldMapStrategyKit;
 using static CountryToGlobalCountry;
+using static SpecialOperationsTeam;
 
 #pragma warning disable 0168 // variable declared but not used.
 #pragma warning disable 0219 // variable assigned but not used.
@@ -16,10 +17,438 @@ using static CountryToGlobalCountry;
 namespace Assets
 {
 
+
     public class ContactGenerator
     {
+        public List<Gear> GearByType(KitType kitType)
+        {
+            return DefaultGearList().Where(kits => kits.GearKitType == kitType).ToList();
+        }
+        public TeamKits GenerateKit(KitType type)
+        {
+            var cg = new ContactGenerator();
 
+            var newKit = new TeamKits()
+            {
+                Name = type.ToDescription(),
+                KitGunHitRate = 85f,
+                KitHealthHP = 100f,
+                KitsKillSight = 75f,
+                Kit = type,
+                Gun = null
+            };
+
+            newKit.Gear = cg.GearByType(type);
+            return newKit;
+        }
+        public List<Gear> DefaultGearList()
+        {
+            return new List<Gear>
+                {
+                    new Gear()
+                    {
+
+                    GearName = "Sniper Scope",
+                    GearPerkType = KitValueType.GunAccurancy,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.Sniper
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "Ghillie Suit",
+                    GearPerkType = KitValueType.Armor,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.Sniper
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "Range Finder",
+                    GearPerkType = KitValueType.GunAccurancy,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.Sniper
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "Mission Datalink",
+                    GearPerkType = KitValueType.KillSight,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.Sniper
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "Bipod",
+                    GearPerkType = KitValueType.GunAccurancy,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.Sniper
+                    },
+
+                    new Gear()
+                    {
+
+                    GearName = "40mm Grenade Launcher",
+                    GearPerkType = KitValueType.Ammo,
+                    GearValue = 1.5f,
+                    GearCount = 8,
+                    GearKitType = KitType.Assault
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "Body Armor",
+                    GearPerkType = KitValueType.Armor,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.Assault
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "Enhanced NVGs",
+                    GearPerkType = KitValueType.KillSight,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.Assault
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "Smoke grenades",
+                    GearPerkType = KitValueType.Grenade,
+                    GearValue = 1.5f,
+                    GearCount = 4,
+                    GearKitType = KitType.Any
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "ACOG Scope",
+                    GearPerkType = KitValueType.GunAccurancy,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.Assault
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "Gunshot wound Kit",
+                    GearPerkType = KitValueType.Health,
+                    GearValue = 1.5f,
+                    GearCount = 5,
+                    GearKitType = KitType.Medic
+
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "Body Armor",
+                    GearPerkType = KitValueType.Armor,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.Medic
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "Shrapnel wound kit",
+                    GearPerkType = KitValueType.Health,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.Medic
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "defibrillator",
+                    GearPerkType = KitValueType.Health,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.Medic
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "bleed powder",
+                    GearPerkType = KitValueType.Health,
+                    GearValue = 1.5f,
+                    GearCount = 5,
+                    GearKitType = KitType.Medic
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "40mm Grenade Launcher",
+                    GearPerkType = KitValueType.Ammo,
+                    GearValue = 1.5f,
+                    GearCount = 5,
+                    GearKitType = KitType.Grenadier
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "Body Armor",
+                    GearPerkType = KitValueType.Armor,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.Grenadier
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "Enhanced NVGs",
+                    GearPerkType = KitValueType.GunAccurancy,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.Grenadier
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "Claymore",
+                    GearPerkType = KitValueType.Grenade,
+                    GearValue = 1.5f,
+                    GearCount = 2,
+                    GearKitType = KitType.Grenadier
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "Grip",
+                    GearPerkType = KitValueType.GunAccurancy,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.Any
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "556mm Ammo",
+                    GearPerkType = KitValueType.Ammo,
+                    GearValue = 1.5f,
+                    GearCount = 5,
+                    GearKitType = KitType.Any
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "Body Armor",
+                    GearPerkType = KitValueType.Armor,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.SquadLeader
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "Enhanced NVGs",
+                    GearPerkType = KitValueType.GunAccurancy,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.SquadLeader
+                    },
+                    new Gear()
+                    {
+
+                    GearName = "Bincolars",
+                    GearPerkType = KitValueType.GunAccurancy,
+                    GearValue = 1.5f,
+                    GearCount = 2,
+                    GearKitType = KitType.SquadLeader
+                    },
+                    new Gear()
+                    {
+                    GearName = "Radio",
+                    GearPerkType = KitValueType.KillSight,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.Nco
+                    },new Gear()
+                    {
+
+                    GearName = "Grip",
+                    GearPerkType = KitValueType.GunAccurancy,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.Nco
+                    }
+                    ,new Gear()
+                    {
+
+                    GearName = "Body Armor",
+                    GearPerkType = KitValueType.Armor,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.Nco
+                    }
+                    ,new Gear()
+                    {
+
+                    GearName = "ACOG Scope",
+                    GearPerkType = KitValueType.GunAccurancy,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.Nco
+                    }
+                    ,new Gear()
+                    {
+
+                    GearName = "Bipod",
+                    GearPerkType = KitValueType.GunAccurancy,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.SAW
+                    }
+                     ,new Gear()
+                    {
+
+                    GearName = "5.56mm Ammo",
+                    GearPerkType = KitValueType.Ammo,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.SAW
+                    }
+                      ,new Gear()
+                    {
+
+                    GearName = "Heavy Barrel",
+                    GearPerkType = KitValueType.GunAccurancy,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.SAW
+                    }
+                      ,new Gear()
+                    {
+
+                    GearName = "Body Armor",
+                    GearPerkType = KitValueType.Armor,
+                    GearValue = 1.5f,
+                    GearCount = 1,
+                    GearKitType = KitType.SAW
+                    }
+                    };
+        }
         #region Constants
+
+        #region Squad Names
+
+        public static string[] ChineseSquads =
+      {
+            // A Male names
+            "Blade",
+            "Arrow",
+            "Falcon",
+            "Tiger",
+            "Flying Dragon",
+            "Oscar",
+            "Bat",
+            "Eagle",
+            "Backfire",
+            "Owl",
+            "Blackjack",
+            "Sword",
+            "Sea Dragon",
+            "Dragon",
+            "South",
+            "Jade",
+            "Monokey",
+            "Crane",
+            "Mantis",
+            "Panada",
+            "Snow leopard",
+            "Thundergod"
+        };
+
+        public static string[] WesternSquads =
+       {
+            // A Male names
+            "Alpha",
+            "Bravo",
+            "Charlie",
+            "Delta",
+            "Echo",
+            "Foxtrot",
+            "Golf",
+            "Hotel",
+            "India",
+            "Juliet",
+            "Kilo",
+            "Lima",
+            "Mike",
+            "November",
+            "Oscar",
+            "Papa",
+            "Quebec",
+            "Romeo",
+            "Sierra",
+            "Tango",
+            "Uniform",
+            "Victor",
+            "Whiskey",
+            "X-Ray",
+            "Yankee",
+            "Zulu",
+                "Adam",
+                "Able",
+                "Baker",
+                "Charlie",
+                "David",
+               "Easy",
+                "Frank",
+               "Georg",
+                "Henry",
+                "Item",
+                "Johnn",
+                "King",
+                "Love",
+                "Mike",
+                "Nab/N",
+                "Oboe",
+                "Peter",
+                "Queen",
+                "Roger",
+                "Sugar",
+                "Tare",
+                "Uncle",
+                "Victo",
+                "William",
+                "X-Ray",
+                "Yoke",
+                "Zebra",
+                "Dog",
+                "Easy",
+                "Fox",
+                "George",
+                "How",
+                "Item",
+                "Jig",
+                "King",
+                "Roger",
+                "Sugar",
+                "Tare",
+                "Uncle",
+                "Victor",
+                "William ",
+                "Yoke",
+                "Edward",
+                "George",
+                "John",
+                "Lincoln",
+                "Mary",
+                "Ocean",
+                "Robert",
+                "Sam",
+                "Tom",
+                "Union",
+        };
+        #endregion
 
         #region First Names Female
         /// <summary>
@@ -1930,7 +2359,7 @@ namespace Assets
         //Envy is a reaction to lacking something. Jealousy is a reaction to the threat of losing something (usually someone)
         public enum ContactVice
         {
-           
+
             sex,
             drugs,
             rocknroll,
@@ -1972,6 +2401,20 @@ namespace Assets
 
         }
 
+        public enum ContactHealthStatus
+        {
+            InCombat,
+            Healthly,
+            Tired,
+            Sick,
+            CriticallySick,
+            Wounded,
+            CriticallyWounded,
+            POW,
+            KIA,
+            MIA,
+            Unknown
+        }
 
         //TODO Write bios for these Statesment && diplomat
         /// <summary>
@@ -2016,6 +2459,8 @@ namespace Assets
             officer,
             [Description("Special Forces")]
             commando,
+            #endregion Contact Group Type "military" 18
+            #region Rebel
             [Description("Rebel Leader")]
             rebelleader,
             [Description("Rebel Fighter")]
@@ -2026,8 +2471,8 @@ namespace Assets
             terroristfighter,
             [Description("Enemy Combatant")]
             combatant,
-            #endregion Contact Group Type "military" 18
 
+            #endregion Rebel 18
             #region Contact Group Type "intelligence" 19
             [Description("Hacker")]
             hacker,
@@ -2182,7 +2627,9 @@ namespace Assets
             intelligence,
             economic,
             research,
-            population
+            population,
+            rebel,
+            terrorist
         }
         #endregion
 
@@ -2201,6 +2648,29 @@ namespace Assets
             }
         }
 
+
+        public List<Operator> GenerateSpecialOpsTeam(int SquadSize, List<KitType> TeamBaseConfig, string TeamCountryName, string TeamCountryRegion)
+        {
+            var localTeam = new List<Operator>();
+
+            for (int f = 0; f < SquadSize; f++)
+            {
+                var squadName = string.Format("{0} {1} {2}-{3}", WesternSquads[UnityEngine.Random.Range(0, 22)], WesternSquads[UnityEngine.Random.Range(0, 22)],
+          Helpers.NumberToText(UnityEngine.Random.Range(0, 9)), Helpers.NumberToText(UnityEngine.Random.Range(0, 9)));
+                for (int i = 0; i < TeamBaseConfig.Count; i++)
+                {
+                    var op = new Operator();
+                    Contact newOperative = GenerateContact(TeamCountryName, TeamCountryRegion, ContactGameGroup.military);
+                    op.Teammate = newOperative;
+                    op.Kit = GenerateKit(TeamBaseConfig[i]);
+                    op.TeamSquadName = squadName;
+                    op.Status = ContactHealthStatus.Healthly;
+                    localTeam.Add(op);
+                }
+            }
+
+            return localTeam;
+        }
         public Contact GenerateTmpContact;
 
 
@@ -2231,26 +2701,66 @@ namespace Assets
             generatedContact.IsCompromised = false;
             generatedContact.IsIntelTarget = false;
 
-            var inGameMaxYearDOb = 1990; //TODO this needs to come the max time of the current game time ie 2016-25 years)
-            var DoBYear = UnityEngine.Random.Range(1950, inGameMaxYearDOb);
+
+            var inGameMaxYearDOb = 2001;
+            var inGameMinYearDOb = 1950;
+
+            switch (gameGroup)
+            {
+                case ContactGameGroup.random:
+                    inGameMinYearDOb = 1964;
+                    break;
+                case ContactGameGroup.diplomacy:
+                    inGameMinYearDOb = 1950;
+                    break;
+                case ContactGameGroup.military:
+                    inGameMinYearDOb = 1980;
+                    break;
+                case ContactGameGroup.intelligence:
+                    inGameMinYearDOb = 1970;
+                    break;
+                case ContactGameGroup.economic:
+                    inGameMinYearDOb = 1980;
+                    break;
+                case ContactGameGroup.research:
+                    inGameMinYearDOb = 1980;
+                    break;
+                case ContactGameGroup.population:
+                    inGameMinYearDOb = 1950;
+                    break;
+                case ContactGameGroup.rebel:
+                    inGameMinYearDOb = 1990;
+                    break;
+                case ContactGameGroup.terrorist:
+                    inGameMinYearDOb = 1990;
+                    break;
+                default:
+                    break;
+            }
+            //TODO this needs to come the max time of the current game time ie 2016-25 years)
+
             var DoBDay = UnityEngine.Random.Range(1, 30);
-            
+            var DoBYear = UnityEngine.Random.Range(inGameMinYearDOb, inGameMaxYearDOb);
             generatedContact.Dob = new DateTime(DoBYear, newRandomProfile.BirthMonth, DoBDay);
             var age = DateTime.Now.Year - generatedContact.Dob.Year;
             // Go back to the year the person was born in case of a leap year
             if (generatedContact.Dob > DateTime.Now.AddYears(-age)) age--;
             generatedContact.Age = age;
+            generatedContact.DobMonth = newRandomProfile.BirthMonth;
+            generatedContact.DobYear = generatedContact.Dob.Year;
             generatedContact.CountryName = countryName;
             generatedContact.ContactSkill = RandomEnumValue<ContactSkill>();
             generatedContact.ContactVice = RandomEnumValue<ContactVice>();
-
+            generatedContact.GeneProfile = newRandomProfile;
+            generatedContact.NameRegion = countryRegionName;
+            generatedContact.ContactNativeLangauge = db.LanguageFromCountry(countryName);
             switch (gameGroup)
             {
                 case ContactGameGroup.diplomacy:
                     generatedContact.ContactType = RandomEnumValue<ContactType>((int)ContactType.diplomat, (int)ContactType.partyinsider);
                     break;
                 case ContactGameGroup.military:
-                    generatedContact.ContactType = RandomEnumValue<ContactType>((int)ContactType.patriot, (int)ContactType.combatant);
+                    generatedContact.ContactType = RandomEnumValue<ContactType>((int)ContactType.patriot, (int)ContactType.commando);
                     break;
                 case ContactGameGroup.intelligence:
                     generatedContact.ContactType = RandomEnumValue<ContactType>((int)ContactType.hacker, (int)ContactType.agent007);
@@ -2841,7 +3351,7 @@ namespace Assets
         }
 
 
-       
+
         public static string WPMGetRandomHomeTown(string countryName)
         {
             var country = map.GetCountry(map.GetCountryIndex(countryName));

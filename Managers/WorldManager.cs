@@ -27,7 +27,11 @@ public class WorldManager : MonoBehaviour
     public Sprite FOBIcon;
     public Sprite OPIcon;
     public Sprite Infrastructure;
+    public Texture2D CityDefaultIcon;
+    public Texture2D CityTownIcon;
+    public Texture2D CityVillageIcon;
 
+    public List<CountryToGlobalCountry.GenericCountryInfrastructure> WorldInfrastructureList;
     public GameObject CountryAIManagerGameObject;
     public GameObject CountryHumanManagerGameObject;
     public GameObject CountryPlayerManagerGameObject;
@@ -53,7 +57,28 @@ public class WorldManager : MonoBehaviour
 
     }
 
+    public List<CountryToGlobalCountry.GenericProvince> InitalizeControlProvinceList(List<CountryToGlobalCountry.GenericProvince> provinces)
+    {
+        var list = new List<CountryToGlobalCountry.GenericProvince>();
 
+        provinces.ForEach(prov =>
+        {
+            prov.ProvinceControl = 100f;
+            list.Add(prov);
+        });
+        return list;
+    }
+
+    public List<CountryToGlobalCountry.GenericCity> InitalizeControlCityList(List<CountryToGlobalCountry.GenericCity> cities) {
+        var list = new List<CountryToGlobalCountry.GenericCity>();
+
+        cities.ForEach(city =>
+        {
+            city.CityControl = 100f;
+            list.Add(city);
+        });
+        return list;
+    }
 
     public void InitalizeRefrenceCity(string cityName, CountryToGlobalCountry.GenericCity cityData ) { }
 
@@ -76,6 +101,10 @@ public class WorldManager : MonoBehaviour
             newCountryManagerSetup.CountryLaws = gov.Laws;
             newCountryManagerSetup.CountryPoliticalParties = gov.PoliticalParties;
             newCountryManagerSetup.CountryPopulationGroups = gov.DemographicGroups;
+            newCountryManagerSetup.countryMilitary = gov.Military;
+            newCountryManagerSetup.CountryCityControlList = InitalizeControlCityList(gov.ControlsCitiesNames);
+            newCountryManagerSetup.CountryProvinceControlList = InitalizeControlProvinceList(gov.ControlsProvincesNames);
+            newCountryManagerSetup.CountryGovernment.CountryFounding = new DateTime(newCountryManagerSetup.CountryGovernment.FoundingYear, newCountryManagerSetup.CountryGovernment.FoundingMonth, newCountryManagerSetup.CountryGovernment.FoundingDay);
 
             var newCountryAgentConfig = newCountryAgent.AddComponent<CountryAgent>();
             var newCountryAmbassdorAgent = newCountryAmbassdor.AddComponent<GameAgent>();
@@ -94,7 +123,7 @@ public class WorldManager : MonoBehaviour
             //GameMapManager.wmslObj.AddMarker2DSprite()
             countryPropertries.attrib.Absorb(gov.ContactOfHeadOfState.ContactName);
             var citiesInCountry = GameMapManager.wmslObj.cities.Where(e => e.countryIndex == gov.CountryOfGovernment.index);
-           
+           //TODO THIS MIGHT GET REPLACED WITH THE GENERIC DATA INSTEAD
             if (gov.IsMasterPlayer || gov.IsHumanPlayer)
             {
 
@@ -168,8 +197,9 @@ public class WorldManager : MonoBehaviour
         return false;
     }
 
-    public Color CityStatus(CountryGovernment countryGovernment, CountryToGlobalCountry.GenericCity city, City mapCity)
+    public Color CityStatus(CountryGovernment countryGovernment, City mapCity)
     {
+        var genericCity = countryGovernment.ControlsCitiesNames.FirstOrDefault(city => city.index == mapCity.uniqueId);
 
 
         //check the status of the city and determine if it meets these conditions
@@ -183,36 +213,83 @@ public class WorldManager : MonoBehaviour
         //green is a city with plus change either in production or money generation
         var lastData = mapCity.attrib["data"];
 
-        var provinceData = countryGovernment.ControlsProvincesNames.FirstOrDefault(e => e.name == city.name && e.index == city.index);
+      
 
-        if ((city.CityTerrorLevel > 95) || city.IsTerrorAttack)
+        if (genericCity.IsTerrorAttack || genericCity.CityTerrorLevel > 95)
         {
-            return Color.red;
+            return Colors.DarkRed;
         }
 
-        if ((city.CityCrimeIndex > 95) || city.IsStreetRiots)
+        if(genericCity.CityTerrorLevel >= 94 && genericCity.CityTerrorLevel <= 90)
         {
-            return Colors.Amaranth;
+            return Colors.RustyRed;
         }
 
-        if ((city.CityPropertyValue < 10) || city.IsBlackoutPowerLost || city.IsNaturalDisater)
+        if (genericCity.CityTerrorLevel >= 94 && genericCity.CityTerrorLevel <= 90)
         {
-            return Color.red;
+            return Colors.Lava;
+        }
+        if (genericCity.CityTerrorLevel >= 89 && genericCity.CityTerrorLevel <= 85)
+        {
+            return Colors.Lava;
+        }
+        if (genericCity.CityTerrorLevel >= 84 && genericCity.CityTerrorLevel <= 70)
+        {
+            return Colors.Lava;
+        }
+        if (genericCity.CityTerrorLevel >= 69 && genericCity.CityTerrorLevel <= 60)
+        {
+            return Colors.Lava;
+        }
+        if (genericCity.CityTerrorLevel >= 59 && genericCity.CityTerrorLevel <= 50)
+        {
+            return Colors.Lava;
         }
 
-        if ((city.CityRebelControl > 95) || city.IsUnderRebelControl)
+        if (genericCity.IsStreetRiots)
         {
-            return Color.red;
+            return Colors.InternationalOrangeEngineering;
         }
 
-        if ((city.CityTradeValue < 10))
+        if (genericCity.IsBlackoutPowerLost)
         {
-            return Color.red;
+            return Colors.Sinopia;
         }
-
-        if (city.IsUnderQuarintine || city.IsUnderStateOfEmergency)
+        if (genericCity.IsInPanic)
         {
-            return Color.red;
+            return Colors.Sinopia;
+        }
+        if (genericCity.IsNaturalDisater)
+        {
+            return Colors.Sinopia;
+        }
+        if (genericCity.IsTerrorAttack)
+        {
+            return Colors.Sinopia;
+        }
+        if (genericCity.IsUnderMarshalLaw)
+        {
+            return Colors.Sinopia;
+        }
+        if (genericCity.IsUnderNoFlyZone)
+        {
+            return Colors.Sinopia;
+        }
+        if (genericCity.IsUnderQuarintine)
+        {
+            return Colors.Sinopia;
+        }
+        if (genericCity.IsUnderRebelControl)
+        {
+            return Colors.Sinopia;
+        }
+        if (genericCity.IsUnderStateOfEmergency)
+        {
+            return Colors.Sinopia;
+        }
+        if (genericCity.IsUnderRebelControl)
+        {
+            return Colors.Sinopia;
         }
 
         return Color.white;

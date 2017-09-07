@@ -12,7 +12,7 @@ public class MilitaryManager : MonoBehaviour
 {
     public List<Tuple<CountryGovernment, List<DeckDataItem>, Vector2>> GameActiveMilitaryList;
     public List<Tuple<string, List<DeckDataItem>, Vector4>> PlayersMilitaryDeployments;
-    public List<StrategicForce> PlayerStrategicForces;
+    public List<StrategicWeapon> PlayerStrategicForces;
     public List<MilitaryBase> PlayerMilitaryBases;
     public CountryMilitary PlayerMilitary;
     public MilitaryBaseFactory PlayerMilitaryBase;
@@ -70,7 +70,7 @@ public class MilitaryManager : MonoBehaviour
         GameDeckManager.PlayerDecks.ForEach(PlayerDeck =>{
 
         });
-
+        PlayerMilitaryBases = PlayerMilitary.MilitaryBases;
        // PlayerMilitaryBases = PlayerMilitaryBase.DefaultList(GamePlayerMilitaryBaseContainer);
         //PlayerMilitaryList = new List<Tuple<List<DeckDataItem>, Vector2>>(GameDeckManager.PlayerDecks,)
     }

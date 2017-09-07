@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Assets;
 using System.ComponentModel;
 
-public class MilitaryBaseFactory 
+public class MilitaryBaseFactory
 {
     [MenuItem("Tools/MyTool/Do It in C#")]
     static void DoIt()
@@ -29,7 +29,7 @@ public class MilitaryBaseFactory
         [Description("Major Installation")]
         SupportBase, //supplies transfer from here to another base, and resupply reload here
         [Description("Major Installation")]
-        ColocationBase, //joint base with allied country, if you lose alliance etc this goes away
+        CooperativeSecurityLocationBase, //joint base with allied country, if you lose alliance etc this goes away
         [Description("Major Installation")]
         ForwardOperatingBase, //this is a base in an allied country that can be used to launch attacks you must move decks to forward bases
         [Description("Major Installation")]
@@ -38,6 +38,8 @@ public class MilitaryBaseFactory
         CovertSupportBase, //this is a covert facility that can be used to launch intel and covert operations, it can be anywhere, but can be detect by hostile countries intelligence services
         [Description("Major Installation")]
         ElectronicSupportBase,//this is a covert facility designed to capture signals intelligences it can be anywhere but can also be discovered and disabled.
+        [Description("Fire Support Bases have more slots for indirect fire weapons and less for barracks or logistics.")]
+        FireSupportBase
     }
 
     public enum BaseIconType
@@ -67,10 +69,28 @@ public class MilitaryBaseFactory
         RebelSig,
         RebelCovert,
     }
+    public enum BaseDefenses
+    {
+        BarbWire,
+        RazorWire,
+        HescoSingle,
+        HescoDouble,
+        ConcreteHalf,
+        ConcreteWall,
+        ImprovisedBarricades,
+        ChainLinkFence,
+        AntiTankMines,
+        AntiPersonelMines,
+        TankObstacle,
+        GroundSensor,
+        ElectronicPassive,
+        AutomatedDefense,
+        GuardDogs
+    }
     public enum BaseSpecialize
     {
         [Description("Indirect Artilley Support")]
-        Artillery, //all artillery weapons will be better mortars defense and artillery in offensive
+        MortarArtillery, //all artillery weapons will be better mortars defense and artillery in offensive
         [Description("Indirect Missile Support")]
         Missilery, // all missiles defense and offesne will be better, reduce time for missile strikes
         [Description("Intelligence Gathering Site")]
@@ -91,6 +111,12 @@ public class MilitaryBaseFactory
         FuelStorage, //increase the sortie rate
         [Description("Airbase Air Traffic Controller")]
         ChemicalWeaponsStorage, //increase the sortie rate
+        [Description("Airbase Air Traffic Controller")]
+        NucearWeaponsStorage, //increase the sortie rate
+        [Description("Airbase Air Traffic Controller")]
+        MissileSiloSite, //increase the sortie rate
+        [Description("Airbase Air Traffic Controller")]
+        FirebaseMLRS, //increase the sortie rate
         [Description("Airbase Air Traffic Controller")]
         HighGainSat, //increase the sortie rate
         [Description("Airbase Air Traffic Controller")]
@@ -113,7 +139,38 @@ public class MilitaryBaseFactory
         Helipad, //increase the sortie rate
         [Description("Shipping containers")]
         LogisticalStorage, //increase the sortie rate
-
+        [Description("Shipping containers")]
+        KillHouseTraining, //increase the sortie rate
+        [Description("Shipping containers")]
+        BaseDefenseHescoWalls, //increase the sortie rate
+        [Description("Shipping containers")]
+        BaseMGBunker,
+        [Description("Shipping containers")]
+        BaseIndirectFireBunker,
+        [Description("Shipping containers")]
+        ShootingRanging,
+        [Description("Shipping containers")]
+        SpecialOperationsCenter,
+        [Description("Shipping containers")]
+        PXStore,
+        [Description("Shipping containers")]
+        LaundryServices,
+        [Description("Shipping containers")]
+        WasteManagement,
+        [Description("Shipping containers")]
+        WaterDesalinator,
+        [Description("Shipping containers")]
+        PowerGeneratorWindTurbine,
+        [Description("Shipping containers")]
+        Airstrip,
+        [Description("Shipping containers")]
+        LargeAirstrip,
+        [Description("Shipping containers")]
+        MunitionsBunker,
+        [Description("Shipping containers")]
+        UndergroundMunitonsBunker,
+        [Description("Shipping containers")]
+        UndergroundFuelStorage
 
     }
     public WeaponsConfigFactory weaponConfigFactory = new WeaponsConfigFactory();
@@ -137,7 +194,7 @@ public class MilitaryBaseFactory
     }
     public MilitaryBase CreateMilitaryBase(GameObject gameObject)
     {
-       // var newBase = gameObject.AddComponent<MilitaryBase>();
+        // var newBase = gameObject.AddComponent<MilitaryBase>();
 
         return new MilitaryBase();
     }

@@ -16,6 +16,7 @@ public class CountryGovernment : ScriptableObject
     public List<DiplomaticEvent> GovernmentHistoryWithPlayer;
 
     public List<CountryToGlobalCountry.GenericProvince> ControlsProvincesNames;
+    public List<CountryToGlobalCountry.GenericCity> ControlsCitiesNames;
 
     public List<CountryToGlobalCountry.GenericCountry> ControlCountriesNames;
     public List<CountryToGlobalCountry.GenericCountryInfrastructure> ControlCountryCriticalInfrastructure;
@@ -114,8 +115,24 @@ public class CountryGovernment : ScriptableObject
     public string TitleOfPopulation;
 
     public string TitleOfHeadOfState;
+    public string TitleOfHeadOfMilitary;
+    public string TitleOfHeadOState;
+    public string TitleOfHeadOInternal;
+    public string TitleOfHeadOTrade;
+    public string TitleOfHeadOJustice;
+    public string TitleOfHeadOResearch;
+    public string TitleOfHeadOIntel;
+    public string TitleOfHeadOCulture;
+    public string TitleOfHeadOEducation;
+    public string TitleOfHeadOEnergy;
+    public string TitleOfHeadOHealth;
+    public string TitleOfHeadOEnvironment;
+    public string TitleOfHeadOAgriculture;
+    public string TitleOfHeadOStatePolice;
+    public string TitleOfHeadOStateSecertService;
+    public string TitleOfHeadOPopulation;
 
-    private void MinstryOf()
+    private void MinstryOHeadOf()
     {
 
         MinistryOf = true;
@@ -136,6 +153,7 @@ public class CountryGovernment : ScriptableObject
         TitleOfHealth = string.Format(min, TitleOfHealth);
         TitleOfStatePolice = string.Format(min, TitleOfStatePolice);
         TitleOfStateSecertService = string.Format(min, TitleOfStateSecertService);
+
     }
 
     [Header("National Power")]
@@ -179,6 +197,16 @@ public class CountryGovernment : ScriptableObject
     [Range(0.0f, 1.0f)]
     public float HDI;
 
+
+    /// <summary>
+    /// The  breakdown between rural and city folk
+    /// </summary>
+    [Range(-100.0f, 100.0f)]
+    public float UrbanizationRate;
+    [Range(0.0f, 100.0f)]
+    public float UrbanPopulationRate;
+
+
     public bool MilitaryConscription;
     /// <summary>
     /// Does the player have a embassy in this government
@@ -194,7 +222,10 @@ public class CountryGovernment : ScriptableObject
     public long RawPopulation;
     private void UpdatePopulations()
     {
-
+        var helper = new Helper();
+        helper.DemographicDistribution = new Accord.Statistics.Distributions.Univariate.BinomialDistribution();
+        //take the distrubtion of this into the political parties so you get a dis of white republicans black democrats and asian indendants etc
+        //helper.DemographicDistribution.Generate()
         DemographicGroups.ForEach(e =>
         {
             double newPopulation = (e.Population / 100) * RawPopulation;
@@ -233,24 +264,50 @@ public class CountryGovernment : ScriptableObject
     [Tooltip(" The baseline len of the government at the start of the game, Closer to 0 left wing 1 rightwing")]
     [Range(-1.0f, 1.0f)]
     public float GovernmentIdeologyIndex;
+    [Tooltip(" is a state governed as a single power in which the central government is ultimately supreme or a federation of states (ie the US or Russia, Canada, Brazil, India, Argentina etc)")]
+    public bool IsUnitaryState;
+    [Range(0f, 10.00f)]
+    public float FeedomIndex;
+    public CountryFreedomIndex CountryFreedomIndex;
+
     public CountryGovernmentTypes GovernmentType;
     [Tooltip("If you want to use the historic bias to build up the country allies and rivals")]
     public CountryBias GovernmnetBias;
     public Texture2D CountryFlag;
+    public Texture2D CountryMediumFlag;
+    public Texture2D CountryLargeFlag;
+    public Texture2D CountryMarker;
     public List<CountryFlawSkill> CountryFlaws;
     public List<CountryPerkSkill> CountrPerks;
     public CountrySpokeLanguage CountrySpokenLanguage;
     public BudgetSize CountrBugetScale;
+    [ContextMenuItem("Get History and Bias", "GetRivals")]
+
     public List<string> Allies;
+
     public List<string> Rivals;
+    private void GetRivals()
+    {
+        var HistoricalBias = CountryRelationsFactory.StubCountryBiasList().FirstOrDefault(e => e.Item2 == MapLookUpName);
+
+        GovernmentType = HistoricalBias.Item5;
+        GovernmnetBias = HistoricalBias.Item1;
+        Allies = HistoricalBias.Item3.ToList();
+        Rivals = HistoricalBias.Item4.ToList();
+    }
     public CountryToGlobalCountry.GenericProvince CaptialProvince;
+
+
 
     [ContextMenuItem("Fil From World Map", "GetFromMap")]
     public CountryToGlobalCountry.GenericCountry CountryOfGovernment;
 
     private void GetFromMap()
     {
+        var cityM = new CountryToGlobalCountry();
         var localMap = WMSK.instance;
+        var localWorldManager = FindObjectOfType<WorldManager>();
+
         var countryIndex = localMap.GetCountryIndex(MapLookUpName);
 
         var localCountry = localMap.GetCountry(countryIndex);
@@ -267,9 +324,11 @@ public class CountryGovernment : ScriptableObject
         CaptialProvince.name = captialProvince.name;
         CaptialProvince.location = captialProvince.center;
         CaptialProvince.countryIndex = countryIndex;
+        CaptialProvince.urbanRate = UrbanPopulationRate;
         CountryOfGovernment.captialLocation = captialCity.unity2DLocation;
 
-        if (CountryFlag != null) {
+        if (CountryFlag != null)
+        {
             CaptialProvince.flagowner = CountryFlag;
             CountryOfGovernment.flagowner = CountryFlag;
         }
@@ -278,14 +337,77 @@ public class CountryGovernment : ScriptableObject
         {
             var selectedProvince = localCountry.provinces[i];
             var newProvince = new CountryToGlobalCountry.GenericProvince(selectedProvince.name);
-            newProvince.index = selectedProvince.uniqueId;
-            newProvince.countryIndex = countryIndex;
-            newProvince.location.x = selectedProvince.center.x;
-            newProvince.location.y = selectedProvince.center.y;
-            ControlsProvincesNames.Add(newProvince);
+
+            var provinceCities = localMap.cities.Where(e => e.countryIndex == countryIndex && e.province == selectedProvince.name);
+
+
+            ControlsProvincesNames.Add(cityM.RandomProvince(provinceCities, selectedProvince, this));
         }
+
+        ControlsCitiesNames.Clear();
+        var localCities = localMap.cities.Where(e => e.countryIndex == countryIndex).ToList();
+
+
+        for (int i = 0; i < localCities.Count; i++)
+        {
+            var city = localCities[i];
+            var cityData = localWorldManager.WorldCityData.FirstOrDefault(e => e.name == city.name);
+            var cityProvince = ControlsProvincesNames.FirstOrDefault(e => e.name == city.province);
+
+            if (cityData != null)
+            {
+                cityProvince.ProvinceCities = new List<CountryToGlobalCountry.GenericCity>();
+
+                var newCity = cityM.GenericCityFromData(cityData);
+                cityProvince.ProvinceCities.Add(newCity);
+                ControlsCitiesNames.Add(newCity);
+
+            }
+            else
+            {
+                try
+                {
+
+                    var copyOfGover = this;
+                    var selectedProvince = localCountry.provinces.ToList().FirstOrDefault(e => e.name == cityProvince.name);
+                    var newGenericCity = cityM.RandomGenericCity(city, copyOfGover, selectedProvince, localMap);
+                    if (city.cityClass == CITY_CLASS.COUNTRY_CAPITAL)
+                    {
+                        newGenericCity.isCapital = true;
+                    }
+
+                    if (city.cityClass == CITY_CLASS.REGION_CAPITAL)
+                    {
+                        newGenericCity.isRegionalCaptial = true;
+                        cityProvince.regionCaptialLocation = city.unity2DLocation;
+                    }
+                    ControlsCitiesNames.Add(newGenericCity);
+
+                    //if (cityProvince.ProvinceCities == null)
+                    //{
+                    //    cityProvince.ProvinceCities = new List<CountryToGlobalCountry.GenericCity>();
+                    //    cityProvince.ProvinceCities.Add(newGenericCity);
+                    //}
+                    //else
+                    //{
+                    //    cityProvince.ProvinceCities.Add(newGenericCity);
+                    //}
+                }
+                catch (Exception di)
+                {
+                    var f = di;
+                }
+
+            }
+
+        }
+
     }
+
+
     public string CaptialName;
+    public int FoundingDay;
+    public int FoundingMonth;
     public int FoundingYear;
     public DateTime CountryFounding;
     public DateTime GovernmentNextElection;
@@ -294,7 +416,18 @@ public class CountryGovernment : ScriptableObject
 
     public List<CountryLaw> Laws;
     public List<PoliticalParties> PoliticalParties;
+    [ContextMenuItem("Caluate From PopulationGroups", "BuildPopulationGroups")]
     public List<DemographicGroups> DemographicGroups;
+
+    private void BuildPopulationGroups()
+    {
+        var countrPopulation = RawPopulation;
+        DemographicGroups.ForEach(group =>
+        {
+            var populationPercenatge = (long)((group.Population / 100) * countrPopulation);
+            group.Numbers = populationPercenatge;
+        });
+    }
     public List<ResearchItem> CountryKnownResearch;
     public List<CountrySectors> CountryMarkets;
     public List<SectorManager.Sectors> CountryMarketSectors;

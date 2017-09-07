@@ -102,7 +102,7 @@ public class CountryAgent : MonoBehaviour
 
     public void DeterminGoal()
     {
-        WhereDoesMyPowerComeFrom();
+        //WhereDoesMyPowerComeFrom();
     }
 
     public void DetermineGoalType() { }
@@ -183,9 +183,9 @@ public class CountryAgent : MonoBehaviour
         //            "text": "2,381,741 sq km"
         //        },
       
-        var localCountryManager = lGm.GameWorldManager.CountryPlayerManagerGameObject.GetComponent<CountryManager>();
-        var wmCountry = lGm.GameMapManager.wmslObj.GetCountry(localCountryManager.CountryGovernment.MapLookUpName);
-        var getSizeKm = wmCountry.regionsRect2DArea;
+        //var localCountryManager = lGm.GameWorldManager.CountryPlayerManagerGameObject.GetComponent<CountryManager>();
+        //var wmCountry = lGm.GameMapManager.wmslObj.GetCountry(localCountryManager.CountryGovernment.MapLookUpName);
+      //  var getSizeKm = wmCountry.regionsRect2DArea;
         //if size is 
 
         //asse for each goal type

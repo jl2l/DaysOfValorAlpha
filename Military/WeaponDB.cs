@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Assets
 {
 
-  
+
 
     [Serializable]
     public class HardPointType
@@ -31,7 +31,7 @@ namespace Assets
     [Serializable]
     public partial class WeaponStationType
     {
-     
+
         public enum PointType
         {
             Fixed = 0, // aircraft
@@ -79,7 +79,7 @@ namespace Assets
     [Serializable]
     public class ObjectGeneralInfo
     {
-        
+
         [SerializeField]
         public int CrewNumber;
         public int OfficerNumber;
@@ -135,7 +135,7 @@ namespace Assets
         public string DesignText;
     }
 
-    
+
     public enum ObjectTypeCategory
     {
         airjet = 0,
@@ -153,7 +153,7 @@ namespace Assets
     /// <summary>
     /// For the Battle AI this will determine the track type and how it behaves Air will track for other Air AirGround can see both Air and Ground etc
     /// </summary>
-    
+
     public enum SensorSpectrum
     {
         Visible,
@@ -171,7 +171,7 @@ namespace Assets
     /// <summary>
     /// For the Battle AI this will determine the track type and how it behaves Air will track for other Air AirGround can see both Air and Ground etc
     /// </summary>
-    
+
     public enum TrackMode
     {
         Air,
@@ -183,7 +183,7 @@ namespace Assets
         UnderseaSeaAirGround
     }
 
-    
+
     public enum AircraftSize
     {
         Tiny,
@@ -193,7 +193,7 @@ namespace Assets
         VeryLarge
     }
 
-    
+
     public enum VehicleSize
     {
         Tiny,
@@ -203,7 +203,7 @@ namespace Assets
         VeryLarge
     }
 
-    
+
     public enum ShipSize
     {
         Tiny,
@@ -213,7 +213,7 @@ namespace Assets
         VeryLarge
     }
 
-    
+
     public enum SensorType
     {
         AESAradar,
@@ -303,7 +303,7 @@ namespace Assets
 
 
         public List<Armor> armorslots;
-        
+
         public int index;
         public int CreateState;
         public bool IsAlive;
@@ -314,16 +314,16 @@ namespace Assets
 
 
         public float DeploymentCost;
-        
+
         public DeckFactory.DeckUnitType UnitDeckType;
-        
+
         public UnitCharacteristics UnitCharacteristics;
         public ObjectGeneralInfo ObjectGeneralInfo;
 
         public ObjectHistory ObjectHistory;
     }
 
-   
+
 
 
 
@@ -338,7 +338,8 @@ namespace Assets
         IRJam,
         LaserJam
     }
-    public enum ArmorPosition {
+    public enum ArmorPosition
+    {
 
         Front,
         Side,
@@ -367,7 +368,7 @@ namespace Assets
     /// AIR BASED
     /// </summary>
     [Serializable]
-    
+
     public class UnitCharacteristics
     {
         public int DeploymentCost;
@@ -477,6 +478,18 @@ namespace Assets
         electronicwarfare,
     }
 
+
+    [Serializable]
+    public enum BaseAirType
+    {
+        None,
+        Transport,
+        Fighter,
+        Bomber,
+        Rotary,
+        VTOL,
+        Drone
+    }
     [Serializable]
     public enum AircraftTypeStr
     {
@@ -534,14 +547,14 @@ namespace Assets
     }
 
     [Serializable]
-    
+
     public class AircraftObject : BaseWarGameObject
     {
-        
+
         public List<WeaponConfig> AircraftWeaponConfig;
-        
+
         public AircraftTypeStr AircraftType;
-        
+
         public HeloTypeStr HeloType;
 
         public List<AircraftWeapon> GetListWeapons()
@@ -551,14 +564,14 @@ namespace Assets
     }
 
     [Serializable]
-    
+
     public class GroundVehicleWeapon : Weapon
     {
         public GroundVehicleWeaponType weaponType;
     }
 
     [Serializable]
-    
+
     public enum GroundVehicleWeaponType
     {
         None = 0,
@@ -621,7 +634,21 @@ namespace Assets
     }
 
     [Serializable]
-    
+
+    public enum BaseGroundType
+    {
+        None,
+        Log,
+        X4,
+        APC,
+        TANK,
+        Artillery,
+        Misc
+
+    }
+
+    [Serializable]
+
     public enum GroundVehicleType
     {
         none,
@@ -631,6 +658,7 @@ namespace Assets
         amphtank,
         vehicle,
         armorcar,
+        mrap,
         ifv,
         apc,
         spagun,
@@ -644,7 +672,7 @@ namespace Assets
     }
 
     [Serializable]
-    
+
     public enum InfType
     {
         none,
@@ -658,7 +686,7 @@ namespace Assets
     }
 
     [Serializable]
-    
+
     public enum logisticType
     {
         none,
@@ -672,7 +700,7 @@ namespace Assets
     }
 
     [Serializable]
-    
+
     public enum UnmannedType
     {
         none,
@@ -694,7 +722,7 @@ namespace Assets
         specialOps
     }
     [Serializable]
-    
+
     public enum UnitType
     {
         aircarrier,
@@ -807,7 +835,7 @@ namespace Assets
     /// The main combat vehicles 
     /// </summary>
     [Serializable]
-    
+
     public class GroundVehicleObject : BaseWarGameObject
     {
         public List<WeaponConfig> GroundVehicleWeaponConfig;
@@ -816,7 +844,7 @@ namespace Assets
         {
             return new List<GroundVehicleWeapon>();
         }
-        
+
         public GroundVehicleType GroundVehicleType;
     }
 
@@ -831,7 +859,7 @@ namespace Assets
         {
             return new List<GroundVehicleWeapon>();
         }
-        
+
         public bool IsCapturing;
         public InfType InfType;
     }
@@ -840,7 +868,7 @@ namespace Assets
     /// Logistic can be both air or ground refuel tanker etc but what makes them different is they can resupply 
     /// </summary>
     [Serializable]
-    
+
     public class LogisitcObject : BaseWarGameObject
     {
         public List<WeaponConfig> GroundVehicleWeaponConfig;
@@ -854,7 +882,7 @@ namespace Assets
     /// Unmanned vehicles can be either air or ground but they don't have humans so you can risk them much more, but they are limited in there effectiveness
     /// </summary>
     [Serializable]
-    
+
     public class UnmannedObject : BaseWarGameObject
     {
         public List<WeaponConfig> UnmannedVehicleWeaponConfig;
@@ -868,7 +896,7 @@ namespace Assets
     /// SEA BASED 
     /// </summary>
     [Serializable]
-    
+
     public class SeaObjectCharacteristics
     {
         public int Displacement;
@@ -933,7 +961,7 @@ namespace Assets
     }
 
     [Serializable]
-    
+
     public enum WarheadType
     {
         /// <summary>
@@ -991,10 +1019,11 @@ namespace Assets
         FMJ,
         API,
         SensorFuze,
-        Airbust
+        Airbust,
+        TearGas
     }
     [Serializable]
-    
+
     public enum WeaponPerks
     {
         HEAT,
@@ -1020,7 +1049,10 @@ namespace Assets
         Hypersonic,
         MIRV,
         LaserProof,
-        HighAngleOfAttack
+        HighAngleOfAttack,
+        NonLethal,
+        LaserGuided,
+        DataLink
     }
 
     [Serializable]
@@ -1031,7 +1063,7 @@ namespace Assets
     }
 
     [Serializable]
-    
+
     public enum SeaWeaponType
     {
         None,
@@ -1089,14 +1121,28 @@ namespace Assets
     }
 
     [Serializable]
-    
+    public enum BaseSeaType
+    {
+        None,
+        Carrier,
+        DDG,
+        FFG,
+        Corvette,
+        Patrol,
+        Mine,
+        Amph,
+        Sub
+    }
+
+    [Serializable]
+
     public enum SeaObjectType
     {
         none,
         aircarrier,
         helocarrier,
         vstolcarrier,
-        supercarrier ,
+        supercarrier,
         subcarrier, //future 
         stealthcarrier, //future
         guidemisslecruiser,
@@ -1132,25 +1178,223 @@ namespace Assets
     [Serializable]
     public class SeaObject : BaseWarGameObject
     {
-        
+
         public SeaObjectCharacteristics SeacraftCharacteristics;
-        
+
         public SeaObjectPerformance SeacraftPerformance;
-        
+
         public List<SeaObjectWeaponConfig> SeacraftWeaponConfig;
-        
+
         public List<SeaObjectWeapon> weapons;
 
         public SeaObjectType SeacraftType;
 
         public bool IsDeckFlagShip;
 
-        
+
         public string SeacraftTypeName;
 
-        
+
         public int SeacraftTypeId;
 
+    }
+
+    public enum DefconLevel
+    {
+        DEFCONZero = 0,
+        DEFCONOne = 1,
+        DEFCONTwo = 2,
+        DEFCONThree = 3,
+        DEFCONFour = 4,
+        DEFCONFive = 5,
+    }
+
+    public enum COGCONLevel
+    {
+        [Description("Activate classified CONPLAN 3600 evacuating the President and those in the line of presidential succession. Activate classified CONPLAN 3502 deploying the military to enforce law and order within the Civilian Control Districts. Seize all private communication facilities and assume control over all civilian voice and data communications. Activate internet kill switch under SOP 303. Commandeer all U.S. domestic resources including food and water. Seize all domestic energy and transportation infrastructure. Deploy the national citizen conscription plan to fulfill any labor required for the purpose of national defense and reconstitution.")]
+        COGCONZero = 0,
+        [Description("Full deployment of designated leadership and continuity staffs to perform the organization’s essential functions from alternate facilities either as a result of, or in preparation for, a catastrophic emergency.")]
+        COGCONOne = 1,
+        [Description("Routine protective security measures appropriate to the business concerned.Deployment of 50-75% of Emergency Relocation Group continuity staff to alternate locations. Establish their ability to conduct operations and prepare to perform their organization’s essential functions in the event of a catastrophic emergency.")]
+        COGCONTwo = 2,
+        [Description("Federal agencies and departments Advance Relocation Teams “warm up” their alternate sites and capabilities, which include testing communications and IT systems. Ensure that alternate facilities are prepared to receive continuity staff. Track agency leaders and successors daily.")]
+        COGCONThree = 3,
+        [Description("Federal executive branch government employees at their normal work locations. Maintain alternate facility and conduct periodic continuity readiness exercises.")]
+        COGCONFour = 4,
+    }
+
+    public enum ThreatResponse
+    {
+        [Description("Routine protective security measures appropriate to the business concerned.")]
+        Normal,
+        [Description("Additional and sustainable protective security measures reflecting the broad nature of the threat combined with specific business and geographical vulnerabilities and judgements on acceptable risk.")]
+        Heightened,
+        [Description("Maximum protective security measures to meet specific threats and to minimise vulnerability and risk. Critical may also be used if a nuclear attack is expected.")]
+        Exceptional
+    }
+    public enum ThreatLevel
+    {
+        [Description("An attack is very unlikely.")]
+        Low,
+        [Description("An attack is possible, but not likely.")]
+        Moderate,
+        [Description("An attack is a strong possibility.")]
+        Substantial,
+        [Description("An attack is highly likely.")]
+        Severe,
+        [Description("An attack is expected imminently.")]
+        Critical
+    }
+
+    public enum PlatformBase
+    {
+        LandSilo,
+        LandRoadMobile,
+        LandRailBase,
+        Bomber,
+        Fighter,
+        Submarine,
+        SeaBased,
+        Space,
+        Tactical
+    }
+
+
+
+    public enum WMDType
+    {
+        [Description("Sarin, VX")]
+        nerveAgent,
+        ricin,
+        lewisiteBlister,
+        mustardgas,
+        Phosgene,
+        BZ,
+        biotoxin,
+        infectiousAgent,
+        bioWeapon,
+        nanoWeapon,
+        insectWarfare,
+        nuclear,
+        radition,
+        emp,
+        nuetron,
+        ditybomb
+
+    }
+
+
+    public enum WeaponRangeClass
+    {
+        Tactical,
+        FreeFall,
+        CrusieMissile,
+        SRBM,
+        MRBM,
+        IRBM,
+        ICBM,
+        SLBM,
+        ASAT
+    }
+
+    public enum KitValueType
+    {
+        Armor,
+        GunAccurancy,
+        KillSight,
+        Ammo,
+        Grenade,
+        Health
+    }
+
+    public enum KitType
+    {
+        Any,
+        [Description("Scount Sniper")]
+        Sniper,
+        [Description("Assault Rifleman")]
+        Assault,
+        [Description("Combat Medic")]
+        Medic,
+        [Description("Designated Marksman")]
+        DMR,
+        [Description("Squad Automatic Rifleman")]
+        SAW,
+        [Description("Grenadier")]
+        Grenadier,
+        [Description("Sargent")]
+        Nco,
+        [Description("Squad Leader")]
+        SquadLeader,
+        [Description("Anti-Tank")]
+        Antitank,
+        [Description("Rifleman")]
+        Rifleman,
+        [Description("Rifleman")]
+        EOD
+
+    }
+    public enum TeamSpecialization
+    {
+        DirectCombat,
+        PoliceAction,
+        CounterTerrorism,
+        CombatDiving,
+        MartimeBoardings,
+        Paratrooper,
+        ScoutSniper,
+        CombatRescue,
+        GuerrillaWarfare,
+        CounterInsurgency,
+        ForeignDefense,
+        IntelligenceSurveliance,
+        ColdWeatherCombat,
+        WildernessSurvival,
+        JungleWarfare,
+        MountainWarfare,
+        JTAC,
+        Pathfinding,
+        CombatEngineer,
+        EOD,
+        UnderwaterDemolition,
+        UrbanWarfare,
+
+
+    }
+
+    [System.Serializable]
+    public class Gear
+    {
+        public string GearName;
+        public KitType GearKitType;
+        public KitValueType GearPerkType;
+        [Range(-100.0f, 100.0f)]
+        public float GearValue;
+        public int GearCount;
+
+    }
+
+    [System.Serializable]
+    public class TeamKits
+    {
+        public string Name;
+        public Weapon Gun;
+        public KitType Kit;
+        public float KitsKillSight;
+        public float KitGunHitRate;
+        public float KitHealthHP;
+        public List<Gear> Gear;
+    }
+    [System.Serializable]
+    public class Operator
+    {
+        public Contact Teammate;
+        public TeamKits Kit;
+        public string TeamSquadName;
+        public ContactGenerator.ContactHealthStatus Status;
+        public bool IsKIA;
+        public bool IsMIA;
+        public bool IsDeployed;
     }
 
 }

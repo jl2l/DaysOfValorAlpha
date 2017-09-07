@@ -12,9 +12,52 @@ using static Assets.JsonCountryCIAModel;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
+using Accord.Statistics.Distributions.Univariate;
 
 public static class Helpers
 {
+    public static string NumberToText(int n)
+    {
+        if (n < 0)
+            return "Minus " + NumberToText(-n);
+        else if (n == 0)
+            return "";
+        else if (n <= 19)
+            return new string[] {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight",
+         "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
+         "Seventeen", "Eighteen", "Nineteen"}[n - 1] + " ";
+        else if (n <= 99)
+            return new string[] {"Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy",
+         "Eighty", "Ninety"}[n / 10 - 2] + " " + NumberToText(n % 10);
+        else if (n <= 199)
+            return "One Hundred " + NumberToText(n % 100);
+        else if (n <= 999)
+            return NumberToText(n / 100) + "Hundreds " + NumberToText(n % 100);
+        else if (n <= 1999)
+            return "One Thousand " + NumberToText(n % 1000);
+        else if (n <= 999999)
+            return NumberToText(n / 1000) + "Thousands " + NumberToText(n % 1000);
+        else if (n <= 1999999)
+            return "One Million " + NumberToText(n % 1000000);
+        else if (n <= 999999999)
+            return NumberToText(n / 1000000) + "Millions " + NumberToText(n % 1000000);
+        else if (n <= 1999999999)
+            return "One Billion " + NumberToText(n % 1000000000);
+        else
+            return NumberToText(n / 1000000000) + "Billions " + NumberToText(n % 1000000000);
+    }
+
+    public static float WeightedAverage<T>(this IEnumerable<T> records, Func<T, float> value, Func<T, float> weight)
+    {
+        float weightedValueSum = records.Sum(x => value(x) * weight(x));
+        float weightSum = records.Sum(x => weight(x));
+
+        if (weightSum != 0)
+            return weightedValueSum / weightSum;
+        else
+            throw new DivideByZeroException("Your message here");
+    }
+
     public static string ToDescription(this Enum value)
     {
         DescriptionAttribute[] da = (DescriptionAttribute[])(value.GetType().GetField(value.ToString())).GetCustomAttributes(typeof(DescriptionAttribute), false);
@@ -23,8 +66,10 @@ public static class Helpers
 
     public static RegionInfo GetRegionInfo(string countryName)
     {
-
         var regions = CultureInfo.GetCultures(CultureTypes.SpecificCultures).Select(x => new RegionInfo(x.LCID)).ToList();
+
+        regions.OrderBy(pet => pet.EnglishName);
+
         return regions.FirstOrDefault(region => region.EnglishName.Contains(countryName));
     }
 
@@ -76,7 +121,15 @@ public class Helper
         // {"ID":13,"ZoneName":"Africa/Cairo","Country":"Cairo","RuleName":"Egypt","GmtOffset":7200,"Format":"EEST","StandardName":"Egypt Standard Time"},
     }
 
+    public Texture2D LoadFlagFromCountryName(string countryName)
+    {
 
+        var twocode = GetTwoCountryCodeFromName(countryName).ToLower();
+        var countTewoCode = string.Format("UI/icons/Flags/png100px/{0}", twocode);
+        var g = Resources.Load<Texture2D>("UI/icons/Flags/png100px/ar");
+        var texture = Resources.Load(countTewoCode) as Texture2D;
+        return texture;
+    }
     public List<TimeZone> GameTimeZones()
     {
         return new List<TimeZone>();
@@ -121,9 +174,27 @@ public class Helper
 
     }
 
-    public string GetTwoCountryCodeFromName(string countrName)
+    public string GetTwoCountryCodeFromName(string countryName)
     {
-        return Helpers.GetRegionInfo(countrName).TwoLetterISORegionName;
+        if (countryName == "United States of America")
+        {
+            return "us";
+        }
+        if (countryName == "Hati")
+        {
+            return "ht";
+        }
+
+        var region = Helpers.GetRegionInfo(countryName);
+        if (region == null)
+        {
+            Console.Write(countryName);
+        }
+        else
+        {
+            return region.TwoLetterISORegionName;
+        }
+        return string.Empty;
     }
 
     public void GetCIAInfoFromFile(string regionName, out CountryCiaDbObject ciaObject)
@@ -161,19 +232,21 @@ public class Helper
                     var Dig = CIACountryIndex().FirstOrDefault().Property(item);
                 }
             }
-            else {
+            else
+            {
 
             }
-           return CIACountryIndex().FirstOrDefault().Property(PropertyXPath);
+            return CIACountryIndex().FirstOrDefault().Property(PropertyXPath);
         }
-   
+
         else
-        foreach (JProperty prop in CIACountryIndex().FirstOrDefault().Properties())
-        {
-            if (prop.Path == PropertyXPath) {
-                return prop;
+            foreach (JProperty prop in CIACountryIndex().FirstOrDefault().Properties())
+            {
+                if (prop.Path == PropertyXPath)
+                {
+                    return prop;
+                }
             }
-        }
         return null;
     }
 
@@ -215,9 +288,12 @@ public class Helper
         new KeyValuePair<SectorManager.Sectors, string>( SectorManager.Sectors.Mining, "aluminum smelting"),
         new KeyValuePair<SectorManager.Sectors, string>( SectorManager.Sectors.Telecom, "telecommunications equipment"),
          new KeyValuePair<SectorManager.Sectors, string>( SectorManager.Sectors.Aerospace, "commercial space launch vehicles"),
-       
+
     };
     }
+
+
+    public BinomialDistribution DemographicDistribution;
 }
 
 
@@ -243,33 +319,44 @@ public enum ReserveCurrency
 
 public enum CityType
 {
-
-    [Description("A rural farming village commonly found in the third world")]
+    [Description("an isolated dwelling would only have 1 or 2 buildings or families in it. It would have negligible services, if any.")]
+    Remote,
+    [Description("a hamlet has a tiny population (<100) and very few (if any) services, and few buildings")]
+    Hamlet,
+    [Description("a village is a human settlement or community that is larger than a hamlet but, smaller than a town. A village generally does not have many services, most likely a church or only a small shop or post office. The population of a village varies however, the average population can range from hundreds to thousands.")]
     SmallVillage,
-    [Description("A rural farming village commonly found in the third world")]
-    FishingVillage,
-    [Description("A rural farming village commonly found in the third world")]
+    [Description("a village is a human settlement or community that is larger than a hamlet but, smaller than a town. A village generally does not have many services, most likely a church or only a small shop or post office. The population of a village varies however, the average population can range from hundreds to thousands.")]
+    Village,
+    [Description("a town has a population of 1,000 to 20,000")]
     SmallTown,
-    [Description("A rural farming village commonly found in the third world")]
+    [Description("a town has a population of 1,000 to 20,000")]
     SmallTownEuropean,
-    [Description("A rural farming village commonly found in the third world")]
+    [Description("a town has a population of 1,000 to 20,000")]
     SmallTownAmericas,
-    [Description("A rural farming village commonly found in the third world")]
+    [Description("a town has a population of 1,000 to 20,000")]
     SmallTownAsia,
-    [Description("A rural farming village commonly found in the third world")]
+    [Description("a town has a population of 1,000 to 20,000")]
     SmallTownAfrica,
-    [Description("A rural farming village commonly found in the third world")]
+    [Description("a town has a population of 1,000 to 20,000")]
+    SmallTownMiddleEastern,
+    [Description("a large town has a population of 20,000 to 100,000")]
+    Town,
+    [Description("a city would have abundant services, but not as many as a large city. The population of a city is between 100,000 and 300,000 people.")]
     SmallCity,
-    [Description("A rural farming village commonly found in the third world")]
+    [Description("a city with a large population and many services. The population is <1 million people but over 300,000 people")]
     City,
-    [Description("A rural farming village commonly found in the third world")]
+    [Description("a city with a large population and many services. The population is <1 million people but over 300,000 people")]
     LargeCity,
+    [Description("a large city and its suburbs consisting of multiple cities and towns. The population is usually one to three million.")]
+    Metropolis,
     [Description("A rural farming village commonly found in the third world")]
     RegionalCaptial,
     [Description("A rural farming village commonly found in the third world")]
     GovernmentCaptial,
-    [Description("A rural farming village commonly found in the third world")]
-    MegaCity,
+    [Description(" a group of conurbations, consisting of more than ten million people each.")]
+    MegaCity
+
+
 }
 
 

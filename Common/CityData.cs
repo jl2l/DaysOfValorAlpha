@@ -65,6 +65,6 @@ public class CityData : ScriptableObject
     public bool IsStreetRiots;
     public CityType CityType;
     public Texture2D CityOwnerFlag;
-    public Tuple<SectorManager.Sectors, long> ProductionSectors;
-    public List<CountryToGlobalCountry.countryInfrastructure> cityInfrastructure;
+    public List<Tuple<SectorManager.Sectors, long>> ProductionSectors;
+    public List<CountryToGlobalCountry.GenericCountryInfrastructure> cityInfrastructure;
 }

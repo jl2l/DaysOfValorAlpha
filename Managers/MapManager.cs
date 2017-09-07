@@ -10,13 +10,14 @@ using System.Linq;
 using static CountryToGlobalCountry;
 using UnityEngine.EventSystems;
 using Newtonsoft.Json;
+using UnityEngine.SceneManagement;
 
 public class MapManager : MonoBehaviour
 {
 
     public enum MapSelected
     {
-
+        None,
         Country,
         Province,
         City,
@@ -31,7 +32,12 @@ public class MapManager : MonoBehaviour
         PassengerPlane
     }
 
-
+    enum MapMoveUNIT_TYPE
+    {
+        TANK = 1, //only over land
+        SHIP = 2, //only over water
+        AIRPLANE = 3 //over either
+    }
     public enum MapSpeed
     {
         HourSecond, //default
@@ -53,7 +59,9 @@ public class MapManager : MonoBehaviour
         ResearchView,
         IntelView,
         TradeView,
-        DefconView
+        DefconView,
+        DetailCityMode,
+        DetailedProvinceMode
 
     }
 
@@ -61,7 +69,6 @@ public class MapManager : MonoBehaviour
     public WMSK wmslObj;
     public WorldMapGlobe wmGlobeObj;
     public Text DebugText;
-    public Camera globeCamera;
     public Camera worldCamer;
     public GameObject viewport, fadePlane;
     public Text CurrentPlayerGameTimeText;
@@ -71,7 +78,7 @@ public class MapManager : MonoBehaviour
     public MapDisplayMode GameLastMapDisplayMode;
     public MapDisplayMode GameMapDisplayMode;
     public MapSpeed GameMapSpeed;
-    public List<MapSelected> GameMapSelectedTypes;
+    public MapSelected GameMapSelectedType;
     public DateTime GameDisplayDate;
     public DateTime LocalTimeOfProince;
     public Text LocalTimeZone;
@@ -82,6 +89,7 @@ public class MapManager : MonoBehaviour
     private double HoverOverOffSetTime;
 
 
+    public Text WorldMapHintInfo;
     public Text WorldHoverOverInfo;
     public GameObject GameButtonCountryInfo;
     public GameObject GameButtonCountryVassal;
@@ -121,6 +129,7 @@ public class MapManager : MonoBehaviour
     public GameObject GameResearchInfoPanel;
     public GameObject GameDefconInfoPanel;
     public GameObject GameInfrastructureInfoPanel;
+    public GameObject GameMilitaryOperationsInfoPanel;
     #endregion
     #region UI Country Relations
 
@@ -150,11 +159,30 @@ public class MapManager : MonoBehaviour
     public CountryManager SelectedCountryManager;
     public CountryManager GamePlayerCountryManager;
 
+
     public Text GamePlayerCountryText;
     GameObjectAnimator tank;
     List<GameObjectAnimator> SelectedObjects;
     public GameObject CountryPerkTemplate;
     public Helper helpers;
+
+
+    public void SetAll(List<GameObject> obj, bool set)
+    {
+        for (int i = 0; i < obj.Count; i++)
+        {
+            try
+            {
+                obj[i].SetActive(set);
+            }
+            catch (Exception FailOn)
+            {
+
+            }
+
+        }
+    }
+
     #region ENUMABLES
 
     #region UI / FX
@@ -185,41 +213,50 @@ public class MapManager : MonoBehaviour
             }
 
         }
-
-
         yield return new WaitForEndOfFrame();
     }
     public IEnumerator DrawPlayerBases()
     {
         int BaseId = 0;
-        foreach (var militaryBase in GameManager.GameMilitaryManager.PlayerMilitaryBases)
+        if (GameManager == null)
         {
-            // Instantiate the sprite, face it to up and position it into the map
-            // GameObject star = Instantiate(Resources.Load<Texture2D>(militaryBase.BaseIcon.name));
-            GameObject marker = Instantiate(militaryBase.BaseMarker, GameManager.GameMilitaryManager.GamePlayerMilitaryBaseContainer.transform);
+            GameManager = FindObjectOfType<GameManager>();
+        }
+        if (GameManager.GameMilitaryManager == null)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        else
+        {
+            foreach (var militaryBase in GameManager.GameMilitaryManager.PlayerMilitaryBases)
+            {
+                // Instantiate the sprite, face it to up and position it into the map
+                // GameObject star = Instantiate(Resources.Load<Texture2D>(militaryBase.BaseIcon.name));
+                GameObject marker = Instantiate(militaryBase.BaseMarker, GameManager.GameMilitaryManager.GamePlayerMilitaryBaseContainer.transform);
 
-            GameObject mapIcon = new GameObject(string.Format(militaryBase.BaseIcon.name + "_base"));
-            mapIcon.AddComponent<SpriteRenderer>().sprite = Sprite.Create(militaryBase.BaseIcon, new Rect(0.0f, 0.0f, militaryBase.BaseIcon.width, militaryBase.BaseIcon.height), new Vector2(0.5f, 0.5f), 100.0f);
+                GameObject mapIcon = new GameObject(string.Format(militaryBase.BaseIcon.name + "_base"));
+                mapIcon.AddComponent<SpriteRenderer>().sprite = Sprite.Create(militaryBase.BaseIcon, new Rect(0.0f, 0.0f, militaryBase.BaseIcon.width, militaryBase.BaseIcon.height), new Vector2(0.5f, 0.5f), 100.0f);
 
-            var gameBase = marker.AddComponent<GameMilitaryBase>();
+                var gameBase = marker.AddComponent<GameMilitaryBase>();
 
-            gameBase.BaseData = militaryBase;
+                gameBase.BaseData = militaryBase;
 
-            gameBase.GameBaseMaxSize = 10;
-            gameBase.GameBaseStrength = 1000;
-            gameBase.GameBaseSupplyLevel = 5000;
-            gameBase.GameMaxBaseDecksAP = 50;
-            gameBase.BaseUniqueId = BaseId;
-            gameBase.MilitaryCountryBattleFlag = militaryBase.MilitaryCountryBattleFlag;
+                gameBase.GameBaseMaxSize = 10;
+                gameBase.GameBaseStrength = 1000;
+                gameBase.GameBaseSupplyLevel = 5000;
+                gameBase.GameMaxBaseDecksAP = 50;
+                gameBase.BaseUniqueId = BaseId;
+                gameBase.MilitaryCountryBattleFlag = militaryBase.MilitaryCountryBattleFlag;
 
 
-            wmslObj.AddMarker2DSprite(mapIcon, militaryBase.BaseLocation, 0.002f);
-            marker.transform.localRotation = Quaternion.Euler(90, 0, 0);
-            marker.transform.localScale = WorldMapStrategyKit.Misc.Vector3one * 0.01f;
-            marker.WMSK_MoveTo(militaryBase.BaseLocation.x, militaryBase.BaseLocation.y);
-            wmslObj.AddMarker3DObject(marker, militaryBase.BaseLocation, 0.05f);
-            marker.transform.SetParent(GameManager.GameMilitaryManager.GamePlayerMilitaryBaseContainer.transform);
-            BaseId++;
+                wmslObj.AddMarker2DSprite(mapIcon, militaryBase.BaseLocation, 0.002f);
+                marker.transform.localRotation = Quaternion.Euler(90, 0, 0);
+                marker.transform.localScale = WorldMapStrategyKit.Misc.Vector3one * 0.01f;
+                marker.WMSK_MoveTo(militaryBase.BaseLocation.x, militaryBase.BaseLocation.y);
+                wmslObj.AddMarker3DObject(marker, militaryBase.BaseLocation, 0.05f);
+                marker.transform.SetParent(GameManager.GameMilitaryManager.GamePlayerMilitaryBaseContainer.transform);
+                BaseId++;
+            }
         }
 
         yield return new WaitForEndOfFrame();
@@ -248,7 +285,7 @@ public class MapManager : MonoBehaviour
 
         GameMilitaryBaseInfoPanel.SetActive(true);
         string delimiter = ",";
-        GameManager.GameMilitaryManager.GameMilitaryBaseSelectedInfo.text = string.Format("{0}, {1}", militaryBase.BaseData.BaseName, militaryBase.BaseData.BaseInProvinceName.name);
+        GameManager.GameMilitaryManager.GameMilitaryBaseSelectedInfo.text = string.Format("{0}, {1}", militaryBase.BaseData.BaseName, militaryBase.BaseData.BaseInProvinceName);
         GameManager.GameMilitaryManager.GameBaseMaxSize.value = militaryBase.GameBaseMaxSize;
         GameManager.GameMilitaryManager.GameBaseMaxSizeText.text = militaryBase.GameBaseMaxSize.ToString();
         GameManager.GameMilitaryManager.GameBaseStrength.value = militaryBase.GameBaseStrength;
@@ -328,6 +365,69 @@ public class MapManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
     }
 
+
+
+    #region Tilt Map 
+    IEnumerator SwitchFlatMapView()
+    {
+        DebugText.text = "TILT MAP MODE START";
+        GamePlayerCountryManager = null;
+        GameLastMapDisplayMode = GameMapDisplayMode;
+        GameMapDisplayMode = MapDisplayMode.FlatMap;
+        SetMapGeoview();
+        //StartCoroutine(SetSideBar(SelectedCountryManager));
+        // Before switching view mode, initiates fade to smooth transition effect
+        Invoke("StartFade", 2f);
+
+        // After 1 second of flight, switch to normal mode. You could also check current zoomLevel in the Update() method and change accordingly.
+        Invoke("DisableViewport", 1f);
+
+        GamePlayerCountryManager = WorldManager.CountryPlayerManagerGameObject.transform.GetChild(0).GetComponent<CountryManager>();
+        StartCoroutine(ColorForEachCountry(GameMapDisplayMode));
+        var decorsToFade = wmslObj.decorator.GetDecoratorGroup(0, false);
+        decorsToFade.StartCoroutine(DoFade(3f));
+        DebugText.text = "TILT MAP MODE ON";
+        yield return new WaitForEndOfFrame();
+    }
+    IEnumerator MapUpdateFlatMap()
+    {
+
+        GamePlayerCountryManager = WorldManager.CountryPlayerManagerGameObject.transform.GetChild(0).GetComponent<CountryManager>();
+        StartCoroutine(ColorForEachCountry(GameMapDisplayMode));
+        DebugText.text = "TILT MAP MODE UPDATED..";
+        yield return new WaitForEndOfFrame();
+    }
+    #endregion
+
+    #region Tilt Map 
+    IEnumerator SwitchToTiltMapView()
+    {
+        DebugText.text = "TILT MAP MODE START";
+        GamePlayerCountryManager = null;
+        GameLastMapDisplayMode = GameMapDisplayMode;
+        GameMapDisplayMode = MapDisplayMode.TiltMap;
+        SetMapGeoview();
+        // Before switching view mode, initiates fade to smooth transition effect
+        Invoke("StartFade", 2f);
+
+        // After 2.5 seconds of flight, switch to viewport mode. You could also check current zoomLevel in the Update() method and change accordingly.
+        Invoke("EnableViewport", 1f);
+        GamePlayerCountryManager = WorldManager.CountryPlayerManagerGameObject.transform.GetChild(0).GetComponent<CountryManager>();
+        StartCoroutine(ColorForEachCountry(GameMapDisplayMode));
+        var decorsToFade = wmslObj.decorator.GetDecoratorGroup(0, false);
+        decorsToFade.StartCoroutine(DoFade(3f));
+        DebugText.text = "TILT MAP MODE ON";
+        yield return new WaitForEndOfFrame();
+    }
+    IEnumerator MapUpdateTiltMap()
+    {
+
+        GamePlayerCountryManager = WorldManager.CountryPlayerManagerGameObject.transform.GetChild(0).GetComponent<CountryManager>();
+        StartCoroutine(ColorForEachCountry(GameMapDisplayMode));
+        DebugText.text = "TILT MAP MODE UPDATED..";
+        yield return new WaitForEndOfFrame();
+    }
+    #endregion
     #region Diplomatic 
     IEnumerator SwitchToDiplomaticView()
     {
@@ -541,7 +641,7 @@ public class MapManager : MonoBehaviour
         GamePlayerCountryManager = null;
         GameLastMapDisplayMode = GameMapDisplayMode;
         GameMapDisplayMode = MapDisplayMode.DefconView;
-
+        SetDefcon();
         GamePlayerCountryManager = WorldManager.CountryPlayerManagerGameObject.transform.GetChild(0).GetComponent<CountryManager>();
         StartCoroutine(ColorForEachCountry(GameMapDisplayMode));
         var decorsToFade = wmslObj.decorator.GetDecoratorGroup(0, false);
@@ -663,27 +763,41 @@ public class MapManager : MonoBehaviour
     // Use this for initialization
     public void Start()
     {
-        GameMapDisplayMode = MapDisplayMode.FlatMap;
-        GameMapSpeed = MapSpeed.HourSecond;
-
+        GameManager = FindObjectOfType<GameManager>();
         helpers = new Helper();
         wmslObj = WMSK.instance;
+
+        WorldManager = GameManager.GameWorldManager;
+
+        SetPlayerCountryManager();
+
+
+
+
+
+
+
+        mapCameraController = FindObjectOfType<CameraController>();
+
         //wmGlobeObj = WorldMapGlobe.instance;
         // Get the material of the fade plane
         fadePlane = worldCamer.transform.Find("FadePlane").gameObject;
         fadeMaterial = fadePlane.GetComponent<Renderer>().sharedMaterial;
         viewport = GameObject.Find("Viewport");
         wmslObj.sun = Sun;
-        GameManager = FindObjectOfType<GameManager>();
-        WorldManager = GameManager.GameWorldManager;
-        mapCameraController = FindObjectOfType<CameraController>();
-        SetPlayerCountryManager();
-        // Get a reference to the viewport gameobject (we'll enable/disable it when changing modes)
-        SetCamera((int)MapDisplayMode.FlatMap);
+
+
+
+
+
+
 
         //Set the game start time based on the settings ie you playing 2017 or 1986
 
         GameDisplayDate = new DateTime(2017, 1, 1);
+        GameMapDisplayMode = MapDisplayMode.FlatMap;
+        GameMapSpeed = MapSpeed.HourSecond;
+        GameMapSelectedType = MapSelected.None;
     }
     public void OnGUI()
     {
@@ -734,6 +848,11 @@ public class MapManager : MonoBehaviour
             ClearCurrentSelection();
         }
 
+        if (Input.GetKeyDown(KeyCode.R) && GameMapSelectedType == MapSelected.AirTransport)
+        {
+            CancelFlightFollow();
+        }
+
         UpdateMapTime();
         ConfigMapState(GameMapDisplayMode);
     }
@@ -762,7 +881,7 @@ public class MapManager : MonoBehaviour
             }
             if (OldYear != GameDisplayDate.Year)
             {
-               // WorldManager.CountryPlayerManagerGameObject.GetComponent<CountryManager>().countryBudget.ProcessYearBudgetRenew();
+                // WorldManager.CountryPlayerManagerGameObject.GetComponent<CountryManager>().countryBudget.ProcessYearBudgetRenew();
             }
             //WorldManager.CountryPlayerManagerGameObject.GetComponent<CountryManager>().countryBudget.ProcessBudgetDay();
             //WorldManager.CountryPlayerManagerGameObject.GetComponent<SectorManager>().Process();
@@ -774,7 +893,18 @@ public class MapManager : MonoBehaviour
         if (CurrentPlayerGameTimeText)
         {
             CurrentPlayerGameTimeText.text = string.Format("{0}, ZULU {1}:00", GameDisplayDate.ToLongDateString(), currentHour);
-            GamePlayerCountryText.text = string.Format("{0} Government, {1} has been in power for {2} days.", GamePlayerCountryManager.CountryGovernment.NameOfGovernment, GamePlayerCountryManager.CountryGovernment.ContactOfHeadOfState.ContactName, OldDays);
+            if (GamePlayerCountryManager != null)
+            {
+
+                if (OldDays != GameDisplayDate.DayOfYear)
+                {
+                    GamePlayerCountryText.text = string.Format("{0} Government, {1} has been in power for {2} days.",
+                                                 GamePlayerCountryManager.CountryGovernment.NameOfGovernment,
+                                                 GamePlayerCountryManager.CountryGovernment.ContactOfHeadOfState.ContactName, OldDays);
+                }
+
+            }
+
         }
         //regionInfo.ti
         var dTIme = LocalTimeOfProince.AddHours(currentHour + HoverOverOffSetTime);
@@ -921,6 +1051,7 @@ public class MapManager : MonoBehaviour
                 ColorUtility.TryParseHtmlString("#494560D6", out decorator.fillColor);
                 wmslObj.decorator.SetCountryDecorator(0, GamePlayerCountryManager.CountryGovernment.MapLookUpName, decorator);
                 GamePlayerCountryText.text = GamePlayerCountryManager.CountryGovernment.NameOfGovernment;
+                DebugText.text = "Country Player Manager Set" + GamePlayerCountryManager.CountryGovernment.NameOfGovernment;
             }
         }
 
@@ -936,23 +1067,35 @@ public class MapManager : MonoBehaviour
         {
 
             SelectCity(cityIndex, SelectedCity);
-
-            Debug.Log("Entered city " + wmslObj.cities[cityIndex].name);
+            DebugText.text = "Entered city " + wmslObj.cities[cityIndex].name;
         };
 
         wmslObj.OnCityExit += (int cityIndex) =>
         {
-            ResetMenus();
+            if (GameMapDisplayMode == MapDisplayMode.DetailCityMode)
+            {
+                SetAll(new List<GameObject>() { GameCityInfoPanel
+        }, true);
+            }
+            else
+            {
+                SetAll(new List<GameObject>() { GameCityInfoPanel
+        }, false);
+
+            }
+
             //  Debug.Log("Exited city " + wmslObj.cities[cityIndex].name);
         };
 
         wmslObj.OnCityClick += (int cityIndex, int buttonIndex) =>
         {
-            //
+            //sticky the city panel until exit of province or country
             if (buttonIndex == 0)
             {
                 var selectedCity = wmslObj.cities[cityIndex];
-                Debug.Log("Clicked city " + wmslObj.cities[cityIndex].name);
+                GameLastMapDisplayMode = GameMapDisplayMode;
+                GameMapDisplayMode = MapDisplayMode.DetailCityMode;
+                DebugText.text = "Clicked city " + wmslObj.cities[cityIndex].name;
                 SelectCityOnClick(selectedCity);
 
             }
@@ -965,17 +1108,29 @@ public class MapManager : MonoBehaviour
 
         wmslObj.OnProvinceExit += (int provinceIndex, int regionIndex) =>
         {
-            //Debug.Log("Exited province " + wmslObj.provinces[provinceIndex].name);
+            DebugText.text = "Exited province " + wmslObj.provinces[provinceIndex].name;
+            GameMapDisplayMode = GameLastMapDisplayMode;
+            if (GameMapDisplayMode == MapDisplayMode.DetailCityMode)
+            {
+                SetAll(new List<GameObject>() { GameCityInfoPanel
+        }, true);
+            }
+            else
+            {
+                ResetMenus();
+            }
 
-            ResetMenus();
+            SetAll(new List<GameObject>() { GameCountryInfoPanel
+        }, true);
         };
 
         wmslObj.OnProvinceClick += (int provinceIndex, int regionIndex, int buttonIndex) =>
         {
+            GameMapDisplayMode = GameLastMapDisplayMode;
             if (buttonIndex == 0)
             {
-                //wmslObj.SetZoomLevel(wmslObj.GetCountryRegionZoomExtents(regionIndex), 1.5f);
-                //SelectOnCountry();
+                //sticky province until exit province or country
+                SelectProvinceOnClick(provinceIndex, regionIndex, SelectedProvince);
             }
             if (buttonIndex == 1)
             {
@@ -987,13 +1142,12 @@ public class MapManager : MonoBehaviour
 
         wmslObj.OnCountryClick += (int countryIndex, int regionIndex, int buttonIndex) =>
         {
-
             wmslObj.showProvinces = true;
-         
-
-
-
-
+            if (buttonIndex == 1)
+            {
+                wmslObj.SetZoomLevel(wmslObj.GetCountryRegionZoomExtents(regionIndex), 1.5f);
+                SelectOnCountry();
+            }
         };
 
         wmslObj.OnCountryExit += WmslObj_OnCountryExit;
@@ -1023,25 +1177,8 @@ public class MapManager : MonoBehaviour
         switch (GameMapDisplayMode)
         {
             case MapDisplayMode.FlatMap:
-
-                // Before switching view mode, initiates fade to smooth transition effect
-                Invoke("StartFade", 1.8f);
-
-                // After 2.5 seconds of flight, switch to viewport mode. You could also check current zoomLevel in the Update() method and change accordingly.
-                Invoke("EnableViewport", 2.5f);
-                // StartCoroutine(SetSideBar(SelectedCountryManager));
-                GameCountryInfoPanel.SetActive(true);
-                GameCountryInfoPanel.GetComponent<FadeObjectInOut>().FadeIn();
                 break;
             case MapDisplayMode.TiltMap:
-                //StartCoroutine(SetSideBar(SelectedCountryManager));
-                // Before switching view mode, initiates fade to smooth transition effect
-                Invoke("StartFade", 0.4f);
-
-                // After 1 second of flight, switch to normal mode. You could also check current zoomLevel in the Update() method and change accordingly.
-                Invoke("DisableViewport", 1f);
-                GameCountryInfoPanel.SetActive(true);
-                GameCountryInfoPanel.GetComponent<FadeObjectInOut>().FadeIn();
                 break;
             case MapDisplayMode.InGarage:
                 GameDeckInfoPanel.SetActive(true);
@@ -1069,28 +1206,23 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    public void SetCamera(int MaxCameraIndex = 0)
-    {
-
-        wmslObj = WMSK.instance;
-        //globeCamera.gameObject.SetActive(false);
-        worldCamer.gameObject.SetActive(true);
-        //wmGlobeObj.Hide();
-        ZoomChange = wmslObj.GetZoomLevel();
-        GameMapDisplayMode = (MapDisplayMode)MaxCameraIndex;
-        ResetMenus();
-        SetPanelsByModeOnClick();
-
-    }
-
     public void SelectCityOnClick(WorldMapStrategyKit.City selectedCity)
     {
         var s = selectedCity.attrib["data"].str;
 
+
+        //first does this city our city then show the player city data which is live
+        //if its not the players then it might be another world governments WorldCountryManagement find it in here
+        //if its not in there then get the historic data from either the  WorldManager.WorldCityData or auto generate it and add it to the list of world cities that 
+        //you can click on a city and spawn the data for it into the memory
+
+
+        var cityInfoPanel = GameCityInfoPanel.GetComponent<CityInfoPanel>();
+        cityInfoPanel.CitySelectedPanel.SetActive(true);
         if (s == null)
         {
             var data = JsonUtility.FromJson<CityData>(s);
-            data = WorldManager.WorldCityData.FirstOrDefault(e => e.index == selectedCity.uniqueId || e.name == selectedCity.name);
+            data = WorldManager.WorldCityData.FirstOrDefault(e => e.index == selectedCity.uniqueId && e.name == selectedCity.name);
             var cityPanelInfo = FindObjectOfType<CityInfoPanel>();
             cityPanelInfo.CrimeIndex = data.CityCrimeIndex;
             cityPanelInfo.EconomicIndex = data.CityEconomicIndex;
@@ -1098,14 +1230,14 @@ public class MapManager : MonoBehaviour
             cityPanelInfo.ResearchIndex = data.CityResearchIndex;
             cityPanelInfo.TerrorIndex = data.CityTerrorLevel;
             cityPanelInfo.TradeIndex = data.CityTradeValue;
-            cityPanelInfo.CityStatusText.text = "";
+            cityPanelInfo.CityRumorReport.text = "";
             cityPanelInfo.CityProvinceText.text = data.provinceName;
             cityPanelInfo.CityPopulationText.text = string.Format("{0:n0}", data.population);
             cityPanelInfo.CityNameText.text = data.name;
-            cityPanelInfo.CityIncomeText.text = string.Format("{0:n0}M PER Day", data.population);
+            cityPanelInfo.CityProductionReport.text = string.Format("{0:n0}M PER Day", data.population);
             cityPanelInfo.CityControllingFlag.texture = data.CityOwnerFlag;
         }
-
+        GameMapSelectedType = MapSelected.City;
         //var f = data.
         //WorldManager.CityStatus(SelectedCountryManager.CountryGovernment,)
     }
@@ -1117,63 +1249,245 @@ public class MapManager : MonoBehaviour
 
         var cityInfo = wmslObj.cities[cityIndex];
 
-        SelectedCity.index = cityInfo.uniqueId;
-        SelectedCity.location = cityInfo.unity2DLocation;
-        cityInfoPanel.CityNameText.text = SelectedCity.name = cityInfo.name;
-        cityInfoPanel.CityProvinceText.text = SelectedCity.provinceName = cityInfo.province;
-        SelectedCity.population = cityInfo.population;
-        cityInfoPanel.CityPopulationText.text = string.Format("{0:n0}", cityInfo.population);
+        //no relations or network
+        cityInfoPanel.CityNoIntel.gameObject.SetActive(true);
+        cityInfoPanel.CityNoLocalNewsInfo.gameObject.SetActive(true);
+        cityInfoPanel.CityNoProductionInfo.gameObject.SetActive(true);
+        cityInfoPanel.CityNoRumorInfo.gameObject.SetActive(true);
+        cityInfoPanel.CityNoStatInfo.gameObject.SetActive(true);
+        cityInfoPanel.CityStatsInfoPanel.SetActive(false);
+        var mapFlag = helpers.LoadFlagFromCountryName(cityInfoPanel.CityStateText.text);
+        //if its different selected from previous
+        if (cityInfo.uniqueId != SelectedCity.index)
+        {
+            var countrygovernment = WorldManager.WorldCountryManagement.FirstOrDefault(country => country.CountryGovernment.CountryOfGovernment.index == cityInfo.countryIndex);
+            if (countrygovernment != null)
+            {
+                var countryCities = countrygovernment.CountryCityControlList.FirstOrDefault(city => city.index == cityInfo.uniqueId);
+
+                //if we have intel network etc
+
+                if (countryCities != null)
+                {
+                    SelectedCity = countryCities;
+
+                    cityInfoPanel.CityCrimeIndex.value = cityInfoPanel.CrimeIndex = SelectedCity.CityCrimeIndex;
+                    cityInfoPanel.CityTerrorIndex.value = cityInfoPanel.TerrorIndex = SelectedCity.CityTerrorLevel;
+                    cityInfoPanel.CityPropertyConstruction.value = cityInfoPanel.PropertyConstruction = SelectedCity.CityPropertyValue;
+                    cityInfoPanel.CityEconomicIndex.value = cityInfoPanel.EconomicIndex = SelectedCity.CityEconomicIndex;
+                    cityInfoPanel.CityTradeIndex.value = cityInfoPanel.TradeIndex = SelectedCity.CityTradeValue;
+                    cityInfoPanel.CityResearchIndex.value = cityInfoPanel.ResearchIndex = SelectedCity.CityResearchIndex;
+
+                    cityInfoPanel.CityStatsInfoPanel.SetActive(true);
+                }
+                mapFlag = countrygovernment.CountryGovernment.CountryFlag;
+                //do we have intel network?
+                // do we have media sharing?
+                // do we have trade deal?
+                // do we have back-channel deal?
+                //
+                cityInfoPanel.CityNoIntel.gameObject.SetActive(false);
+                cityInfoPanel.CityNoLocalNewsInfo.gameObject.SetActive(false);
+                cityInfoPanel.CityNoProductionInfo.gameObject.SetActive(false);
+                cityInfoPanel.CityNoRumorInfo.gameObject.SetActive(false);
+                cityInfoPanel.CityNoStatInfo.gameObject.SetActive(false);
+
+                cityInfoPanel.CityIntelReport.gameObject.SetActive(true);
+                cityInfoPanel.CityLocalNews.gameObject.SetActive(true);
+                cityInfoPanel.CityProductionReport.gameObject.SetActive(true);
+                cityInfoPanel.CityRumorReport.gameObject.SetActive(true);
+            }
+            else
+            {
+
+                SelectedCity.index = cityInfo.uniqueId;
+                SelectedCity.location = cityInfo.unity2DLocation;
+                SelectedCity.population = cityInfo.population;
+                SelectedCity.name = cityInfo.name;
+                SelectedCity.provinceName = cityInfo.province;
+
+            }
+        }
+
+        //get it from wahtever slected city was before
+        cityInfoPanel.CityNameText.text = string.Format("{0} {1}", SelectedCity.name, SelectedCity.isCapital ? "[Captial]" :string.Empty, SelectedCity.isCapital ? "[Province Captial]" : string.Empty);
+        cityInfoPanel.CityProvinceText.text = SelectedCity.provinceName;
+        cityInfoPanel.CityStateText.text = wmslObj.countryHighlighted.name;
+        cityInfoPanel.CityPopulationText.text = string.Format("{0:n0}", SelectedCity.population);
+
+        cityInfoPanel.CityControllingFlag.texture = mapFlag;
         GameCityInfoPanel.SetActive(true);
         GameCityInfoPanel.GetComponent<FadeObjectInOut>().FadeIn();
     }
 
+
+    public void SelectProvinceOnClick(int provindeIndex, int regionIndex, GenericProvince SelectedProvince)
+    {
+        DebugText.text = "Clicked province " + wmslObj.provinces[provindeIndex].name;
+        GameMapSelectedType = MapSelected.Province;
+        SelectProvince(provindeIndex, regionIndex, SelectedProvince);
+    }
     public void SelectProvince(int provinceIndex, int regionIndex, GenericProvince SelectedProvince)
     {
 
         //  wmslObj.getpr
         GameProvinceInfoPanel.SetActive(true);
+        var cm = new CountryToGlobalCountry();
+        var provinceUI = GameProvinceInfoPanel.GetComponent<ProvinceInfoPanel>();
+        var controlLevel = 100f;
         if (SelectedProvince != null && SelectedCountryManager != null)
         {
             SelectedProvince = SelectedCountryManager.CountryGovernment.ControlsProvincesNames.FirstOrDefault(e => e.index == provinceIndex && e.countryIndex == regionIndex);
             //Player controls this province
             //wmslObj.FlyToProvince(provinceIndex, 3f, ZoomChange);
+            if (SelectedCountryManager != null && SelectedProvince == null)
+            {
+                var selectedProvince = wmslObj.provinces[provinceIndex];
+                var newProvince = new CountryToGlobalCountry.GenericProvince(selectedProvince.name);
+                newProvince.index = selectedProvince.uniqueId;
+                newProvince.countryIndex = regionIndex;
+                newProvince.location.x = selectedProvince.center.x;
+                newProvince.location.y = selectedProvince.center.y;
+                SelectedProvince = newProvince;
+                SelectedCountryManager.CountryGovernment.ControlsProvincesNames.Add(newProvince);
+                provinceUI.ProvinceControllingFlag.texture = SelectedProvince.flagowner;
+                // helpers.LoadFlagFromCountryName(selectedProvince.countryIndex);
+            }
         }
         else
         {
+
             var selectedProvince = wmslObj.provinces[provinceIndex];
-            var newProvince = new CountryToGlobalCountry.GenericProvince(selectedProvince.name);
-            newProvince.index = selectedProvince.uniqueId;
-            newProvince.countryIndex = regionIndex;
-            newProvince.location.x = selectedProvince.center.x;
-            newProvince.location.y = selectedProvince.center.y;
-            SelectedProvince = newProvince;
+            //check if the player owns this or if it exists in the list of known provinces
+            var gameManager = FindObjectOfType<GameManager>();
+            var playerCountryManager = gameManager.GameWorldManager.CountryPlayerManagerGameObject.GetComponentInChildren<CountryManager>();
+            provinceUI.ProvinceMilitary.text = GetTotalMilitaryInProvince(playerCountryManager, selectedProvince.uniqueId);
+            if (playerCountryManager.CountryProvinceControlList.Count > 0)
+            {
+                SelectedProvince = playerCountryManager.CountryProvinceControlList.FirstOrDefault(e => e.index == selectedProvince.uniqueId);
+                if (SelectedProvince.ProvinceCities.Count == 1)
+                {
+                    SelectedProvince.ProvinceCities = playerCountryManager.CountryCityControlList.Where(e => e.provinceName == selectedProvince.name).ToList();
+                }
+                controlLevel = playerCountryManager.CountryProvinceControlList.FirstOrDefault(e => e.index == selectedProvince.uniqueId).ProvinceControl;
+            }
+            else if(gameManager.GameWorldManager.CountryAIManagerGameObject != null && SelectedProvince == null)
+            {
+                //check if the AI provinces exists
+                var AICountryManagers = gameManager.GameWorldManager.CountryAIManagerGameObject.GetComponents<CountryManager>().ToList();
+                if (SelectedProvince == null && AICountryManagers != null)
+                {
+                    SelectedProvince = AICountryManagers.FirstOrDefault(e =>
+                    e.CountryGovernment.CountryOfGovernment.index == selectedProvince.countryIndex).CountryProvinceControlList.FirstOrDefault(prov =>
+                    prov.index == selectedProvince.uniqueId);
+                    controlLevel = AICountryManagers.FirstOrDefault(e =>
+                    e.CountryGovernment.CountryOfGovernment.index == selectedProvince.countryIndex).CountryProvinceControlList.FirstOrDefault(prov =>
+                    prov.index == selectedProvince.uniqueId).ProvinceControl;
+                    SelectedProvince.ProvinceCities = AICountryManagers.FirstOrDefault(e =>
+                     e.CountryGovernment.CountryOfGovernment.index == selectedProvince.countryIndex).CountryCityControlList.Where(prov =>
+                     prov.index == selectedProvince.uniqueId).ToList();
+                    provinceUI.ProvinceMilitary.text = GetTotalMilitaryInProvince(AICountryManagers.FirstOrDefault(e =>
+                    e.CountryGovernment.CountryOfGovernment.index == selectedProvince.countryIndex), selectedProvince.uniqueId);
+                }
+            }
+
+            if (SelectedProvince == null)
+            {
+                //it doesn't exit in the game yet so lets check from the seed data
+                SelectedProvince = playerCountryManager.CountryGovernment.ControlsProvincesNames.FirstOrDefault(province => province.index == selectedProvince.uniqueId && province.countryIndex == selectedProvince.countryIndex);
+                if (SelectedProvince == null)
+                {
+                    var listOfCities = wmslObj.cities.Where(e => e.countryIndex == selectedProvince.countryIndex && e.province == selectedProvince.name);
+                    //it doesn't exist so add it to the world list temporary
+                    var newProvince = cm.RandomProvince(listOfCities, selectedProvince, playerCountryManager.CountryGovernment);
+                    newProvince.index = selectedProvince.uniqueId;
+                    newProvince.countryIndex = selectedProvince.countryIndex;
+                    newProvince.location.x = selectedProvince.center.x;
+                    newProvince.location.y = selectedProvince.center.y;
+                    SelectedProvince = newProvince;
+                    provinceUI.ProvinceMilitary.text = "Unknown.";
+                }
+            }
         }
 
+        if (SelectedProvince != null)
+        {
+            provinceUI.ProvinceNameText.text = SelectedProvince.name;
+            provinceUI.ProvinceRuleOfLaw.value = provinceUI.provinceRuleOfLaw = SelectedProvince.provinceRuleOfLaw;
+            provinceUI.ProvinceHumanSecurity.value = provinceUI.provinceHumanSecurity = SelectedProvince.provinceHumanSecurity;
+            provinceUI.ProvinceEconomicActivity.value = provinceUI.provinceEconomicDevelopment = SelectedProvince.provinceEconomicDevelopment;
+            provinceUI.ProvinceCulturalValue.value = provinceUI.provinceCulturalValue = SelectedProvince.provinceCulturalValue;
+            provinceUI.CityTotal.text = GetTotalCities(SelectedProvince.ProvinceCities);
+            provinceUI.PopulationText.text = string.Format("{0} people",SelectedProvince.population);
+        }
+
+
+        // provinceUI.PopulationText.text = string.Format("{0:n0}", SelectedProvince.population);
         SetPanelsByModeOnClick();
+
+    }
+    private string GetTotalMilitaryInProvince(CountryManager countryInfo, long provinceIndex)
+    {
+        //Major Military Bases; 4 
+        // Local Defense Forces: 3 BCTs
+        //get a list of military bases in the province;
+        //get a list of military units
+        var listofBases = countryInfo.countryMilitary.MilitaryBases.Where(milbase => milbase.BaseInProvinceIndex == provinceIndex).ToList();
+        var totalPeople = listofBases.Sum(e => e.BaseStrength);
+        return string.Format("Major Airbases; {0} Major Naval Bases; {1} Major Military Bases: {2}; Minor Military {3}; Blacksites {4}; Total Military Personnel {5};", 
+            listofBases.Count(e=>e.GameBasetype == MilitaryBaseFactory.BaseType.MajorAirBase), 
+            listofBases.Count(e => e.GameBasetype == MilitaryBaseFactory.BaseType.MajorNavalBase), 
+            listofBases.Count(e => e.GameBasetype == MilitaryBaseFactory.BaseType.MajorInstallation),
+            listofBases.Count(e => (e.GameBasetype != MilitaryBaseFactory.BaseType.MajorAirBase) || (e.GameBasetype != MilitaryBaseFactory.BaseType.MajorNavalBase) || (e.GameBasetype != MilitaryBaseFactory.BaseType.MajorInstallation)),
+            listofBases.Count(e => e.GameBasetype == MilitaryBaseFactory.BaseType.CovertSupportBase), totalPeople
+            );
+    }
+    private string GetTotalCities(List<GenericCity> provinceCities)
+    {
+
+        var totalMegaCities = provinceCities.Count(e => (e.CityType == CityType.MegaCity) || (e.CityType == CityType.Metropolis) || (e.CityType == CityType.LargeCity || (e.CityType == CityType.City) || (e.CityType == CityType.SmallCity)));// 2
+        var totalTowns = provinceCities.Count(e => (e.CityType == CityType.Town) || (e.CityType == CityType.SmallTown) || (e.CityType == CityType.SmallTownAmericas || (e.CityType == CityType.SmallTownEuropean) || (e.CityType == CityType.SmallTownMiddleEastern)));
+        var totalVillages = provinceCities.Count(e => (e.CityType == CityType.Village) || (e.CityType == CityType.SmallVillage) || (e.CityType == CityType.Hamlet || (e.CityType == CityType.Remote)));
+
+        //1 Major City (NEw York) 8 Smaller Sisyes
+        return string.Format("{0} Cities; {1} Towns; {2} Villages;", totalMegaCities, totalTowns, totalVillages);
+
 
     }
 
 
     public void SelectOnCountry()
     {
+        var countryInfoPanel = GameCountryInfoPanel.GetComponent<CountryInfoPanel>();
         //AND HAS EMBASY OPEN TODO
         if (wmslObj.countryHighlighted != null)
         {
             ResetMenus();
+
+
             SelectedCountryManager = WorldManager.WorldCountryManagement.FirstOrDefault(e => e.CountryGovernment.CountryOfGovernment.name == wmslObj.countryHighlighted.name);
             if (SelectedCountryManager != null)
             {
                 DebugText.text = string.Format("SELET {0}, {1}", SelectedCountryManager.name, SelectedCountryManager.CountryGovernment.MapLookUpName);
-
+                countryInfoPanel.CountryMoreDetailsPanel.SetActive(true);
                 wmslObj.FlyToCountry(SelectedCountryManager.CountryGovernment.MapLookUpName, 1f, ZoomChange);
+                DebugText.text = string.Format("elected Country Government {0}", wmslObj.countryHighlighted.name);
+                countryInfoPanel.CountryName.text = wmslObj.countryHighlighted.name;
+                countryInfoPanel.CountryNationals.text = SelectedCountryManager.CountryGovernment.TitleOfPopulation;
+                countryInfoPanel.CountryFounding.text = SelectedCountryManager.CountryGovernment.FoundingYear.ToString();
+                countryInfoPanel.CaptialName.text = SelectedCountryManager.CountryGovernment.CaptialName;
+                GameMapSelectedType = MapSelected.Country;
             }
             else
             {
                 DebugText.text = string.Format("Missing Government {0}", wmslObj.countryHighlighted.name);
+                countryInfoPanel.CountryMoreDetailsPanel.SetActive(false);
+                countryInfoPanel.CountryName.text = wmslObj.countryHighlighted.name;
                 wmslObj.FlyToCountry(wmslObj.countryHighlighted.name, 1f, ZoomChange);
             }
 
             SetPanelsByModeOnClick();
+
         }
         else
         {
@@ -1186,23 +1500,51 @@ public class MapManager : MonoBehaviour
 
     public void ResetMenus()
     {
-        GameGovernmentInfoPanel.SetActive(false);
-        GameCityInfoPanel.SetActive(false);
-        GameProvinceInfoPanel.SetActive(false);
-        GameIntelInfoPanel.SetActive(false);
-        GameDiplomaticInfoPanel.SetActive(false);
-        GameCountryInfoPanel.SetActive(false);
-        GameResearchInfoPanel.SetActive(false);
-        GameShipInfoPanel.SetActive(false);
-        GameEconomicInfoPanel.SetActive(false);
-        GameMilitaryBaseInfoPanel.SetActive(false);
-        GameShipInfoPanel.SetActive(false);
-        GameDeckInfoPanel.SetActive(false);
-        GameDefconInfoPanel.SetActive(false);
-        GameInfrastructureInfoPanel.SetActive(false);
+
+        SetAll(new List<GameObject>() { GameCityInfoPanel,
+            GameGovernmentInfoPanel,
+            GameProvinceInfoPanel,
+            GameIntelInfoPanel,
+            GameDiplomaticInfoPanel,
+            GameCountryInfoPanel,
+            GameResearchInfoPanel,
+            GameShipInfoPanel,
+            GameEconomicInfoPanel,
+            GameMilitaryBaseInfoPanel,
+            GameShipInfoPanel,
+            GameDeckInfoPanel,
+            GameDefconInfoPanel,
+            GameInfrastructureInfoPanel,
+            GameMilitaryOperationsInfoPanel
+
+        }, false);
     }
 
     #region Toggles
+    public void ToggleFlatMapView()
+    {
+        ResetMenus();
+        if (GameMapDisplayMode == MapDisplayMode.FlatMap)
+        {
+            StartCoroutine("MapUpdateFlatMap");
+        }
+        else
+        {
+            StartCoroutine("SwitchFlatMapView");
+        }
+    }
+    public void ToggleTitlMapView()
+    {
+        ResetMenus();
+        if (GameMapDisplayMode == MapDisplayMode.TiltMap)
+        {
+            StartCoroutine("MapUpdateTiltMap");
+        }
+        else
+        {
+            StartCoroutine("SwitchToTiltMapView");
+        }
+    }
     public void ToggleDiplomaticView()
     {
         ResetMenus();
@@ -1294,7 +1636,7 @@ public class MapManager : MonoBehaviour
     public void ToggleDefconView()
     {
         ResetMenus();
-        if (GameMapDisplayMode == MapDisplayMode.EconomcView)
+        if (GameMapDisplayMode == MapDisplayMode.DefconView)
         {
             StartCoroutine("MapUpdateDefcon");
         }
@@ -1306,6 +1648,172 @@ public class MapManager : MonoBehaviour
 
     #endregion
 
+
+    #region Military Movement
+    //GameMilitaryOperationsInfoPanel
+
+    public void CancelFlightFollow()
+    {
+        var flights = FindObjectOfType<GameObjectAnimator>().follow = false;
+        GameMapSelectedType = MapSelected.None;
+
+    }
+
+
+    public void DeployTransport()
+    {
+        var menuInfo = GameMilitaryOperationsInfoPanel.GetComponent<MilitaryOperationInfoPanel>();
+
+        GameObjectAnimator airplane = new GameObjectAnimator();
+        //first get the destinations and what we are transporting
+        //then hide the menu
+        //then create airplane and flight plan
+        //then zoom into the plane taking off and display button to "deselect" the transport view
+        //update the flight data
+        //landing the flight and trigger end event
+
+        // Destroy existing airplane
+        // if (airplane != null) DestroyImmediate(airplane.gameObject);
+
+        menuInfo.MilitaryTransportAirPanel.SetActive(false);
+        // Location for airplane
+        Vector2 position = wmslObj.GetCity("New York", "United States of America").unity2DLocation;
+
+        // Create ship
+        GameObject airplaneGO = Instantiate(Resources.Load<GameObject>("Airplane/Airplane"));
+        airplaneGO.transform.localScale = WorldMapStrategyKit.Misc.Vector3one * 0.25f;
+        airplane = airplaneGO.WMSK_MoveTo(position);
+        airplane.type = (int)MapMoveUNIT_TYPE.AIRPLANE;              // this is completely optional, just used in the demo scene to differentiate this unit from other tanks and ships
+        airplane.terrainCapability = TERRAIN_CAPABILITY.Any;  // ignores path-finding and can use a straight-line from start to destination
+        airplane.pivotY = 0.5f; // model is not ground based (which has a pivoty = 0, the default value, so setting the pivot to 0.5 will center vertically the model)
+        airplane.autoRotation = true;  // auto-head to destination when moving
+        airplane.rotationSpeed = 0.25f;  // speed of the rotation of auto-head to destination
+        airplane.follow = true;
+        WorldMapHintInfo.gameObject.SetActive(true);
+        WorldMapHintInfo.text = "Click E to stop  following the flight";
+        GameMapSelectedType = MapSelected.AirTransport;
+        // Go to airplane location and wait for launch
+        wmslObj.FlyToLocation(position, 1.5f, 0.05f);
+        StartCoroutine(StartFlight(airplane));
+
+    }
+
+    IEnumerator StartFlight(GameObjectAnimator airplane)
+    {
+        airplane.arcMultiplier = 5f;     // this is the arc for the plane trajectory
+        airplane.easeType = EASE_TYPE.SmootherStep;    // make it an easy-in-out movement
+
+        Vector2 destination = wmslObj.GetCity("Paris", "France").unity2DLocation;
+        airplane.MoveTo(destination, 150f);
+        airplane.OnMoveEnd += (GameObjectAnimator anim) =>
+        {
+
+            anim.follow = false;
+            WorldMapHintInfo.gameObject.SetActive(false);
+            WorldMapHintInfo.text = string.Empty;
+            if (airplane != null) DestroyImmediate(airplane.gameObject);
+
+        };    // once the movement has finished, stop following the unit
+
+        yield return new WaitForEndOfFrame();
+    }
+    private AsyncOperation GetAirStrikeAsync = null;
+
+    IEnumerator StartAirstrike(GameObjectAnimator airplane)
+    {
+        airplane.arcMultiplier = 5f;     // this is the arc for the plane trajectory
+        airplane.easeType = EASE_TYPE.SmootherStep;    // make it an easy-in-out movement
+
+        Vector2 destination = wmslObj.GetCity("Paris", "France").unity2DLocation;
+        airplane.MoveTo(destination, 10f);
+        StartCoroutine("CoLoadNextScene");
+        airplane.OnMoveEnd += (GameObjectAnimator anim) =>
+        {
+
+
+            anim.follow = false;
+            WorldMapHintInfo.gameObject.SetActive(false);
+            WorldMapHintInfo.text = string.Empty;
+
+            if (airplane != null) DestroyImmediate(airplane.gameObject);
+
+            if (GetAirStrikeAsync != null)
+                if (GetAirStrikeAsync.progress >= 0.9f)
+                {
+                    //Scene loaded! Do fades then set allowSceneActivation to true when done to switch scenes.
+                    GetAirStrikeAsync.allowSceneActivation = true;
+                }
+
+        };    // once the movement has finished, stop following the unit
+
+        yield return new WaitForEndOfFrame();
+    }
+
+    IEnumerator CoLoadNextScene()
+    {
+        GetAirStrikeAsync = SceneManager.LoadSceneAsync(6);
+        GetAirStrikeAsync.allowSceneActivation = false;
+        yield return GetAirStrikeAsync;
+    }
+
+
+    public void DeployAirStrike()
+    {
+        var menuInfo = GameMilitaryOperationsInfoPanel.GetComponent<MilitaryOperationInfoPanel>();
+
+        GameObjectAnimator airplane = new GameObjectAnimator();
+        //first get the destinations and what we are transporting
+        //then hide the menu
+        //then create airplane and flight plan
+        //then zoom into the plane taking off and display button to "deselect" the transport view
+        //update the flight data
+        //landing the flight and trigger end event
+
+        // Destroy existing airplane
+        // if (airplane != null) DestroyImmediate(airplane.gameObject);
+
+        menuInfo.MilitaryTransportAirPanel.SetActive(false);
+        // Location for airplane
+        Vector2 position = wmslObj.GetCity("New York", "United States of America").unity2DLocation;
+
+        // Create ship
+        GameObject airplaneGO = Instantiate(Resources.Load<GameObject>("Airplane/Airplane"));
+        airplaneGO.transform.localScale = WorldMapStrategyKit.Misc.Vector3one * 0.25f;
+        airplane = airplaneGO.WMSK_MoveTo(position);
+        airplane.type = (int)MapMoveUNIT_TYPE.AIRPLANE;              // this is completely optional, just used in the demo scene to differentiate this unit from other tanks and ships
+        airplane.terrainCapability = TERRAIN_CAPABILITY.Any;  // ignores path-finding and can use a straight-line from start to destination
+        airplane.pivotY = 0.5f; // model is not ground based (which has a pivoty = 0, the default value, so setting the pivot to 0.5 will center vertically the model)
+        airplane.autoRotation = true;  // auto-head to destination when moving
+        airplane.rotationSpeed = 0.25f;  // speed of the rotation of auto-head to destination
+        airplane.follow = true;
+        WorldMapHintInfo.gameObject.SetActive(true);
+        WorldMapHintInfo.text = "Click E to recall bombers";
+        GameMapSelectedType = MapSelected.AirTransport;
+        // Go to airplane location and wait for launch
+        wmslObj.FlyToLocation(position, 1.5f, 0.05f);
+        StartCoroutine(StartAirstrike(airplane));
+    }
+
+    #endregion
+
+    public void SetMapGeoview()
+    {
+        wmslObj.frontiersColor = Colors.Black;
+        wmslObj.thickerFrontiers = false;
+        wmslObj.showCountryNames = false;
+        wmslObj.earthStyle = WorldMapStrategyKit.EARTH_STYLE.NaturalScenicPlus16K;
+    }
+    public void SetDefcon()
+    {
+        wmslObj.frontiersColor = Colors.Azure;
+        wmslObj.thickerFrontiers = true;
+        wmslObj.earthStyle = WorldMapStrategyKit.EARTH_STYLE.NaturalScenicPlusAlternate1;
+        wmslObj.showCountryNames = true;
+        wmslObj.countryLabelsColor = Colors.BananaYellow;
+        wmslObj.countryLabelsSize = 0.15f;
+
+
+    }
 
     public void EnableViewport()
     {

@@ -3,46 +3,64 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using Assets;
+using System.Timers;
 
 [System.Serializable]
 public class WorldEvent : ScriptableObject
 {
-    public string EventName { get; set; }
-    public string EventDescription { get; set; }
-    public string StartTime { get; set; }
+    public string EventName;
+    public string EventDescription;
+    public string StartTime;
+    public DateTime EventGameDate;
+  
+
     /// <summary>
     /// The country making the diplomatic offer
     /// </summary>
-    public CountryToGlobalCountry.GenericCountry EventInCountry { get; set; }
+    public CountryToGlobalCountry.GenericCountry EventInCountry;
     /// <summary>
     /// The country getting the diplomatic offer
     /// </summary>
-    public CountryToGlobalCountry.GenericProvince EventInProvince { get; set; }
+    public CountryToGlobalCountry.GenericProvince EventInProvince;
+    /// <summary>
+    /// The country getting the diplomatic offer
+    /// </summary>
+    public CountryToGlobalCountry.GenericCity EventInCity;
 
-    public string EventInCity { get; set; }
+    public bool IsBlowback;
 
-    public bool IsBlowback { get; set; }
+    public EventGenerator.WorldEventType EventType;
+    public List<WorldEvent> BlowbackEvents;
 
-    public EventGenerator.WorldEventType EventType { get; set; }
-    public List<WorldEvent> BlowbackEvents { get; set; }
-
-    public List<Contact> EventContacts { get; set; }
-    public float EventWeight { get; set; }
-
-    public double EventRiskIncrease { get; set; }
-    public double EventRiskDecrease { get; set; }
+    public List<Contact> EventContacts;
+    public float EventWeight;
     /// <summary>
     /// True is a gain false is a lost ie - minus
     /// </summary>
-    public bool GainLost { get; set; }
-    public double EventCost { get; set; }
+    [Range(-100.0f, 100.0f)]
+    public float GainLost;
+    public long EventCost;
+    public bool IsEventInFuture;
+    public Timer EventTimer;
+   
 
-    public TimeSpan NextPhaseEventTimeSpan { get; set; }
-    public WorldEvent NextWorldEvent { get; set; }
+    public void onTimerComplete(object source, ElapsedEventArgs e)
+    {
+        //do things 
+    }
+
+
+    public TimeSpan EventTimeSpan;
+    public WorldEvent NextWorldEvent;
     // Use this for initialization
     void Start()
     {
-
+        //        minutes = Mathf.Floor(timer / 60).ToString("00");
+        //seconds = (timer % 60).ToString("00);
+        EventTimer = new Timer();
+        EventTimer.Elapsed += new ElapsedEventHandler(onTimerComplete);
+        EventTimer.Interval = 500;
+        EventTimer.Start();
     }
 
     // Update is called once per frame
