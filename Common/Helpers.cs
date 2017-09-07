@@ -16,6 +16,36 @@ using Accord.Statistics.Distributions.Univariate;
 
 public static class Helpers
 {
+    public static string NumberToText(int n)
+    {
+        if (n < 0)
+            return "Minus " + NumberToText(-n);
+        else if (n == 0)
+            return "";
+        else if (n <= 19)
+            return new string[] {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight",
+         "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
+         "Seventeen", "Eighteen", "Nineteen"}[n - 1] + " ";
+        else if (n <= 99)
+            return new string[] {"Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy",
+         "Eighty", "Ninety"}[n / 10 - 2] + " " + NumberToText(n % 10);
+        else if (n <= 199)
+            return "One Hundred " + NumberToText(n % 100);
+        else if (n <= 999)
+            return NumberToText(n / 100) + "Hundreds " + NumberToText(n % 100);
+        else if (n <= 1999)
+            return "One Thousand " + NumberToText(n % 1000);
+        else if (n <= 999999)
+            return NumberToText(n / 1000) + "Thousands " + NumberToText(n % 1000);
+        else if (n <= 1999999)
+            return "One Million " + NumberToText(n % 1000000);
+        else if (n <= 999999999)
+            return NumberToText(n / 1000000) + "Millions " + NumberToText(n % 1000000);
+        else if (n <= 1999999999)
+            return "One Billion " + NumberToText(n % 1000000000);
+        else
+            return NumberToText(n / 1000000000) + "Billions " + NumberToText(n % 1000000000);
+    }
 
     public static float WeightedAverage<T>(this IEnumerable<T> records, Func<T, float> value, Func<T, float> weight)
     {
@@ -97,7 +127,7 @@ public class Helper
         var twocode = GetTwoCountryCodeFromName(countryName).ToLower();
         var countTewoCode = string.Format("UI/icons/Flags/png100px/{0}", twocode);
         var g = Resources.Load<Texture2D>("UI/icons/Flags/png100px/ar");
-      var texture =  Resources.Load(countTewoCode) as Texture2D;
+        var texture = Resources.Load(countTewoCode) as Texture2D;
         return texture;
     }
     public List<TimeZone> GameTimeZones()
@@ -156,7 +186,7 @@ public class Helper
         }
 
         var region = Helpers.GetRegionInfo(countryName);
-        if(region == null)
+        if (region == null)
         {
             Console.Write(countryName);
         }
@@ -202,19 +232,21 @@ public class Helper
                     var Dig = CIACountryIndex().FirstOrDefault().Property(item);
                 }
             }
-            else {
+            else
+            {
 
             }
-           return CIACountryIndex().FirstOrDefault().Property(PropertyXPath);
+            return CIACountryIndex().FirstOrDefault().Property(PropertyXPath);
         }
-   
+
         else
-        foreach (JProperty prop in CIACountryIndex().FirstOrDefault().Properties())
-        {
-            if (prop.Path == PropertyXPath) {
-                return prop;
+            foreach (JProperty prop in CIACountryIndex().FirstOrDefault().Properties())
+            {
+                if (prop.Path == PropertyXPath)
+                {
+                    return prop;
+                }
             }
-        }
         return null;
     }
 
@@ -256,7 +288,7 @@ public class Helper
         new KeyValuePair<SectorManager.Sectors, string>( SectorManager.Sectors.Mining, "aluminum smelting"),
         new KeyValuePair<SectorManager.Sectors, string>( SectorManager.Sectors.Telecom, "telecommunications equipment"),
          new KeyValuePair<SectorManager.Sectors, string>( SectorManager.Sectors.Aerospace, "commercial space launch vehicles"),
-       
+
     };
     }
 
@@ -323,8 +355,8 @@ public enum CityType
     GovernmentCaptial,
     [Description(" a group of conurbations, consisting of more than ten million people each.")]
     MegaCity
-   
-    
+
+
 }
 
 

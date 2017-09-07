@@ -10,8 +10,8 @@ namespace Assets
 {
     [System.Serializable]
     public class Contact : ScriptableObject
-    { 
-       
+    {
+
 
         [ContextMenuItem("Randomize Name", "Randomize")]
         public string ContactName;
@@ -29,6 +29,8 @@ namespace Assets
         public ContactVice ContactVice; // what there weakness is
         public ContactType ContactType; // what type they are ie there background before they became this
         public int Age;
+        public int DobYear;
+        public int DobMonth;
         public DateTime Dob;
         public TimeSpan DateArrested;
         public TimeSpan DateTargeted;
@@ -37,6 +39,7 @@ namespace Assets
         public GeneProfile GeneProfile;
         public Family Family;
         public int YearsInService;
+        public bool DoNotDelete;
         private void Randomize()
         {
             NameRegion = ContactSubregion.ToDescription();

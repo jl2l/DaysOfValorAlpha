@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Assets
 {
 
-  
+
 
     [Serializable]
     public class HardPointType
@@ -31,7 +31,7 @@ namespace Assets
     [Serializable]
     public partial class WeaponStationType
     {
-     
+
         public enum PointType
         {
             Fixed = 0, // aircraft
@@ -79,7 +79,7 @@ namespace Assets
     [Serializable]
     public class ObjectGeneralInfo
     {
-        
+
         [SerializeField]
         public int CrewNumber;
         public int OfficerNumber;
@@ -135,7 +135,7 @@ namespace Assets
         public string DesignText;
     }
 
-    
+
     public enum ObjectTypeCategory
     {
         airjet = 0,
@@ -149,7 +149,7 @@ namespace Assets
         submarine = 8
     }
 
-   
+
     /// <summary>
     /// For the Battle AI this will determine the track type and how it behaves Air will track for other Air AirGround can see both Air and Ground etc
     /// </summary>
@@ -171,7 +171,7 @@ namespace Assets
     /// <summary>
     /// For the Battle AI this will determine the track type and how it behaves Air will track for other Air AirGround can see both Air and Ground etc
     /// </summary>
-    
+
     public enum TrackMode
     {
         Air,
@@ -183,7 +183,7 @@ namespace Assets
         UnderseaSeaAirGround
     }
 
-    
+
     public enum AircraftSize
     {
         Tiny,
@@ -193,7 +193,7 @@ namespace Assets
         VeryLarge
     }
 
-    
+
     public enum VehicleSize
     {
         Tiny,
@@ -203,7 +203,7 @@ namespace Assets
         VeryLarge
     }
 
-    
+
     public enum ShipSize
     {
         Tiny,
@@ -213,7 +213,7 @@ namespace Assets
         VeryLarge
     }
 
-    
+
     public enum SensorType
     {
         AESAradar,
@@ -303,7 +303,7 @@ namespace Assets
 
 
         public List<Armor> armorslots;
-        
+
         public int index;
         public int CreateState;
         public bool IsAlive;
@@ -314,16 +314,16 @@ namespace Assets
 
 
         public float DeploymentCost;
-        
+
         public DeckFactory.DeckUnitType UnitDeckType;
-        
+
         public UnitCharacteristics UnitCharacteristics;
         public ObjectGeneralInfo ObjectGeneralInfo;
 
         public ObjectHistory ObjectHistory;
     }
 
-   
+
 
 
 
@@ -338,7 +338,8 @@ namespace Assets
         IRJam,
         LaserJam
     }
-    public enum ArmorPosition {
+    public enum ArmorPosition
+    {
 
         Front,
         Side,
@@ -367,7 +368,7 @@ namespace Assets
     /// AIR BASED
     /// </summary>
     [Serializable]
-    
+
     public class UnitCharacteristics
     {
         public int DeploymentCost;
@@ -489,7 +490,7 @@ namespace Assets
         VTOL,
         Drone
     }
-        [Serializable]
+    [Serializable]
     public enum AircraftTypeStr
     {
         none,
@@ -546,14 +547,14 @@ namespace Assets
     }
 
     [Serializable]
-    
+
     public class AircraftObject : BaseWarGameObject
     {
-        
+
         public List<WeaponConfig> AircraftWeaponConfig;
-        
+
         public AircraftTypeStr AircraftType;
-        
+
         public HeloTypeStr HeloType;
 
         public List<AircraftWeapon> GetListWeapons()
@@ -563,14 +564,14 @@ namespace Assets
     }
 
     [Serializable]
-    
+
     public class GroundVehicleWeapon : Weapon
     {
         public GroundVehicleWeaponType weaponType;
     }
 
     [Serializable]
-    
+
     public enum GroundVehicleWeaponType
     {
         None = 0,
@@ -647,7 +648,7 @@ namespace Assets
     }
 
     [Serializable]
-    
+
     public enum GroundVehicleType
     {
         none,
@@ -671,7 +672,7 @@ namespace Assets
     }
 
     [Serializable]
-    
+
     public enum InfType
     {
         none,
@@ -685,7 +686,7 @@ namespace Assets
     }
 
     [Serializable]
-    
+
     public enum logisticType
     {
         none,
@@ -699,7 +700,7 @@ namespace Assets
     }
 
     [Serializable]
-    
+
     public enum UnmannedType
     {
         none,
@@ -721,7 +722,7 @@ namespace Assets
         specialOps
     }
     [Serializable]
-    
+
     public enum UnitType
     {
         aircarrier,
@@ -834,7 +835,7 @@ namespace Assets
     /// The main combat vehicles 
     /// </summary>
     [Serializable]
-    
+
     public class GroundVehicleObject : BaseWarGameObject
     {
         public List<WeaponConfig> GroundVehicleWeaponConfig;
@@ -843,7 +844,7 @@ namespace Assets
         {
             return new List<GroundVehicleWeapon>();
         }
-        
+
         public GroundVehicleType GroundVehicleType;
     }
 
@@ -858,7 +859,7 @@ namespace Assets
         {
             return new List<GroundVehicleWeapon>();
         }
-        
+
         public bool IsCapturing;
         public InfType InfType;
     }
@@ -867,7 +868,7 @@ namespace Assets
     /// Logistic can be both air or ground refuel tanker etc but what makes them different is they can resupply 
     /// </summary>
     [Serializable]
-    
+
     public class LogisitcObject : BaseWarGameObject
     {
         public List<WeaponConfig> GroundVehicleWeaponConfig;
@@ -881,7 +882,7 @@ namespace Assets
     /// Unmanned vehicles can be either air or ground but they don't have humans so you can risk them much more, but they are limited in there effectiveness
     /// </summary>
     [Serializable]
-    
+
     public class UnmannedObject : BaseWarGameObject
     {
         public List<WeaponConfig> UnmannedVehicleWeaponConfig;
@@ -895,7 +896,7 @@ namespace Assets
     /// SEA BASED 
     /// </summary>
     [Serializable]
-    
+
     public class SeaObjectCharacteristics
     {
         public int Displacement;
@@ -960,7 +961,7 @@ namespace Assets
     }
 
     [Serializable]
-    
+
     public enum WarheadType
     {
         /// <summary>
@@ -1022,7 +1023,7 @@ namespace Assets
         TearGas
     }
     [Serializable]
-    
+
     public enum WeaponPerks
     {
         HEAT,
@@ -1062,7 +1063,7 @@ namespace Assets
     }
 
     [Serializable]
-    
+
     public enum SeaWeaponType
     {
         None,
@@ -1134,14 +1135,14 @@ namespace Assets
     }
 
     [Serializable]
-    
+
     public enum SeaObjectType
     {
         none,
         aircarrier,
         helocarrier,
         vstolcarrier,
-        supercarrier ,
+        supercarrier,
         subcarrier, //future 
         stealthcarrier, //future
         guidemisslecruiser,
@@ -1177,23 +1178,23 @@ namespace Assets
     [Serializable]
     public class SeaObject : BaseWarGameObject
     {
-        
+
         public SeaObjectCharacteristics SeacraftCharacteristics;
-        
+
         public SeaObjectPerformance SeacraftPerformance;
-        
+
         public List<SeaObjectWeaponConfig> SeacraftWeaponConfig;
-        
+
         public List<SeaObjectWeapon> weapons;
 
         public SeaObjectType SeacraftType;
 
         public bool IsDeckFlagShip;
 
-        
+
         public string SeacraftTypeName;
 
-        
+
         public int SeacraftTypeId;
 
     }
@@ -1295,4 +1296,105 @@ namespace Assets
         SLBM,
         ASAT
     }
+
+    public enum KitValueType
+    {
+        Armor,
+        GunAccurancy,
+        KillSight,
+        Ammo,
+        Grenade,
+        Health
+    }
+
+    public enum KitType
+    {
+        Any,
+        [Description("Scount Sniper")]
+        Sniper,
+        [Description("Assault Rifleman")]
+        Assault,
+        [Description("Combat Medic")]
+        Medic,
+        [Description("Designated Marksman")]
+        DMR,
+        [Description("Squad Automatic Rifleman")]
+        SAW,
+        [Description("Grenadier")]
+        Grenadier,
+        [Description("Sargent")]
+        Nco,
+        [Description("Squad Leader")]
+        SquadLeader,
+        [Description("Anti-Tank")]
+        Antitank,
+        [Description("Rifleman")]
+        Rifleman,
+        [Description("Rifleman")]
+        EOD
+
+    }
+    public enum TeamSpecialization
+    {
+        DirectCombat,
+        PoliceAction,
+        CounterTerrorism,
+        CombatDiving,
+        MartimeBoardings,
+        Paratrooper,
+        ScoutSniper,
+        CombatRescue,
+        GuerrillaWarfare,
+        CounterInsurgency,
+        ForeignDefense,
+        IntelligenceSurveliance,
+        ColdWeatherCombat,
+        WildernessSurvival,
+        JungleWarfare,
+        MountainWarfare,
+        JTAC,
+        Pathfinding,
+        CombatEngineer,
+        EOD,
+        UnderwaterDemolition,
+        UrbanWarfare,
+
+
+    }
+
+    [System.Serializable]
+    public class Gear
+    {
+        public string GearName;
+        public KitType GearKitType;
+        public KitValueType GearPerkType;
+        [Range(-100.0f, 100.0f)]
+        public float GearValue;
+        public int GearCount;
+
+    }
+
+    [System.Serializable]
+    public class TeamKits
+    {
+        public string Name;
+        public Weapon Gun;
+        public KitType Kit;
+        public float KitsKillSight;
+        public float KitGunHitRate;
+        public float KitHealthHP;
+        public List<Gear> Gear;
+    }
+    [System.Serializable]
+    public class Operator
+    {
+        public Contact Teammate;
+        public TeamKits Kit;
+        public string TeamSquadName;
+        public ContactGenerator.ContactHealthStatus Status;
+        public bool IsKIA;
+        public bool IsMIA;
+        public bool IsDeployed;
+    }
+
 }

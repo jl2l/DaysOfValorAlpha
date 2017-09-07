@@ -32,11 +32,11 @@ public class EditorHelper
     [MenuItem("DOV/Create Special Operations Unit", false, 101)]
     public static void CreateSpecialOperations()
     {
-        SpecialOperationsTeam asset = (SpecialOperationsTeam)CreateAsset(countryFlag + "weapon/configs", typeof(SpecialOperationsTeam));
+        SpecialOperationsTeam asset = (SpecialOperationsTeam)CreateAsset("DoVAlpha/GovernmentsDefault/data/militaries", typeof(SpecialOperationsTeam));
         if (asset != null)
             asset.TeamName = "SEALs";
     }
-    
+
     // -------- duplicate this code block to create your own custom item type --------
     // for more info, see the comments in "vp_CustomType.cs"
     [MenuItem("DOV/Create Weapon Config", false, 101)]
@@ -106,7 +106,7 @@ public class EditorHelper
             asset.WeaponName = "some WMD";
     }
 
-    
+
     // -------- duplicate this code block to create your own custom item type --------
     // for more info, see the comments in "vp_CustomType.cs"
     [MenuItem("DOV/Create New Terrost Group", false, 101)]
@@ -134,7 +134,7 @@ public class EditorHelper
         if (asset != null)
             asset.BaseName = "some army";
     }
-    
+
 
     // -------- duplicate this code block to create your own custom item type --------
     // for more info, see the comments in "vp_CustomType.cs"
@@ -160,11 +160,11 @@ public class EditorHelper
     [MenuItem("DOV/Create New Country Budget", false, 101)]
     public static void CreateCountryBudget()
     {
-      CountryBudget asset = (CountryBudget)CreateAsset("DoVAlpha/GovernmentsDefault/data", typeof(CountryBudget));
+        CountryBudget asset = (CountryBudget)CreateAsset("DoVAlpha/GovernmentsDefault/data", typeof(CountryBudget));
         if (asset != null)
             asset.name = "some government";
     }
-    
+
 
     // -------- duplicate this code block to create your own custom item type --------
     // for more info, see the comments in "vp_CustomType.cs"
@@ -455,7 +455,7 @@ public class EditorHelper
         return true;
 
     }
-    
+
 
 
     /// <summary>

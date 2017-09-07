@@ -66,7 +66,6 @@ namespace Assets
    "United States of America"
   };
 
-        
 
         public List<Country> BaseG20Countries()
         {
@@ -115,23 +114,148 @@ namespace Assets
 
 
         }
+
+        public CountrySpokeLanguage LanguageFromCountry(string countryName)
+        {
+            var cg = new ContactGenerator();
+            switch (countryName)
+            {
+                case "China":
+                    return CountrySpokeLanguage.Chinese;
+                case "Singapore":
+                    return cg.RandomEnumValue<CountrySpokeLanguage>((int)CountrySpokeLanguage.Malay, (int)CountrySpokeLanguage.Korean);
+                case "Inda":
+                    return cg.RandomEnumValue<CountrySpokeLanguage>((int)CountrySpokeLanguage.Bengali, (int)CountrySpokeLanguage.Punjabi);
+                case "Mexico":
+                case "Colombia":
+                case "Spain":
+                case "Argentina":
+                case "Peru":
+                case "Venezuela":
+                case "Chile":
+                case "Ecuador":
+                case "Guatemala":
+                case "Cuba":
+                case "Bolivia":
+                case "Dominican Republic":
+                case "Honduras":
+                case "Paraguay":
+                case "El Salvador":
+                case "Nicaragua":
+                case "Costa Rica":
+                case "Puerto Rico":
+                case "Panama":
+                case "Uruguay":
+                    return CountrySpokeLanguage.Spainish;
+                case "Algeria":
+                case "Bahrain":
+                case "Egypt":
+                case "Eritrea":
+                case "Iraq":
+                case "Israel":
+                case "Jordan":
+                case "Kuwait":
+                case "Lebanon":
+                case "Libya":
+                case "Mauritania":
+                case "Morocco":
+                case "Oman":
+                case "Qatar":
+                case "Saudi Arabia":
+                case "Somalia":
+                case "Sudan":
+                case "Syria":
+                case "Tanzania":
+                case "Tinisia":
+                case "Cyprus":
+                case "Iran":
+
+                case "Turkey":
+                    return CountrySpokeLanguage.Arabic;
+                case "Brunei":
+                case "Indonesia":
+                case "Malaysia":
+                    return CountrySpokeLanguage.Malay;
+                case "South Korea":
+                case "North Korea":
+                    return CountrySpokeLanguage.Korean;
+                case "Japan":
+                    return CountrySpokeLanguage.Japanese;
+                case "Brazil":
+                case "Mozambique":
+                case "Angola":
+                case "Portugal":
+                case "Guinea-Bissau":
+                case "East Timor":
+                case "Equatorial Guinea":
+                case "Macau":
+                case "Cape Verde":
+                    return CountrySpokeLanguage.Portuguese;
+                case "Germany":
+                case "Belgium":
+                case "Austria":
+                    return CountrySpokeLanguage.German;
+                case "Switzerland":
+                case "Luxembourg":
+                    return cg.RandomEnumValue<CountrySpokeLanguage>((int)CountrySpokeLanguage.French, (int)CountrySpokeLanguage.German);
+
+                case "Mali":
+                case "Chad":
+                case "Djibouti":
+                case "Comoros":
+
+                    return cg.RandomEnumValue<CountrySpokeLanguage>((int)CountrySpokeLanguage.Arabic, (int)CountrySpokeLanguage.French);
+                case "Canada":
+                    return cg.RandomEnumValue<CountrySpokeLanguage>((int)CountrySpokeLanguage.French, (int)CountrySpokeLanguage.English);
+                case "Democratic Republic of the Congo":
+                case "France":
+                case "Madagascar":
+                case "Cameroon":
+                case "Ivory Coast":
+                case "Niger":
+                case "Burkina Faso":
+
+                case "Senegal":
+
+                case "Guinea":
+                case "Rwanda":
+                case "Burundi":
+                case "Benin":
+                case "Haiti":
+
+                case "Togo":
+                case "Central African Republic":
+                case "Republic of the Congo":
+                case "Gabon":
+                case "Vanuatu":
+                case "Seychelles":
+                    return CountrySpokeLanguage.French;
+                default:
+                    return CountrySpokeLanguage.English;
+            }
+
+        }
+
         [SerializeField]
         public enum CountrySpokeLanguage
         {
-            Chinese,
-            English,
-            Spainish,
-            Hindi,
             Arabic,
-            Malay,
             French,
-            Russian,
-            Japanese,
-            Bengali,
-            Portuguese,
+            English,
             German,
+            Spainish,
+            Portuguese,
+            Hindi,
+            Bengali,
             Punjabi,
-            Korean
+            Chinese,
+            Malay,
+            Japanese,
+            Korean,
+
+
+
+            Russian
 
         }
 
