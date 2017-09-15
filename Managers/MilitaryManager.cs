@@ -25,7 +25,7 @@ public class MilitaryManager : MonoBehaviour
     public Text BaseName;
     public Text BaseIconType;
     public Text BaseSpecialize;
-   
+
     public RawImage BaseIcon;
     public RawImage BaseCountryFlag;
     public Slider GameBaseStrength;
@@ -67,11 +67,12 @@ public class MilitaryManager : MonoBehaviour
 
         PlayerMilitaryBase = new MilitaryBaseFactory();
         GameDeckManager = FindObjectOfType<DeckManager>();
-        GameDeckManager.PlayerDecks.ForEach(PlayerDeck =>{
+        GameDeckManager.PlayerDecks.ForEach(PlayerDeck =>
+        {
 
         });
         PlayerMilitaryBases = PlayerMilitary.MilitaryBases;
-       // PlayerMilitaryBases = PlayerMilitaryBase.DefaultList(GamePlayerMilitaryBaseContainer);
+        // PlayerMilitaryBases = PlayerMilitaryBase.DefaultList(GamePlayerMilitaryBaseContainer);
         //PlayerMilitaryList = new List<Tuple<List<DeckDataItem>, Vector2>>(GameDeckManager.PlayerDecks,)
     }
 
@@ -80,16 +81,19 @@ public class MilitaryManager : MonoBehaviour
     {
 
     }
-    public IEnumerable GetPlayerBases() {
+    public IEnumerable GetPlayerBases()
+    {
         yield return new WaitForEndOfFrame();
         //PlayerMilitaryBases.Add()
     }
 
-    public void CreateMilitaryBase() {
+    public void CreateMilitaryBase()
+    {
         var newBase = PlayerMilitaryBase.CreateMilitaryBase(GamePlayerMilitaryBaseContainer);
     }
 
-    public void AddToMilitaryDeployment(Vector2 deploymentLocation, List<DeckDataItem> deplomentDeck, CountryGovernment governmentDeploying) {
+    public void AddToMilitaryDeployment(Vector2 deploymentLocation, List<DeckDataItem> deplomentDeck, CountryGovernment governmentDeploying)
+    {
 
         GameActiveMilitaryList.Add(new Tuple<CountryGovernment, List<DeckDataItem>, Vector2>(governmentDeploying, deplomentDeck, deploymentLocation));
 
@@ -102,7 +106,8 @@ public class MilitaryManager : MonoBehaviour
 
     public void DectectTypeOfBattle() { }
 
-    public void GetCommander() {
+    public void GetCommander()
+    {
 
         //GameDeckManager.GetDeckCommander()
     }

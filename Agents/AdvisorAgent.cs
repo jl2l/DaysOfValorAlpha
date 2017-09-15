@@ -8,13 +8,19 @@ public class AdvisorAgent : Contact
     /// <summary>
     /// How much influence does this person have in the government and population at large
     /// </summary>
-    public int DiplomaticInfluence { get; set; }
-    public int DiplomaticIntelligence { get; set; }
-    public int DiplomaticTact { get; set; }
-    public int DiplomaticRapport { get; set; }
-    public int DiplomaticLuck { get; set; }
-    public bool IsAmbassdor { get; set; }
-    public bool IsCoverAgent { get; set; }
+    public enum AdvisorType
+    {
+        Military,
+        Science,
+        Cultural,
+        Economic,
+        Political,
+        Inteligence,
+        Trade
+    }
+
+    public AdvisorType Advisor;
+
 
     // Use this for initialization
     void Start()

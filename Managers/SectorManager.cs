@@ -7,35 +7,36 @@ using System;
 
 public class SectorManager : MonoBehaviour
 {
-//    Typical analyses find that tariffs tend to benefit domestic producers and government at the expense of consumers, and that the net welfare effects of a tariff on the importing country are negative.Normative judgements often follow from these findings, namely that it may be disadvantageous for a country to artificially shield an industry from world markets and that it might be better to allow a collapse to take place.Opposition to all tariff aims to reduce tariffs and to avoid countries discriminating between differing countries when applying tariffs.The diagrams to the right show the costs and benefits of imposing a tariff on a good in the domestic economy.
+    //    Typical analyses find that tariffs tend to benefit domestic producers and government at the expense of consumers, and that the net welfare effects of a tariff on the importing country are negative.Normative judgements often follow from these findings, namely that it may be disadvantageous for a country to artificially shield an industry from world markets and that it might be better to allow a collapse to take place.Opposition to all tariff aims to reduce tariffs and to avoid countries discriminating between differing countries when applying tariffs.The diagrams to the right show the costs and benefits of imposing a tariff on a good in the domestic economy.
 
-//When incorporating free international trade into the model we use a supply curve denoted as {\displaystyle P_ { tariff }
-//}
-//P_{tariff} (diagram 1) or {\displaystyle P_ { w }} P_{w} (diagram 2). This curve represents the assumption that the international supply of the good or service is perfectly elastic and that the world can produce at a near infinite quantity of the good.Before the tariff, there is a quantity demanded of Qc1 (diagram 1) or D(diagram 2). The difference between quantity demanded and quantity supplied(between D and S on diagram 2, respectively) was filled by importing from abroad.This is shown on diagram 1 as Quantity of Imports (without tariff). After the imposition of a tariff, domestic price rises, but foreign export prices fall due to the difference in tax incidence on the consumers (at home) and producers (abroad).
+    //When incorporating free international trade into the model we use a supply curve denoted as {\displaystyle P_ { tariff }
+    //}
+    //P_{tariff} (diagram 1) or {\displaystyle P_ { w }} P_{w} (diagram 2). This curve represents the assumption that the international supply of the good or service is perfectly elastic and that the world can produce at a near infinite quantity of the good.Before the tariff, there is a quantity demanded of Qc1 (diagram 1) or D(diagram 2). The difference between quantity demanded and quantity supplied(between D and S on diagram 2, respectively) was filled by importing from abroad.This is shown on diagram 1 as Quantity of Imports (without tariff). After the imposition of a tariff, domestic price rises, but foreign export prices fall due to the difference in tax incidence on the consumers (at home) and producers (abroad).
 
 
-//The new price level at Home is Ptariff or Pt, which is higher than the world price.More of the good is now produced at Home – it now makes Qs2(diagram 1) or S* (diagram 2) of the good.Due to the higher price, only Qc2 or D* of the good is demanded by Home.The difference between the quantity supplied and the quantity demanded is still filled by importing from abroad.However, the imposition of the tariff reduces the quantity of imports from D − S to D* − S* (diagram 2). This is also shown in diagram 1 as Quantity of Imports(with tariff).
+    //The new price level at Home is Ptariff or Pt, which is higher than the world price.More of the good is now produced at Home – it now makes Qs2(diagram 1) or S* (diagram 2) of the good.Due to the higher price, only Qc2 or D* of the good is demanded by Home.The difference between the quantity supplied and the quantity demanded is still filled by importing from abroad.However, the imposition of the tariff reduces the quantity of imports from D − S to D* − S* (diagram 2). This is also shown in diagram 1 as Quantity of Imports(with tariff).
 
-//Domestic producers enjoy a gain in their surplus.Producer surplus, defined as the difference between what the producers were willing to receive by selling a good and the actual price of the good, expands from the region below Pw to the region below Pt.Therefore, the domestic producers gain an amount shown by the area A.
+    //Domestic producers enjoy a gain in their surplus.Producer surplus, defined as the difference between what the producers were willing to receive by selling a good and the actual price of the good, expands from the region below Pw to the region below Pt.Therefore, the domestic producers gain an amount shown by the area A.
 
-//Domestic consumers face a higher price, reducing their welfare.Consumer surplus is the area between the price line and the demand curve. Therefore, the consumer surplus shrinks from the area above Pw to the area above Pt, i.e.it shrinks by the areas A, B, C and D.This includes the gained producer surplus, the deadweight loss, and the tax revenue.
+    //Domestic consumers face a higher price, reducing their welfare.Consumer surplus is the area between the price line and the demand curve. Therefore, the consumer surplus shrinks from the area above Pw to the area above Pt, i.e.it shrinks by the areas A, B, C and D.This includes the gained producer surplus, the deadweight loss, and the tax revenue.
 
-//The government gains from the taxes. It charges an amount Pt − Pt* of tariff for every good imported.Since D* − S* goods are imported, the government gains an area of C and E.However, there is a deadweight loss of the triangles B and D, or in diagram 1, the triangles labeled Societal Loss.Deadweight loss is also called efficiency loss. This cost is incurred because tariffs reduce the incentives for the society to consume and produce.
+    //The government gains from the taxes. It charges an amount Pt − Pt* of tariff for every good imported.Since D* − S* goods are imported, the government gains an area of C and E.However, there is a deadweight loss of the triangles B and D, or in diagram 1, the triangles labeled Societal Loss.Deadweight loss is also called efficiency loss. This cost is incurred because tariffs reduce the incentives for the society to consume and produce.
 
-//The net loss to the society due to the tariff would be given by the total costs of the tariff minus its benefits to the society. Therefore, the net welfare loss due to the tariff is equal to:
+    //The net loss to the society due to the tariff would be given by the total costs of the tariff minus its benefits to the society. Therefore, the net welfare loss due to the tariff is equal to:
 
-//Consumer Loss − Government Revenue − Producer Gain
-//or graphically, this gain is given by the areas shown by:
+    //Consumer Loss − Government Revenue − Producer Gain
+    //or graphically, this gain is given by the areas shown by:
 
-//{\displaystyle(A + B + C + D) - (C + E) - A = B + D - E}
-//(A+B+C+D)-(C+E)-A=B+D-E
-//That is, tariffs are beneficial to the society if the area given by the rectangle E is greater than the deadweight loss.Rectangle E is called the terms of trade gain.
+    //{\displaystyle(A + B + C + D) - (C + E) - A = B + D - E}
+    //(A+B+C+D)-(C+E)-A=B+D-E
+    //That is, tariffs are beneficial to the society if the area given by the rectangle E is greater than the deadweight loss.Rectangle E is called the terms of trade gain.
 
-//The model above is completely accurate only in the extreme case where no consumer belongs to the producers group and the cost of the product is a fraction of their wages.If the opposite extreme is taken, assuming that all consumers come from the producers' group, consumers' only purchasing power comes from the wages earned in production, and the product costs their whole wage, the graph looks radically different.Without tariffs, only those producers/consumers able to produce the product at the world price will have the money to purchase it at that price.
+    //The model above is completely accurate only in the extreme case where no consumer belongs to the producers group and the cost of the product is a fraction of their wages.If the opposite extreme is taken, assuming that all consumers come from the producers' group, consumers' only purchasing power comes from the wages earned in production, and the product costs their whole wage, the graph looks radically different.Without tariffs, only those producers/consumers able to produce the product at the world price will have the money to purchase it at that price.
     #region Resource Types
 
-public enum Sectors
+    public enum Sectors
     {
+        None,
         [Description("The Aerospace industry consists of companies engaged in the production of spacecrafts and commercial military and private aircrafts.")]
         Aerospace,
         Banking,
@@ -75,7 +76,7 @@ public enum Sectors
     public enum ResourcesCategory
     {
         RawMaterials,
-        
+
         EnergyGeneration,
         FoodAndArgiculture,
         IndustrialMaterials,
@@ -106,9 +107,10 @@ public enum Sectors
 
     }
 
-  
+
     public enum Resources
     {
+        None,
         [Description("Rare Earth Metals")]
         REM,
         GoldOre,
@@ -318,7 +320,7 @@ public enum Sectors
         public ResourceDevelopment ResourceDevelop;
         public ResourceType Type;
 
-       
+
     }
     #endregion
 

@@ -55,8 +55,25 @@ public class DoV_Vehicle : ScriptableObject
     public BaseAirType BaseAirType;
     public AircraftTypeStr AircraftType;
     public float FlightSpeed;
+    [Tooltip("The max distance it can go and come back to attack a target for a Air strike.")]
+    public float FlightCombatRadius;
+    [Tooltip("The max ferry distance of this aircraft, so how far it can go to a another airbase without refueling.")]
+    public float FlightTransportRange;
+    [Tooltip("The sensor can target units itself, most strike fighters have this, tanks, but artillery doesnt bombers dont they are indirect")]
+    public bool SelfDesignate;
     public bool IsStealth;
     public bool IsAirTransport;
+    public bool IsAirfueling;
+    public bool IsAirborneReArming;
+    public bool HasInternalGun;
+
+    public int GunAmmo;
+
+
+
+    //one gallon of jet fuel should weigh 6.7 lbs
+    [Tooltip("one gallon of jet fuel should weigh 6.7 lbs")]
+    public int JetFuelGallons;
 
 #if UNITY_EDITOR
     [Separator] public Separator s2;
@@ -75,7 +92,7 @@ public class DoV_Vehicle : ScriptableObject
     [Separator] public Separator sd;
 #endif
 
-   
+
     public int CrewNumber;
     public int OfficerNumber;
     /// <summary>
@@ -131,7 +148,7 @@ public class DoV_Vehicle : ScriptableObject
     /// <summary>
     /// what generations it is
     /// </summary>
-   [Tooltip("what generations it is")]
+    [Tooltip("what generations it is")]
     public int Generation;
     /// <summary>
     /// How fast it burns through fuel rate would be to move at top speed
@@ -163,8 +180,9 @@ public class DoV_Vehicle : ScriptableObject
     /// <summary>
     /// How far ingame radius it can detect something
     /// </summary>
-   
-    public int DetectionRadius() {
+
+    public int DetectionRadius()
+    {
 
         return VehicleSensors.Select(e => e.MaxRange).Max();
     }
@@ -210,7 +228,7 @@ public class DoV_Vehicle : ScriptableObject
     public bool IsInfantry;
     public bool IsCapturing;
     [Tooltip("How many solider in a squad")]
-    public int SquadSize; 
+    public int SquadSize;
     public InfType InfType;
 
 #if UNITY_EDITOR
