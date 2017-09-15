@@ -105,7 +105,15 @@ public class EditorHelper
         if (asset != null)
             asset.WeaponName = "some WMD";
     }
-
+    // -------- duplicate this code block to create your own custom item type --------
+    // for more info, see the comments in "vp_CustomType.cs"
+    [MenuItem("DOV/Create New Deal", false, 101)]
+    public static void CreateNewDeal()
+    {
+        Deal asset = (Deal)CreateAsset("DoVAlpha/GovernmentsDefault/data/deals/", typeof(Deal));
+        if (asset != null)
+            asset.DealName = "a deal";
+    }
 
     // -------- duplicate this code block to create your own custom item type --------
     // for more info, see the comments in "vp_CustomType.cs"

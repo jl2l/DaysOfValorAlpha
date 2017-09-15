@@ -34,10 +34,12 @@ namespace Assets
 
         public enum PointType
         {
-            Fixed = 0, // aircraft
-            FullRotation = 1,//tank turret
-            CrewServered = 2, //MLRS, EW, Infantry
-            VerticaLanucher = 3 //VLS 
+            Fixed, // aircraft
+            FullRotation,
+            CrewServered,
+            VerticaLanucher,
+            Internal,
+            WingTip
         }
 
         public List<Weapon> ConfigWeapons;
@@ -65,6 +67,7 @@ namespace Assets
             hybridengine,
             airbreathing,
             nuclear,
+            supercruise
         }
 
         /// <summary>

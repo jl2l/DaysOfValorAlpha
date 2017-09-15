@@ -714,7 +714,7 @@ namespace Assets
             return new CountryGovernment
             {
                 IsInTotalControlOfCountry = true,
-                CountryHistory = new List<Tuple<CountryToGlobalCountry.GenericCountry, WorldEvent>>(), //this is where the AI stores its moves
+                CountryHistory = new List<WorldEvent>(), //this is where the AI stores its moves
                 NameOfGovernment = CountryName,
                 PlayerHasEmbassy = false,
                 PlayerEmbassyOpen = false,
@@ -726,7 +726,7 @@ namespace Assets
                 TitleOfEconomic = TitleOfEconomicLeader,
                 TitleOfMilitary = TitleOfMilitaryLeader,
                 TitleOfPopulation = TitleOfPopulationLeader,
-                GovernmentHistoryWithPlayer = CreateHistoryWithPlayer("Argentina", "United States of America"),
+                GovernmentDiplomaticHistory = CreateHistoryWithPlayer("Argentina", "United States of America"),
                 //GovernmentTrustLevel = SetIntialTrustLevels(bias, CountryName),
                 PlayerPopulationTrustLevel = 60,
                 PlayerTrustLevel = 60,

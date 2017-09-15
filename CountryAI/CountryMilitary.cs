@@ -70,6 +70,9 @@ public class CountryMilitary : ScriptableObject
 
     public bool HasSpecialForces;
     public bool HasConscripts;
+    public int ConscriptionAge;
+    [Tooltip("In months")]
+    public int ConscriptionLength;
     [Range(0.0f, 100.0f)]
     public float Professionalism;
     [Range(0.0f, 100.0f)]

@@ -56,6 +56,7 @@ public class Sensor : ScriptableObject
 
     public float SensorPowerRate;
 
+
     /// <summary>
     /// The base tech level of the sensor 1-5 being latest tech
     /// </summary>
@@ -68,6 +69,8 @@ public class Sensor : ScriptableObject
     /// The sensor works the same any time of day during the game combat otherwise 1 = percentage of degrading
     /// </summary>
     public bool IsDayNight;
+    public bool IsElectronicWarfare;
+    public bool IsJammingDevice;
     /// <summary>
     /// The spectrum the sensor sees in effects jamming an combat
     /// </summary>

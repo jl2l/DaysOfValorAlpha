@@ -24,7 +24,7 @@ public class CountryToGlobalCountry
 
     public enum MapLevelType
     {
-        
+
         City,
         Province,
         State,
@@ -83,7 +83,7 @@ public class CountryToGlobalCountry
         else if (city.population <= 20000 && city.population >= 1001)
         {
             //from 20k to 1k
-            if(gov.CustomRegionName == "Western European" || gov.CustomRegionName == "Eastern European")
+            if (gov.CustomRegionName == "Western European" || gov.CustomRegionName == "Eastern European")
             {
                 return CityType.SmallTownEuropean;
             }
@@ -91,11 +91,11 @@ public class CountryToGlobalCountry
             {
                 return CityType.SmallTownAsia;
             }
-            if (gov.CustomRegionName == "Western Asia"  || gov.CustomRegionName == "North Africa")
+            if (gov.CustomRegionName == "Western Asia" || gov.CustomRegionName == "North Africa")
             {
                 return CityType.SmallTownMiddleEastern;
             }
-             if (gov.CustomRegionName == "Africa" || gov.CustomRegionName == "West Africa")
+            if (gov.CustomRegionName == "Africa" || gov.CustomRegionName == "West Africa")
             {
                 return CityType.SmallTownAfrica;
             }
@@ -117,7 +117,7 @@ public class CountryToGlobalCountry
         {
             //150 or less
             return CityType.Hamlet;
-        }        
+        }
         return CityType.Remote;
     }
 
@@ -250,15 +250,15 @@ public class CountryToGlobalCountry
         return 0;
     }
 
-   /// <summary>
-   /// draft v1 of teror index
-   /// </summary>
-   /// <param name="population"></param>
-   /// <param name="cityType"></param>
-   /// <param name="cityInGovernment"></param>
-   /// <param name="province"></param>
-   /// <param name="cityData"></param>
-   /// <returns></returns>
+    /// <summary>
+    /// draft v1 of teror index
+    /// </summary>
+    /// <param name="population"></param>
+    /// <param name="cityType"></param>
+    /// <param name="cityInGovernment"></param>
+    /// <param name="province"></param>
+    /// <param name="cityData"></param>
+    /// <returns></returns>
     public int DetermineBaseTerrorIndex(int population, CityType cityType, CountryGovernment cityInGovernment, GenericProvince province, CityData cityData = null)
     {
         float baseTerrorIndex = 0;
@@ -303,7 +303,7 @@ public class CountryToGlobalCountry
         if (cityData)
         {
             IEnumerable<InfrastructureEffect> attributes = cityData.cityInfrastructure.SelectMany(x => x.Effect).Where(x => x.Effect == EffectOnStateProvinceOrCity.CityTerrorLevel);
-            baseTerrorIndex += (int)attributes.Sum(g=>g.EffectRate);
+            baseTerrorIndex += (int)attributes.Sum(g => g.EffectRate);
         }
         else
         {
@@ -312,7 +312,7 @@ public class CountryToGlobalCountry
             if (province.LocalRebelGroups != null && province.LocalRebelGroups.Any())
             {
                 //if the rebels control more then 50% of province the terror level is going to be way high
-                if(province.ProvinceRebelControl > 50f)
+                if (province.ProvinceRebelControl > 50f)
                 {
                     //are there training camps?
                     baseTerrorIndex += province.RebelCamps ? 50f : 0f;
@@ -399,24 +399,25 @@ public class CountryToGlobalCountry
                     break;
             }
 
-            if(cityInGovernment.CountryFlaws.Any(flaw=>
-            (flaw == Assets.CountryRelationsFactory.CountryFlawSkill.Terrorism) || 
-            (flaw == Assets.CountryRelationsFactory.CountryFlawSkill.NarcoState) ||
-            (flaw == Assets.CountryRelationsFactory.CountryFlawSkill.HighCrime)||
-            (flaw == Assets.CountryRelationsFactory.CountryFlawSkill.LocalRebels))
+            if (cityInGovernment.CountryFlaws.Any(flaw =>
+             (flaw == Assets.CountryRelationsFactory.CountryFlawSkill.Terrorism) ||
+             (flaw == Assets.CountryRelationsFactory.CountryFlawSkill.NarcoState) ||
+             (flaw == Assets.CountryRelationsFactory.CountryFlawSkill.HighCrime) ||
+             (flaw == Assets.CountryRelationsFactory.CountryFlawSkill.LocalRebels))
                 )
-                {
+            {
                 baseTerrorIndex += 5f;
             }
             //CountrPerks
             if (cityInGovernment.CountrPerks.Any(perk =>
                  (perk == Assets.CountryRelationsFactory.CountryPerkSkill.CounterTerrorismExperts) ||
                  (perk == Assets.CountryRelationsFactory.CountryPerkSkill.PunchAboveWeight) ||
-                 (perk == Assets.CountryRelationsFactory.CountryPerkSkill.Superpower) 
-                 )){
+                 (perk == Assets.CountryRelationsFactory.CountryPerkSkill.Superpower)
+                 ))
+            {
                 baseTerrorIndex -= 5f;
-            } 
-              //GovernmnetBias
+            }
+            //GovernmnetBias
 
             switch (cityInGovernment.GovernmnetBias)
             {
@@ -550,7 +551,7 @@ public class CountryToGlobalCountry
         ////    WaterVunerable,
         //cityInGovernment.HDI
         // 23.2 victimizations per 1,000 persons 
-        
+
 
         if (cityInGovernment.CountryFlaws.Any(e => (e == Assets.CountryRelationsFactory.CountryFlawSkill.DrugProblems || e == Assets.CountryRelationsFactory.CountryFlawSkill.HighCrime)))
         {
@@ -665,11 +666,11 @@ public class CountryToGlobalCountry
         int totalCityResearchIndex = 100; //determined by the province infrastructure and city infrasture and 
         //cal based on infrasturue or size
         int totalCityTerrorLevel = 0;
-            
-            //(int)((double)DetermineBaseTerrorIndex(city.population, type, cityInGovernment, province) * 100);
+
+        //(int)((double)DetermineBaseTerrorIndex(city.population, type, cityInGovernment, province) * 100);
         int totalCityTradeValue = 100;
         var sec = GenerateRandomSectors(cityInGovernment);
-       
+
         var iscap = (city.cityClass == CITY_CLASS.COUNTRY_CAPITAL);
         var isregioncap = (city.cityClass == CITY_CLASS.REGION_CAPITAL);
 
@@ -727,7 +728,7 @@ public class CountryToGlobalCountry
         }
 
     }
-    
+
 
     public GenericProvince RandomProvince(IEnumerable<City> provinceCities, Province province, CountryGovernment gov)
     {
@@ -736,7 +737,7 @@ public class CountryToGlobalCountry
 
         provincePopulation = provincePopulation + ruralPopulation;
         var listOfCities = new List<GenericCity>();
-        provinceCities.ToList().ForEach(city => {  listOfCities.Add(RandomGenericCity(city, gov, province, WMSK.instance)); });
+        provinceCities.ToList().ForEach(city => { listOfCities.Add(RandomGenericCity(city, gov, province, WMSK.instance)); });
         return new GenericProvince(province.name)
         {
             ProvinceCities = listOfCities,
@@ -775,7 +776,7 @@ public class CountryToGlobalCountry
 
         };
     }
-   
+
     public enum EffectOnStateProvinceOrCity
     {
         CityTerrorLevel,
@@ -808,7 +809,7 @@ public class CountryToGlobalCountry
     }
 
 
-        
+
     [Serializable]
     public class GenericCountryInfrastructure : ScriptableObject
     {
@@ -817,12 +818,21 @@ public class CountryToGlobalCountry
         public MapLevelType mapType;
         public countryInfrastructure type;
         public bool IsCritical;
+        public bool IsOnline;
+        public bool IsDamaged;
+        public bool IsDestroyed;
+        public bool IsUnderConstruction;
+        public bool IsUnderRepair;
         public long FundingCost;
+        public long ConstructionCost;
+        public int ConstructionTimeInDays;
+
         public Vector2 location;
         public Texture2D icon;
         public Texture2D marker;
         public GameObject model;
-       
+        public List<SectorManager.CountryResource> ProducesResource;
+        public List<SectorManager.CountryResource> ConsumesResource;
         public Assets.CountryRelationsFactory.CountryMinstries responsibleMinstry;
         public List<InfrastructureEffect> Effect;
 
@@ -969,7 +979,7 @@ public class CountryToGlobalCountry
         public List<float> ProvincePoliticalParties;
         [Range(0.0f, 100.0f)]
         public List<float> ProvinceDeomgraphicGroups;
- 
+
 
         public bool IsUprising;
         public bool UprisingStarted;
