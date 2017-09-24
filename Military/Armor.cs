@@ -15,6 +15,7 @@ public class Armor : ScriptableObject
     /// Armor ratings there baseline multipliers ie plastic = 1, glass = 1 , aluminium = 2, iron = 3, steel = 5, titanium = 10, ceramic = 15, composite = 20, DU = 25
     /// </summary>
     public int RHARating;
+    public int CurrentArmorHP;
     public ArmorPosition Position;
     public bool IsSloped;
     public bool IsBoltOn;

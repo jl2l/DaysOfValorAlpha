@@ -41,7 +41,14 @@ public class Deal : ScriptableObject
     public DealType TypeOfDeal;
     public DealFor TypeOfDealFor;
 
-
+    public int DealStartDate;
+    public int DealStartMonth;
+    public int DealStartYear;
+    public int DealEndDate;
+    public int DealEndMonth;
+    public int DealEndYear;
+    public bool IsDealExpired;
+    public bool IsDealEnforced;
     public bool RequiresPopularSupport;
     public bool IsExileDeal;
     public CountryToGlobalCountry.GenericCountry TransferSoverightyTo;
@@ -56,7 +63,7 @@ public class Deal : ScriptableObject
     public List<CountryMilitary.MilitaryInventory> TransferMilitaryHardware;
     public List<AdvisorAgent> TransferAdvisorsTeam;
     public List<SpecialOperationsTeam> TransferSpecialForcesTeam;
-
+    public List<Contact> ExileList;
 
     public long HardCurrency;
 

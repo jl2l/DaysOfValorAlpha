@@ -13,12 +13,14 @@ public class CountryManager : MonoBehaviour
     public List<DemographicGroups> CountryPopulationGroups;
     public List<PoliticalParties> CountryPoliticalParties;
     public List<CountryLaw> CountryLaws;
+    public List<Deal> CountryDeals;
     private UnityAction CounterListener;
     public CountryGovernment CountryGovernment;
     public CountryAgent countryAIAgent;
     public CountryRelationsFactory countryFactory;
     public CountryBudget countryBudget;
     public CountryMilitary countryMilitary;
+    public List<CountrySectors> CountrySectors;
     public List<CountryToGlobalCountry.GenericCity> CountryCityControlList;
     public List<CountryToGlobalCountry.GenericProvince> CountryProvinceControlList;
     public List<CountryToGlobalCountry.GenericCountry> CountryGovernmentAlliesIndex;
@@ -95,10 +97,10 @@ public class CountryManager : MonoBehaviour
     private void CreateSubGroup(Tuple<CountryToGlobalCountry.GenericProvince, float> province, CountryGovernment countryGovernment)
     {
 
-       
+
         throw new NotImplementedException();
     }
-   
+
 
 
 
@@ -106,7 +108,7 @@ public class CountryManager : MonoBehaviour
     {
         return (int)CountryCityControlList.Average(e => e.CityCrimeIndex);
         //var
-       //return this.GetCityCrimeAverageIndexAcrossEmpire.WeightedAverage(x => x.Value, x => x.Length);
+        //return this.GetCityCrimeAverageIndexAcrossEmpire.WeightedAverage(x => x.Value, x => x.Length);
     }
 
     public void CheckForNewSubgroup()
@@ -157,7 +159,7 @@ public class CountryManager : MonoBehaviour
                 if (CountryPoliticalParties.Any(party =>
                 {
                     if (party.LawStatus == CountryRelationsFactory.CountryLegalStatus.Illegal ||
-             party.LawStatus == CountryRelationsFactory.CountryLegalStatus.Outlawed)
+                        party.LawStatus == CountryRelationsFactory.CountryLegalStatus.Outlawed)
                     {
                         province.StartUpRisingEvent(province, party);
                     }
@@ -168,8 +170,9 @@ public class CountryManager : MonoBehaviour
                 }
 
                 //if the demographics groups are afriad or angry enough to fight back
-                if(CountryPopulationGroups.Any(group => {
-                    if(group.Anger > 1f)
+                if (CountryPopulationGroups.Any(group =>
+                {
+                    if (group.Anger > 1f)
                     {
                         province.StartUpRisingEvent(province, group);
                     }
@@ -180,11 +183,11 @@ public class CountryManager : MonoBehaviour
                     return false;
                 }))
                 {
-                   
+
 
                 }
 
-                
+
 
             }
 
@@ -198,7 +201,7 @@ public class CountryManager : MonoBehaviour
 
     }
 
-   
+
 
     void Awake()
     {

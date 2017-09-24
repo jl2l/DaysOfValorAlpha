@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 using System.Collections.Generic;
+using UIWidgets;
 
 public class ProvinceInfoPanel : MonoBehaviour
 {
@@ -27,7 +28,7 @@ public class ProvinceInfoPanel : MonoBehaviour
     public Slider ProvinceRuleOfLaw;
     public Slider ProvinceEconomicActivity;
     public Slider ProvinceCulturalValue;
-    public Slider EscalationIndex;
+    public RangeSliderFloat RebelControl;
 
 
     public int TerrorIndex;

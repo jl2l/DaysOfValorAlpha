@@ -17,11 +17,13 @@ public class WorldManager : MonoBehaviour
     /// <summary>
     /// The list of events that happened in the players country
     /// </summary>
+    public WMSK wmslObj;
     public List<Tuple<CountryManager, WorldEvent>> CountryEventsList;
     public List<CountryManager> WorldCountryManagement;
     public List<CountryGovernment> WorldGovernments;
     public List<CityData> WorldCityData;
     private MapManager GameMapManager;
+    public MilitaryManager GameMilitaryManager;
     public Sprite CapitalIcon;
     public Sprite MilitaryBaseIcon;
     public Sprite FOBIcon;
@@ -38,16 +40,21 @@ public class WorldManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        GameMapManager = FindObjectOfType<MapManager>();
+        wmslObj = WMSK.instance;
         if (WorldGovernments.Count == 0)
         {
             countryFactory = new CountryRelationsFactory();
             WorldGovernments = countryFactory.CreateOldWorldOrder();
             //World governments needs to get injected into WorldCountryManagent
-
-
         }
         StartCoroutine(IntializeWorld(WorldGovernments));
+
+
+        GameMapManager = FindObjectOfType<MapManager>();
+        GameMilitaryManager = FindObjectOfType<MilitaryManager>();
+        StartCoroutine(GameMilitaryManager.SetNavalGroups(GameMapManager.GamePlayerCountryManager));
+
+
         //WMSK.instance.SetCountriesAttributes(jsonCountries);
     }
 
@@ -69,7 +76,8 @@ public class WorldManager : MonoBehaviour
         return list;
     }
 
-    public List<CountryToGlobalCountry.GenericCity> InitalizeControlCityList(List<CountryToGlobalCountry.GenericCity> cities) {
+    public List<CountryToGlobalCountry.GenericCity> InitalizeControlCityList(List<CountryToGlobalCountry.GenericCity> cities)
+    {
         var list = new List<CountryToGlobalCountry.GenericCity>();
 
         cities.ForEach(city =>
@@ -80,101 +88,119 @@ public class WorldManager : MonoBehaviour
         return list;
     }
 
-    public void InitalizeRefrenceCity(string cityName, CountryToGlobalCountry.GenericCity cityData ) { }
+    public void InitalizeRefrenceCity(string cityName, CountryToGlobalCountry.GenericCity cityData) { }
 
     public void InitalizeUnknowCity(string cityName, CountryToGlobalCountry.GenericCity cityData) { }
     public void GenerateNewCity(string cityName, CountryToGlobalCountry.GenericCity cityData) { }
-    
+
     IEnumerator IntializeWorld(List<CountryGovernment> WorldGovernments)
     {
         WorldGovernments.ForEach(gov =>
         {
-            var naming = "GovernmentOf_{0}";
-            var namingAgent = "AgentOfGovernmentOf_{0}";
-            var namingAmbassodr = "GameAgentAmbassdorOf_{0}";
-            var newCountry = new GameObject(string.Format(naming, gov.CountryOfGovernment.name));
-            var newCountryAmbassdor = new GameObject(string.Format(namingAmbassodr, gov.CountryOfGovernment.name));
-            var newCountryAgent = new GameObject(string.Format(namingAgent, gov.CountryOfGovernment.name));
-
-            var newCountryManagerSetup = newCountry.AddComponent<CountryManager>();
-            newCountryManagerSetup.CountryGovernment = gov;
-            newCountryManagerSetup.CountryLaws = gov.Laws;
-            newCountryManagerSetup.CountryPoliticalParties = gov.PoliticalParties;
-            newCountryManagerSetup.CountryPopulationGroups = gov.DemographicGroups;
-            newCountryManagerSetup.countryMilitary = gov.Military;
-            newCountryManagerSetup.CountryCityControlList = InitalizeControlCityList(gov.ControlsCitiesNames);
-            newCountryManagerSetup.CountryProvinceControlList = InitalizeControlProvinceList(gov.ControlsProvincesNames);
-            newCountryManagerSetup.CountryGovernment.CountryFounding = new DateTime(newCountryManagerSetup.CountryGovernment.FoundingYear, newCountryManagerSetup.CountryGovernment.FoundingMonth, newCountryManagerSetup.CountryGovernment.FoundingDay);
-
-            var newCountryAgentConfig = newCountryAgent.AddComponent<CountryAgent>();
-            var newCountryAmbassdorAgent = newCountryAmbassdor.AddComponent<GameAgent>();
-            newCountryAmbassdorAgent.GameAgentType = GameAgent.AgentOfType.Diplomat;
-            newCountryManagerSetup.countryAIAgent = newCountryAgentConfig;
-            newCountryManagerSetup.countryAmbassdor = newCountryAmbassdorAgent;
-
-            newCountryManagerSetup.countryBudget = gov.Budget;
-           var newCountrySectoryManager =  newCountry.AddComponent<SectorManager>();
-            newCountrySectoryManager.GamePlayerCoutryResourceList = gov.CountryResources;
-
-            var countryPropertries = GameMapManager.wmslObj.GetCountry(gov.CountryOfGovernment.index);
-            countryPropertries.attrib.Absorb(gov.CaptialName);
-
-
-            //GameMapManager.wmslObj.AddMarker2DSprite()
-            countryPropertries.attrib.Absorb(gov.ContactOfHeadOfState.ContactName);
-            var citiesInCountry = GameMapManager.wmslObj.cities.Where(e => e.countryIndex == gov.CountryOfGovernment.index);
-           //TODO THIS MIGHT GET REPLACED WITH THE GENERIC DATA INSTEAD
-            if (gov.IsMasterPlayer || gov.IsHumanPlayer)
+            try
             {
 
-                citiesInCountry.ToList().ForEach(city => {
 
-                    //1721336815
-                    var dataCity = WorldCityData.FirstOrDefault(cityData => cityData.index == city.uniqueId);
-                    if (city.uniqueId == 1721336815 || city.name == "New York") {
-                        var f = city.population;
-                    }
-                    if (dataCity != null) {
-                        city.attrib["data"] = JsonUtility.ToJson(dataCity);
-                    } else {
-                        city.attrib["data"] = JsonUtility.ToJson(city);
-                    }
-                    
-              
-                });
-                if (gov.IsHumanPlayer)
+                var naming = "GovernmentOf_{0}";
+                var namingAgent = "AgentOfGovernmentOf_{0}";
+                var namingAmbassodr = "GameAgentAmbassdorOf_{0}";
+                var newCountry = new GameObject(string.Format(naming, gov.CountryOfGovernment.name));
+                var newCountryAmbassdor = new GameObject(string.Format(namingAmbassodr, gov.CountryOfGovernment.name));
+                var newCountryAgent = new GameObject(string.Format(namingAgent, gov.CountryOfGovernment.name));
+
+                var newCountryManagerSetup = newCountry.AddComponent<CountryManager>();
+                newCountryManagerSetup.CountryGovernment = gov;
+                newCountryManagerSetup.CountryLaws = gov.Laws == null ? new List<CountryLaw>() : gov.Laws;
+                newCountryManagerSetup.CountryDeals = gov.CountryPoliticalDeals == null ? new List<Deal>() : gov.CountryPoliticalDeals;
+                newCountryManagerSetup.CountryPoliticalParties = gov.PoliticalParties == null ? new List<PoliticalParties>() : gov.PoliticalParties;
+                newCountryManagerSetup.CountryPopulationGroups = gov.DemographicGroups == null ? new List<DemographicGroups>() : gov.DemographicGroups;
+                newCountryManagerSetup.countryMilitary = gov.Military == null ? new CountryMilitary() : gov.Military;
+
+                newCountryManagerSetup.CountrySectors = gov.CountryMarkets == null ? new List<CountrySectors>() : gov.CountryMarkets; ;
+                newCountryManagerSetup.CountryCityControlList = InitalizeControlCityList(gov.ControlsCitiesNames);
+                newCountryManagerSetup.CountryProvinceControlList = InitalizeControlProvinceList(gov.ControlsProvincesNames);
+                newCountryManagerSetup.CountryGovernment.CountryFounding = new DateTime(newCountryManagerSetup.CountryGovernment.FoundingYear, newCountryManagerSetup.CountryGovernment.FoundingMonth, newCountryManagerSetup.CountryGovernment.FoundingDay);
+
+                var newCountryAgentConfig = newCountryAgent.AddComponent<CountryAgent>();
+                var newCountryAmbassdorAgent = newCountryAmbassdor.AddComponent<GameAgent>();
+                newCountryAmbassdorAgent.GameAgentType = GameAgent.AgentOfType.Diplomat;
+                newCountryManagerSetup.countryAIAgent = newCountryAgentConfig;
+                newCountryManagerSetup.countryAmbassdor = newCountryAmbassdorAgent;
+
+                newCountryManagerSetup.countryBudget = gov.Budget == null ? new CountryBudget() : gov.Budget; ;
+                var newCountrySectoryManager = newCountry.AddComponent<SectorManager>();
+                newCountrySectoryManager.GamePlayerCoutryResourceList = gov.CountryResources == null ? new List<SectorManager.CountryResource>() : gov.CountryResources; ;
+
+                var countryPropertries = GameMapManager.wmslObj.GetCountry(gov.CountryOfGovernment.index);
+                countryPropertries.attrib.Absorb(gov.CaptialName);
+
+
+                //GameMapManager.wmslObj.AddMarker2DSprite()
+                countryPropertries.attrib.Absorb(gov.ContactOfHeadOfState.ContactName);
+                var citiesInCountry = GameMapManager.wmslObj.cities.Where(e => e.countryIndex == gov.CountryOfGovernment.index);
+                //TODO THIS MIGHT GET REPLACED WITH THE GENERIC DATA INSTEAD
+                if (gov.IsMasterPlayer || gov.IsHumanPlayer)
                 {
+
+                    citiesInCountry.ToList().ForEach(city =>
+                    {
+
+                        //1721336815
+                        var dataCity = WorldCityData.FirstOrDefault(cityData => cityData.index == city.uniqueId);
+                        if (city.uniqueId == 1721336815 || city.name == "New York")
+                        {
+                            var f = city.population;
+                        }
+                        if (dataCity != null)
+                        {
+                            city.attrib["data"] = JsonUtility.ToJson(dataCity);
+                        }
+                        else
+                        {
+                            city.attrib["data"] = JsonUtility.ToJson(city);
+                        }
+
+
+                    });
+                    if (gov.IsHumanPlayer)
+                    {
+                        newCountryAgentConfig.transform.SetParent(newCountry.transform);
+                        newCountryAgent.transform.SetParent(newCountry.transform);
+                        newCountryAmbassdor.transform.SetParent(newCountry.transform);
+
+                        newCountry.transform.SetParent(CountryHumanManagerGameObject.transform);
+                    }
+                    if (gov.IsMasterPlayer)
+                    {
+                        newCountryAgentConfig.transform.SetParent(newCountry.transform);
+                        newCountryAgent.transform.SetParent(newCountry.transform);
+                        newCountryAmbassdor.transform.SetParent(newCountry.transform);
+                        newCountrySectoryManager.transform.SetParent(newCountry.transform);
+                        newCountry.transform.SetParent(CountryPlayerManagerGameObject.transform);
+                        GameMapManager.GamePlayerCountryManager = newCountryManagerSetup;
+                    }
+                }
+
+                if (gov.IsAIPlayer)
+                {
+                    citiesInCountry.ToList().ForEach(city =>
+                    {
+                        // city.
+                    });
                     newCountryAgentConfig.transform.SetParent(newCountry.transform);
                     newCountryAgent.transform.SetParent(newCountry.transform);
                     newCountryAmbassdor.transform.SetParent(newCountry.transform);
 
-                    newCountry.transform.SetParent(CountryHumanManagerGameObject.transform);
+                    newCountry.transform.SetParent(CountryAIManagerGameObject.transform);
                 }
-                if (gov.IsMasterPlayer)
-                {
-                    newCountryAgentConfig.transform.SetParent(newCountry.transform);
-                    newCountryAgent.transform.SetParent(newCountry.transform);
-                    newCountryAmbassdor.transform.SetParent(newCountry.transform);
-                    newCountrySectoryManager.transform.SetParent(newCountry.transform);
-                    newCountry.transform.SetParent(CountryPlayerManagerGameObject.transform);
-                }
-            }
 
-            if (gov.IsAIPlayer)
+                WorldCountryManagement.Add(newCountryManagerSetup);
+                //Destroy(newCountryAgent);
+            }
+            catch (Exception i)
             {
-                citiesInCountry.ToList().ForEach(city => {
-                    // city.
-                });
-                newCountryAgentConfig.transform.SetParent(newCountry.transform);
-                newCountryAgent.transform.SetParent(newCountry.transform);
-                newCountryAmbassdor.transform.SetParent(newCountry.transform);
-
-                newCountry.transform.SetParent(CountryAIManagerGameObject.transform);
+                Console.Write("Failed ON Country" + gov.NameOfGovernment);
             }
-         
-            WorldCountryManagement.Add(newCountryManagerSetup);
-            //Destroy(newCountryAgent);
-
         });
 
         yield return new WaitForEndOfFrame();
@@ -213,14 +239,14 @@ public class WorldManager : MonoBehaviour
         //green is a city with plus change either in production or money generation
         var lastData = mapCity.attrib["data"];
 
-      
+
 
         if (genericCity.IsTerrorAttack || genericCity.CityTerrorLevel > 95)
         {
             return Colors.DarkRed;
         }
 
-        if(genericCity.CityTerrorLevel >= 94 && genericCity.CityTerrorLevel <= 90)
+        if (genericCity.CityTerrorLevel >= 94 && genericCity.CityTerrorLevel <= 90)
         {
             return Colors.RustyRed;
         }

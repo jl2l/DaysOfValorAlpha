@@ -6,14 +6,19 @@ public class ResearchManager : MonoBehaviour
 {
     public enum ResearchSector
     {
-      Aerospace,
-      Energy,
-      Military,
-      DualUse,
-      Commerical,
-      Biotech,
+        Aerospace,
+        Energy,
+        Military,
+        DualUse,
+        Commerical,
+        Biotech,
 
     }
+
+    public int PlayerResearchPerDayCapacity;
+    public float PlayerResearchTotal;
+    public float PlayerResearchGain;
+
 
     public List<ResearchItem> GameResearchItems;
     public Dictionary<ResearchItem, bool> PlayerResearchUnlocks { get; set; }

@@ -31,10 +31,15 @@ public class GameManager : MonoBehaviour
 
 
         DontDestroyOnLoad(this.gameObject);
+
     }
     // Use this for initialization
     void Start()
     {
+        GameWorldManager = FindObjectOfType<WorldManager>();
+        GameMapManager = FindObjectOfType<MapManager>();
+        GamePlayerCountryManager = GameMapManager.GamePlayerCountryManager;
+
         GameBattleManager = FindObjectOfType<BattleManager>();
         GameCharacterManager = FindObjectOfType<CharacterManager>();
         GameDeckManager = FindObjectOfType<DeckManager>();
@@ -43,8 +48,8 @@ public class GameManager : MonoBehaviour
         GameResearchManager = FindObjectOfType<ResearchManager>();
         GameTradeManager = FindObjectOfType<TradeManager>();
         GameUnitManager = FindObjectOfType<UnitManager>();
-        GameWorldManager = FindObjectOfType<WorldManager>();
-        GameMapManager = FindObjectOfType<MapManager>();
+
+
         //DontDestroyOnLoad(transform.gameObject);
     }
 

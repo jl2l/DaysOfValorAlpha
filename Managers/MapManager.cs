@@ -101,7 +101,7 @@ public class MapManager : MonoBehaviour
     public GameObject GameButtonCountryIntel;
     public GameObject GameButtonCountryTrade;
     public GameObject GameButtonCountryResearch;
-    public bool UpdateNewLocalTime { get; private set; }
+    public bool UpdateNewLocalTime;
 
 
     #region UI Country Government Info
@@ -120,9 +120,7 @@ public class MapManager : MonoBehaviour
     public GameObject GameCityInfoPanel;
     public GameObject GameCountryInfoPanel;
     public GameObject GameProvinceInfoPanel;
-    public GameObject GameCountryMiilitaryInfoPanel;
     public GameObject GameEconomicInfoPanel;
-    public GameObject GameMilitaryBaseInfoPanel;
     public GameObject GameDiplomaticInfoPanel;
     public GameObject GameIntelInfoPanel;
     public GameObject GameDeckInfoPanel;
@@ -130,7 +128,7 @@ public class MapManager : MonoBehaviour
     public GameObject GameResearchInfoPanel;
     public GameObject GameDefconInfoPanel;
     public GameObject GameInfrastructureInfoPanel;
-    public GameObject GameMilitaryOperationsInfoPanel;
+
     public GameObject GameTradeInfoPanel;
     #endregion
     #region UI Country Relations
@@ -160,6 +158,8 @@ public class MapManager : MonoBehaviour
     public GenericProvince SelectedProvince;
     public CountryManager SelectedCountryManager;
     public CountryManager GamePlayerCountryManager;
+
+
 
 
     public Text GamePlayerCountryText;
@@ -203,81 +203,7 @@ public class MapManager : MonoBehaviour
     #region ENUMABLES
 
     #region UI / FX
-    IEnumerator DrawPlayerShips()
-    {
-        int BaseId = 0;
-        foreach (var navalGroup in GameManager.GameMilitaryManager.PlayerMilitary.CountryMilitaryNavy)
-        {
 
-            foreach (var navyShip in navalGroup.Ships)
-            {
-                // Instantiate the sprite, face it to up and position it into the map
-                // GameObject star = Instantiate(Resources.Load<Texture2D>(militaryBase.BaseIcon.name));
-                GameObject marker = Instantiate(navyShip.Model, GameManager.GameMilitaryManager.GamePlayerMilitaryBaseContainer.transform);
-
-                GameObject mapIcon = new GameObject(string.Format("{0}_ship_{1}", navyShip.MapIcon.name, navyShip.Name));
-                mapIcon.AddComponent<SpriteRenderer>().sprite = Sprite.Create(navyShip.MapIcon, new Rect(0.0f, 0.0f, navyShip.MapIcon.width, navyShip.MapIcon.height), new Vector2(0.5f, 0.5f), 100.0f);
-
-                var gameShip = marker.AddComponent<ShipGameObject>();
-
-                wmslObj.AddMarker2DSprite(mapIcon, gameShip.ShipLocation, 0.002f);
-                marker.transform.localRotation = Quaternion.Euler(90, 0, 0);
-                marker.transform.localScale = WorldMapStrategyKit.Misc.Vector3one * 0.01f;
-                marker.WMSK_MoveTo(gameShip.ShipLocation.x, gameShip.ShipLocation.y);
-                wmslObj.AddMarker3DObject(marker, gameShip.ShipLocation, 0.05f);
-                marker.transform.SetParent(GameManager.GameMilitaryManager.GamePlayerMilitaryBaseContainer.transform);
-                BaseId++;
-            }
-
-        }
-        yield return new WaitForEndOfFrame();
-    }
-    public IEnumerator DrawPlayerBases()
-    {
-        int BaseId = 0;
-        if (GameManager == null)
-        {
-            GameManager = FindObjectOfType<GameManager>();
-        }
-        if (GameManager.GameMilitaryManager == null)
-        {
-            yield return new WaitForEndOfFrame();
-        }
-        else
-        {
-            foreach (var militaryBase in GameManager.GameMilitaryManager.PlayerMilitaryBases)
-            {
-                // Instantiate the sprite, face it to up and position it into the map
-                // GameObject star = Instantiate(Resources.Load<Texture2D>(militaryBase.BaseIcon.name));
-                GameObject marker = Instantiate(militaryBase.BaseMarker, GameManager.GameMilitaryManager.GamePlayerMilitaryBaseContainer.transform);
-
-                GameObject mapIcon = new GameObject(string.Format(militaryBase.BaseIcon.name + "_base"));
-                mapIcon.AddComponent<SpriteRenderer>().sprite = Sprite.Create(militaryBase.BaseIcon, new Rect(0.0f, 0.0f, militaryBase.BaseIcon.width, militaryBase.BaseIcon.height), new Vector2(0.5f, 0.5f), 100.0f);
-
-                var gameBase = marker.AddComponent<GameMilitaryBase>();
-
-                gameBase.BaseData = militaryBase;
-
-                gameBase.GameBaseMaxSize = 10;
-                gameBase.GameBaseStrength = 1000;
-                gameBase.GameBaseSupplyLevel = 5000;
-                gameBase.GameMaxBaseDecksAP = 50;
-                gameBase.BaseUniqueId = BaseId;
-                gameBase.MilitaryCountryBattleFlag = militaryBase.MilitaryCountryBattleFlag;
-
-
-                wmslObj.AddMarker2DSprite(mapIcon, militaryBase.BaseLocation, 0.002f);
-                marker.transform.localRotation = Quaternion.Euler(90, 0, 0);
-                marker.transform.localScale = WorldMapStrategyKit.Misc.Vector3one * 0.01f;
-                marker.WMSK_MoveTo(militaryBase.BaseLocation.x, militaryBase.BaseLocation.y);
-                wmslObj.AddMarker3DObject(marker, militaryBase.BaseLocation, 0.05f);
-                marker.transform.SetParent(GameManager.GameMilitaryManager.GamePlayerMilitaryBaseContainer.transform);
-                BaseId++;
-            }
-        }
-
-        yield return new WaitForEndOfFrame();
-    }
     public IEnumerator MapZoomSet()
     {
 
@@ -300,7 +226,7 @@ public class MapManager : MonoBehaviour
     IEnumerator OnHoverOverMilitaryBase(GameMilitaryBase militaryBase)
     {
 
-        GameMilitaryBaseInfoPanel.SetActive(true);
+        GameManager.GameMilitaryManager.GameMilitaryBaseInfoPanel.SetActive(true);
         string delimiter = ",";
         GameManager.GameMilitaryManager.GameMilitaryBaseSelectedInfo.text = string.Format("{0}, {1}", militaryBase.BaseData.BaseName, militaryBase.BaseData.BaseInProvinceName);
         GameManager.GameMilitaryManager.GameBaseMaxSize.value = militaryBase.GameBaseMaxSize;
@@ -334,6 +260,31 @@ public class MapManager : MonoBehaviour
 
         fadePlane.SetActive(false);
 
+    }
+
+
+    IEnumerator ColorMilitaryAllies()
+    {
+        var gm = FindObjectOfType<GameManager>();
+
+        var gov = gm.GameMapManager.GamePlayerCountryManager;
+        if (gov != null && gov.CountryGovernment != null)
+        {
+            float shadingColor = 100f;
+            var dealsWithMilitaryAllies = gov.CountryGovernment.CountryPoliticalDeals.Where(deal => deal.TypeOfDeal == Deal.DealType.Alliance).ToList();
+            dealsWithMilitaryAllies.ForEach(coutry =>
+            {
+                Color color = ColorCell(shadingColor);
+
+                coutry.PartyB.ForEach(ally =>
+                {
+                    wmslObj.ToggleCountrySurface(ally.CountryOfGovernment.name, true, Colors.Navy);
+                });
+
+            });
+        }
+
+        yield return new WaitForEndOfFrame();
     }
 
     IEnumerator ColorForEachCountry(MapDisplayMode mapMode)
@@ -729,7 +680,7 @@ public class MapManager : MonoBehaviour
     IEnumerator SetSideBar(CountryManager countryManager)
     {
         var politicalGroupInPower = countryManager.CountryGovernment.PoliticalParties.FirstOrDefault(e => e.LawStatus == Assets.CountryRelationsFactory.CountryLegalStatus.InPower);
-        GameMilitaryBaseInfoPanel.SetActive(false);
+
 
         UICountryName.text = countryManager.CountryGovernment.LocalNameOfGovernment;
         UICountryCommon.text = countryManager.CountryGovernment.TitleOfPopulation;
@@ -1048,7 +999,7 @@ public class MapManager : MonoBehaviour
 
     }
 
-    void SetPlayerCountryManager()
+    public void SetPlayerCountryManager()
     {
 
         if (WorldManager != null)
@@ -1073,8 +1024,8 @@ public class MapManager : MonoBehaviour
         //StartCoroutine(GetCountryCIAData(GamePlayerCountryManager.CountryGovernment.MapLookUpName));
 
 
-
-        StartCoroutine("DrawPlayerBases");
+        //military map draws
+        StartCoroutine(GameManager.GameMilitaryManager.DrawPlayerBases());
 
         wmslObj.OnCityEnter += (int cityIndex) =>
         {
@@ -1171,7 +1122,7 @@ public class MapManager : MonoBehaviour
                     GameDiplomaticInfoPanel.SetActive(true);
                     break;
                 case MapDisplayMode.MilitaryView:
-                    GameCountryMiilitaryInfoPanel.SetActive(true);
+                    //GameCountryMiilitaryInfoPanel.SetActive(true);
                     break;
                 case MapDisplayMode.EconomcView:
                     GameEconomicInfoPanel.SetActive(true);
@@ -1512,7 +1463,7 @@ public class MapManager : MonoBehaviour
                 countryInfoPanel.CountryMoreDetailsPanel.SetActive(true);
                 wmslObj.FlyToCountry(SelectedCountryManager.CountryGovernment.MapLookUpName, 1f, ZoomChange);
                 DebugText.text = string.Format("elected Country Government {0}", wmslObj.countryHighlighted.name);
-                countryInfoPanel.CountryName.text = wmslObj.countryHighlighted.name;
+                countryInfoPanel.GovernmentName.text = wmslObj.countryHighlighted.name;
                 countryInfoPanel.CountryNationals.text = SelectedCountryManager.CountryGovernment.TitleOfPopulation;
                 countryInfoPanel.CountryFounding.text = SelectedCountryManager.CountryGovernment.FoundingYear.ToString();
                 countryInfoPanel.CaptialName.text = SelectedCountryManager.CountryGovernment.CaptialName;
@@ -1522,7 +1473,7 @@ public class MapManager : MonoBehaviour
             {
                 DebugText.text = string.Format("Missing Government {0}", wmslObj.countryHighlighted.name);
                 countryInfoPanel.CountryMoreDetailsPanel.SetActive(false);
-                countryInfoPanel.CountryName.text = wmslObj.countryHighlighted.name;
+                countryInfoPanel.GovernmentName.text = wmslObj.countryHighlighted.name;
                 wmslObj.FlyToCountry(wmslObj.countryHighlighted.name, 1f, ZoomChange);
             }
 
@@ -1550,9 +1501,6 @@ public class MapManager : MonoBehaviour
             GameResearchInfoPanel,
             GameShipInfoPanel,
             GameEconomicInfoPanel,
-            GameMilitaryBaseInfoPanel,
-            GameMilitaryOperationsInfoPanel,
-            GameCountryMiilitaryInfoPanel,
             GameShipInfoPanel,
             GameDeckInfoPanel,
             GameDefconInfoPanel,
@@ -1685,7 +1633,7 @@ public class MapManager : MonoBehaviour
         var mapMenu = FindObjectOfType<MainButtonList>();
         mapMenu.MilitaryButton.SetActive(true);
         mapMenu.MilitaryButton.GetComponent<Image>().color = Colors.RedMunsell;
-        GameCountryMiilitaryInfoPanel.SetActive(true);
+        //GameCountryMiilitaryInfoPanel.SetActive(true);
         if (GameMapDisplayMode == MapDisplayMode.MilitaryView)
         {
             StartCoroutine("MapUpdateMilitaryMap");
@@ -1761,7 +1709,7 @@ public class MapManager : MonoBehaviour
 
     public void DeployTransport()
     {
-        var menuInfo = GameMilitaryOperationsInfoPanel.GetComponent<MilitaryOperationInfoPanel>();
+        var menuInfo = GameManager.GameMilitaryManager.GameMilitaryOperationsInfoPanel.GetComponent<MilitaryOperationInfoPanel>();
 
         GameObjectAnimator airplane = new GameObjectAnimator();
         //first get the destinations and what we are transporting
@@ -1860,7 +1808,7 @@ public class MapManager : MonoBehaviour
 
     public void DeployAirStrike()
     {
-        var menuInfo = GameMilitaryOperationsInfoPanel.GetComponent<MilitaryOperationInfoPanel>();
+        var menuInfo = GameManager.GameMilitaryManager.GameMilitaryOperationsInfoPanel.GetComponent<MilitaryOperationInfoPanel>();
 
         GameObjectAnimator airplane = new GameObjectAnimator();
         //first get the destinations and what we are transporting
@@ -1900,21 +1848,25 @@ public class MapManager : MonoBehaviour
     }
     public void OpenAirGarage()
     {
-        GameCountryMiilitaryInfoPanel.SetActive(false);
+        //GameCountryMiilitaryInfoPanel.SetActive(false);
         SceneManager.LoadScene(3);
     }
 
     public void OpenSeaGarage()
     {
-        GameCountryMiilitaryInfoPanel.SetActive(false);
+        // GameCountryMiilitaryInfoPanel.SetActive(false);
         SceneManager.LoadScene(5);
     }
     public void OpenLandGarage()
     {
-        GameCountryMiilitaryInfoPanel.SetActive(false);
+        // GameCountryMiilitaryInfoPanel.SetActive(false);
         SceneManager.LoadScene(4);
     }
 
+    public void SetColorMilitaryAllies()
+    {
+        StartCoroutine("ColorMilitaryAllies");
+    }
     #endregion
 
     public void SetMapGeoview()
