@@ -21,14 +21,32 @@ public class ResearchItem : ScriptableObject
     /// </summary>
     public string ResearchName;
     public string ResearchDescription;
+    public enum ResearchTech
+    {
+        StartingTech,
+        AcquiredTech,
+        RareTech,
+        DangerTech,
+        Repeatable
+    }
+
+
     public Texture2D ResearchIcon;
     public ResearchManager.ResearchSector ResearchSector;
 
+    public ResearchAgent AssignedResearchAgent;
+
+    public List<DoV_Vehicle> UnlockVehicles;
     public List<Weapon> UnlockWeapons;
     public List<Sensor> UnlockSensors;
-    
+    public ResearchTech Tier;
+    public WorldEvent ResearchWorldEvent;
+    public IntelEvent ResearchTriggersIntelEvent;
+    public bool IsRootNode;
     public bool IsResearchKnownToPlayer;
-
+    //research manager calcates this and determines what the total number of days is so it research capacity - (goal cost / Research Points Per day)
+    public int DaysToResearch;
+    public List<ResearchItem> RequiredTech;
     public float ResearchPoints;
 
     public ResearchItem ParentResearch;

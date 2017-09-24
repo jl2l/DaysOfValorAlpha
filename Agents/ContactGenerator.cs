@@ -2515,9 +2515,11 @@ namespace Assets
             [Description("Law Enforcement")]
             lawenforcement,
             #endregion Contact Group Type "population" 32
-
+            [Description("Familiy Insider")]
+            familyinsider,
             #region Contact Group Type "random"
-
+            [Description("Ruling Family Member")]
+            familymember,
             #endregion Contact Group Type "random"
 
 

@@ -15,11 +15,14 @@ public class GameAgent : MonoBehaviour
         Rebel,
         Terrorist,
         Compromised,
-
+        DoubleAgent,
+        Political,
+        StateLeader,
+        Scentist
     }
 
 
-   
+
 
 
     public AgentOfType GameAgentType;
@@ -45,6 +48,12 @@ public class GameAgent : MonoBehaviour
                 break;
             case AgentOfType.Compromised:
                 break;
+            case AgentOfType.DoubleAgent:
+                break;
+            case AgentOfType.StateLeader:
+                break;
+            case AgentOfType.Political:
+                break;
         }
     }
 
@@ -69,6 +78,12 @@ public class GameAgent : MonoBehaviour
             case AgentOfType.Terrorist:
                 break;
             case AgentOfType.Compromised:
+                break;
+            case AgentOfType.DoubleAgent:
+                break;
+            case AgentOfType.Political:
+                break;
+            case AgentOfType.StateLeader:
                 break;
         }
     }

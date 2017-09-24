@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using Assets;
+using WorldMapStrategyKit;
+using System.Linq;
 
 [System.Serializable]
 public class CountryMilitary : ScriptableObject
@@ -17,9 +19,43 @@ public class CountryMilitary : ScriptableObject
     [System.Serializable]
     public class NavalGroup
     {
+        public string NavalGroupNam;
         public List<DoV_Vehicle> Ships;
+
+        public Vector2 HomePortLocation;
+
+        [ContextMenuItem("Set World Map", "SetMap")]
+        public string HomePortName;
+        public long HomePortCityIndex;
+
+        public Vector2 ForeignPortLocation;
+        public string ForeignPortName;
+        public long ForeignPortCityIndex;
+
+        public bool IsSpecialOperations;
+
         public GeneralAgent NavalCommander;
+
+        public void SetMap()
+        {
+            var localMap = WMSK.instance;
+
+            var city = localMap.cities.FirstOrDefault(e => e.name == HomePortName);
+            var foreginport = localMap.cities.FirstOrDefault(e => e.name == ForeignPortName);
+            if (city != null)
+            {
+                HomePortLocation = city.unity2DLocation;
+                HomePortCityIndex = city.uniqueId;
+
+            }
+            if (foreginport != null)
+            {
+                ForeignPortLocation = foreginport.unity2DLocation;
+                ForeignPortCityIndex = foreginport.uniqueId;
+            }
+        }
     }
+
 
     public GameAgent.AgentOfType General;
 

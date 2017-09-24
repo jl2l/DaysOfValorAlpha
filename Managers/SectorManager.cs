@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System;
+using static Assets.CountryRelationsFactory;
 
 public class SectorManager : MonoBehaviour
 {
@@ -81,7 +82,8 @@ public class SectorManager : MonoBehaviour
         FoodAndArgiculture,
         IndustrialMaterials,
         FinishedGoods,
-        Services
+        Services,
+        Currency
     }
 
     public enum MarketFreedom
@@ -264,38 +266,55 @@ public class SectorManager : MonoBehaviour
         DualUseMaterials,
         [Description("FinishedGoods")]
         ExoticMaterials,
-        [Description("FinishedGoods")]
+        [Description("Furniture ")]
         Furniture,
-        [Description("FinishedGoods")]
+        [Description("Aircraft Components")]
         AircraftComponents,
-        [Description("FinishedGoods")]
+        [Description("Car Parts")]
         CarParts,
-        [Description("FinishedGoods")]
+        [Description("Car Engines")]
         CarEngines,
-        [Description("FinishedGoods")]
+        [Description("Clothing Texiles")]
         ClothingTexiles,
-        [Description("FinishedGoods")]
+        [Description("Luxury Goods")]
         LuxuryProducts,
-        [Description("FinishedGoods")]
+        [Description("Consumer Health Products")]
         ComsumerHealthProducts,
-        [Description("FinishedGoods")]
+        [Description("Consumer Drones")]
         ComsumerDrones,
-        [Description("Service")]
+        [Description("Financial Service")]
         ServicesFinancial,
-        [Description("Service")]
+        [Description("Health Care")]
         ServiceHealthCare,
-        [Description("Service")]
+        [Description("Information Technology")]
         ServiceInformationTech,
-        [Description("Service")]
+        [Description("Law Enforcement")]
         ServiceLaw,
-        [Description("Service")]
+        [Description("Insurance")]
         ServiceInsurance,
-        [Description("Service")]
+        [Description("Public Service")]
         ServicePublic,
-        [Description("Service")]
+        [Description("Tourism")]
         ServiceTourism,
-        [Description("Service")]
-        ServiceEntertainment
+        [Description("Service Entertainment")]
+        ServiceEntertainment,
+        [Description("Cannabis")]
+        Cannabis,
+        [Description("Herion")]
+        Heroin,
+        [Description("Opium")]
+        Opium,
+        [Description("Cocaine")]
+        Cocaine,
+        [Description("Cocca Leaves")]
+        CoccaLeavs,
+        [Description("Crystal Meth")]
+        Meth,
+        [Description("Cryto Currency")]
+        Cyrptocurrency,
+        [Description("Cash")]
+        Cash
+
     }
     public class CountryResource : ScriptableObject
     {
@@ -311,7 +330,6 @@ public class SectorManager : MonoBehaviour
         public float Consumption;
         public float Trade;
         public float Available;
-        public bool SectorLegalStatus;
         public float SectorTaxRate;
         public float TariffRate;
         public Resources Resource;
@@ -319,6 +337,7 @@ public class SectorManager : MonoBehaviour
         public Sectors ResourceSector;
         public ResourceDevelopment ResourceDevelop;
         public ResourceType Type;
+        public CountryLegalStatus LegalStatus;
 
 
     }

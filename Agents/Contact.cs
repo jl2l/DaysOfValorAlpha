@@ -20,6 +20,7 @@ namespace Assets
         public bool IsIntelTarget;
         public bool IsUnderArrest;
         public bool IsCompromised;
+        public bool IsDoubleAgent;
         public bool IsTerrorist;
         public bool IsDead;
         public bool IsMissing;
@@ -28,6 +29,13 @@ namespace Assets
         public ContactSkill ContactSkill; //what they are good at
         public ContactVice ContactVice; // what there weakness is
         public ContactType ContactType; // what type they are ie there background before they became this
+        public GameAgent.AgentOfType AgentType;
+        public GameAgent ContactAgenct;
+        public AgentBrain ContactBrain;
+        public CompromisedAgentBrain ContactCompromisedBrain;
+
+        //the training set of the double agent the behaviors will be different
+        public DoubleAgentBrain ContactDoubleAgentBrain;
         public int Age;
         public int DobYear;
         public int DobMonth;

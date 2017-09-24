@@ -110,7 +110,8 @@ namespace Assets
             Transportation,
             Commerce,
             Treasury,
-            Interior
+            Interior,
+            LocalProvince
 
 
         }

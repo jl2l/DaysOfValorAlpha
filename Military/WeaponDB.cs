@@ -291,7 +291,8 @@ namespace Assets
         XBandPhaseArrayRadar,
         MMJammer,
         AirSearchRadar,
-        ChemicalDector
+        ChemicalDector,
+        FireControlRadar
     }
 
     /// <summary>
@@ -1134,7 +1135,8 @@ namespace Assets
         Patrol,
         Mine,
         Amph,
-        Sub
+        Sub,
+        Transport
     }
 
     [Serializable]
@@ -1174,7 +1176,11 @@ namespace Assets
         amphibiouslandingship,
         landingshiptank,
         hovercraft,
-        oiler // refuels ships 
+        oiler, // refuels ships 
+        attacksubmarine,
+        midgetsubmarine,
+        ballisticmissilesub,
+        guidedmissileSub
     }
 
 

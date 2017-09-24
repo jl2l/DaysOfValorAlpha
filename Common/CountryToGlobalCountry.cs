@@ -54,33 +54,35 @@ public class CountryToGlobalCountry
         {
             return CityType.MegaCity;
         }
-        else if (city.population <= 3000001 && city.population >= 1000000)
+        else if (city.population <= 3000001 && city.population >= 9999999)
         {
             //between 10 million and 3 million
             return CityType.Metropolis;
         }
-        else if (city.population <= 1000001 && city.population >= 3000000)
+
+        if (city.population <= 999999 && city.population >= 2999999)
         {
             //between 3 million and 1 million
             return CityType.LargeCity;
         }
-        else if (city.population <= 300001 && city.population >= 1000000)
+        else if (city.population <= 300001 && city.population >= 999999)
         {
 
             //between 1 million and 300k
             return CityType.City;
         }
-        else if (city.population <= 300000 && city.population >= 100001)
+
+        if (city.population <= 299999 && city.population >= 100001)
         {
             //between 300k and 100k
             return CityType.SmallCity;
         }
-        else if (city.population <= 100000 && city.population >= 20001)
+        else if (city.population <= 99999 && city.population >= 20001)
         {
             //100k to 20k
             return CityType.Town;
         }
-        else if (city.population <= 20000 && city.population >= 1001)
+        else if (city.population >= 20000 && city.population >= 1001)
         {
             //from 20k to 1k
             if (gov.CustomRegionName == "Western European" || gov.CustomRegionName == "Eastern European")
@@ -103,7 +105,8 @@ public class CountryToGlobalCountry
             return CityType.SmallTown;
 
         }
-        else if (city.population <= 1000 && city.population >= 501)
+
+        if (city.population >= 1000 && city.population >= 501)
         {
             //1k or less
             return CityType.Village;
@@ -527,7 +530,7 @@ public class CountryToGlobalCountry
         return (int)baseTerrorIndex;
     }
 
-    public float DetermineBaseCrimeRate(int population, CityType cityType, CountryGovernment cityInGovernment, Province province)
+    public float DetermineBaseCrimeRate(long population, CityType cityType, CountryGovernment cityInGovernment, Province province)
     {
 
         var baseCrimeRate = 0.03f;
@@ -604,7 +607,7 @@ public class CountryToGlobalCountry
     }
 
 
-    public float DeterminePropertyValue(int population, CityType cityType, CountryGovernment cityInGovernment, Province province)
+    public float DeterminePropertyValue(long population, CityType cityType, CountryGovernment cityInGovernment, Province province)
     {
         return 100;
     }
@@ -796,7 +799,10 @@ public class CountryToGlobalCountry
         FoodSUpplyIndex,
         MedicalCareIndex,
         ElectricitySupplyIndex,
-        InternetAccessIndex
+        InternetAccessIndex,
+        NaturalDisasterBuffer,
+        NationalSecurity,
+        RebelIndex
     }
 
     [Serializable]
@@ -815,6 +821,7 @@ public class CountryToGlobalCountry
     {
         public int index;
         public string DisplayName;
+        public string DisplayDescription;
         public MapLevelType mapType;
         public countryInfrastructure type;
         public bool IsCritical;
@@ -823,6 +830,7 @@ public class CountryToGlobalCountry
         public bool IsDestroyed;
         public bool IsUnderConstruction;
         public bool IsUnderRepair;
+        public bool IsStateControlled;
         public long FundingCost;
         public long ConstructionCost;
         public int ConstructionTimeInDays;
@@ -886,7 +894,13 @@ public class CountryToGlobalCountry
         largestadium,
         zooOrAquarium,
         shoppingMall,
-
+        factory,
+        local,
+        education,
+        terror,
+        rebel,
+        nationalsecurity,
+        cityServices
 
 
     }
