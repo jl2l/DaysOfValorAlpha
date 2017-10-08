@@ -128,7 +128,7 @@ public class CountryAgent : MonoBehaviour
                         countriesBigger.Add(compareCountry);
                     }
                 }
-               // countriesBigger.Sort((country, compareCountry) => compareCountry.CompareTo(country));
+                // countriesBigger.Sort((country, compareCountry) => compareCountry.CompareTo(country));
                 if (countriesBigger.Count == 0)
                 {
                     DebugOutput += "I am a Regional or Superpower GEO Power";
@@ -138,7 +138,7 @@ public class CountryAgent : MonoBehaviour
                     //determine the countrys that are bigger are 
                     foreach (var biggerCountries in countriesBigger)
                     {
-                        
+
 
                     }
                 }
@@ -158,14 +158,15 @@ public class CountryAgent : MonoBehaviour
             case GoalPower.LeaderShip:
                 break;
         }
-      
-    
-      
+
+
+
 
     }
-    public void WhereDoesMyPowerComeFrom() {
+    public void WhereDoesMyPowerComeFrom()
+    {
 
-      
+
         //does my power from from geo
         //how big is my country
         //"Geography": {
@@ -182,10 +183,10 @@ public class CountryAgent : MonoBehaviour
         //        "total": {
         //            "text": "2,381,741 sq km"
         //        },
-      
+
         //var localCountryManager = lGm.GameWorldManager.CountryPlayerManagerGameObject.GetComponent<CountryManager>();
         //var wmCountry = lGm.GameMapManager.wmslObj.GetCountry(localCountryManager.CountryGovernment.MapLookUpName);
-      //  var getSizeKm = wmCountry.regionsRect2DArea;
+        //  var getSizeKm = wmCountry.regionsRect2DArea;
         //if size is 
 
         //asse for each goal type

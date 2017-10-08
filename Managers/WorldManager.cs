@@ -22,7 +22,7 @@ public class WorldManager : MonoBehaviour
     public List<CountryManager> WorldCountryManagement;
     public List<CountryGovernment> WorldGovernments;
     public List<CityData> WorldCityData;
-    private MapManager GameMapManager;
+    public MapManager GameMapManager;
     public MilitaryManager GameMilitaryManager;
     public Sprite CapitalIcon;
     public Sprite MilitaryBaseIcon;
@@ -116,7 +116,7 @@ public class WorldManager : MonoBehaviour
                 newCountryManagerSetup.CountryPopulationGroups = gov.DemographicGroups == null ? new List<DemographicGroups>() : gov.DemographicGroups;
                 newCountryManagerSetup.countryMilitary = gov.Military == null ? new CountryMilitary() : gov.Military;
 
-                newCountryManagerSetup.CountrySectors = gov.CountryMarkets == null ? new List<CountrySectors>() : gov.CountryMarkets; ;
+                newCountryManagerSetup.CountrySectors = gov.CountryMarkets == null ? new List<CountrySectors>() : gov.CountryMarkets;
                 newCountryManagerSetup.CountryCityControlList = InitalizeControlCityList(gov.ControlsCitiesNames);
                 newCountryManagerSetup.CountryProvinceControlList = InitalizeControlProvinceList(gov.ControlsProvincesNames);
                 newCountryManagerSetup.CountryGovernment.CountryFounding = new DateTime(newCountryManagerSetup.CountryGovernment.FoundingYear, newCountryManagerSetup.CountryGovernment.FoundingMonth, newCountryManagerSetup.CountryGovernment.FoundingDay);

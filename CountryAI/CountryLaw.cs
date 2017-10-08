@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class CountryLaw : ScriptableObject
@@ -10,9 +11,15 @@ public class CountryLaw : ScriptableObject
     public string LawDescription;
     public CountryRelationsFactory.CountryLegalStatus LawStatus;
     public int LawCost;
-    public LawEffect LawEffects;
+    public List<LawEffect> LawEffects;
+    public float LawEffectValue;
 
-    public enum LawEffect {
+    public UprisingEvent LawUprisingEvent;
+    public CulturalEvent CultralEvent;
+    public NewsEvent NewsEvent;
+    public DiplomaticEvent LawDiplomaticEvent;
+    public enum LawEffect
+    {
         IncreaseRuleOfLaw,
         IncreaseHumanSecurity,
         IncreaseEconomicDevelop,
@@ -23,10 +30,18 @@ public class CountryLaw : ScriptableObject
         DecreaseCultureValue,
         IncreaseInternational,
         DecreaseInternational,
+        PopulationWealth,
+        PopulationHealth,
+        Business,
+        Trade,
+        Tourism,
+        Consumption,
+        Mirgation,
+        MoneyTransfers
 
     }
 
-    public CountryBudget LawEffectsBudget;
+    public CountryBudget.CountryIncome LawEffectsBudget;
     public SectorManager.CountryResource LawOnResource;
     public PoliticalParties LawBanningParty;
     public DemographicGroups LawBanGroup;

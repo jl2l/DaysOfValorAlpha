@@ -39,6 +39,7 @@ public class ResearchItem : ScriptableObject
     public List<DoV_Vehicle> UnlockVehicles;
     public List<Weapon> UnlockWeapons;
     public List<Sensor> UnlockSensors;
+    public List<SectorManager.CountryResource> UnlocksResources;
     public ResearchTech Tier;
     public WorldEvent ResearchWorldEvent;
     public IntelEvent ResearchTriggersIntelEvent;

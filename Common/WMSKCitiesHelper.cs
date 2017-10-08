@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace WorldMapStrategyKit
 {
- 
+
     public partial class WMSK
     {
         [SerializeField]
@@ -39,7 +39,7 @@ namespace WorldMapStrategyKit
                 }
             }
         }
-        
+
 
         /// <summary>
         /// Redraws the cities. This is automatically called by Redraw(). Used internally by the Map Editor. You should not need to call this method directly.
@@ -84,61 +84,61 @@ namespace WorldMapStrategyKit
             int visibleCount = 0;
             if (map.countryHighlightedIndex != -1)
                 citiestoDraw = map.cities.Where(e => e.countryIndex == map.countryHighlightedIndex).ToList();
-            else if(countryIndex != 0)
-            citiestoDraw = map.cities.Where(e => e.countryIndex == countryIndex).ToList();
-           
+            else if (countryIndex != 0)
+                citiestoDraw = map.cities.Where(e => e.countryIndex == countryIndex).ToList();
+
             int cityCount = citiestoDraw.Count();
             //var go = gameManager.GameWorldManager.CountryPlayerManagerGameObject.GetComponentInChildren<CountryGovernment>();
             foreach (var city in citiestoDraw)
             {
-              
-                    GameObject cityObj, cityParent;
-                    Material mat;
-             
-                switch (city.cityClass)
-                    {
 
-                        case CITY_CLASS.COUNTRY_CAPITAL:
+                GameObject cityObj, cityParent;
+                Material mat;
+
+                switch (city.cityClass)
+                {
+
+                    case CITY_CLASS.COUNTRY_CAPITAL:
                         var cap = Resources.Load<GameObject>("WMSK/Prefabs/CityCapitalCountrySpot");
-                            cityObj = Instantiate(cap);
+                        cityObj = Instantiate(cap);
                         citiesCountryCapitalMat.color = Colors.PuceRed;
                         mat = citiesCountryCapitalMat;
-                        
-                                cityParent = countryCapitals;
-                       // mat.color = gameManager.GameWorldManager.CityStatus(go, city);
+
+                        cityParent = countryCapitals;
+                        // mat.color = gameManager.GameWorldManager.CityStatus(go, city);
                         break;
-                        case CITY_CLASS.REGION_CAPITAL:
-                            cityObj = Instantiate(Resources.Load<GameObject>("WMSK/Prefabs/CityCapitalRegionSpot"));
+                    case CITY_CLASS.REGION_CAPITAL:
+                        cityObj = Instantiate(Resources.Load<GameObject>("WMSK/Prefabs/CityCapitalRegionSpot"));
                         citiesRegionCapitalMat.color = Colors.DeepAquamarine;
                         mat = citiesRegionCapitalMat;
-                            cityParent = regionCapitals;
-                       // mat.color = gameManager.GameWorldManager.CityStatus(go, city);
+                        cityParent = regionCapitals;
+                        // mat.color = gameManager.GameWorldManager.CityStatus(go, city);
                         break;
-                        default:
-                            cityObj = Instantiate(Resources.Load<GameObject>("WMSK/Prefabs/CitySpot"));
+                    default:
+                        cityObj = Instantiate(Resources.Load<GameObject>("WMSK/Prefabs/CitySpot"));
                         citiesNormalMat.color = Colors.PurpleNavy;
-                            mat = citiesNormalMat;
-                            cityParent = normalCities;
+                        mat = citiesNormalMat;
+                        cityParent = normalCities;
                         //mat.color = gameManager.GameWorldManager.CityStatus(go, city);
                         break;
-                    }
+                }
 
-                    cityObj.name = city.name.ToString();
-                    cityObj.hideFlags = HideFlags.DontSave | HideFlags.HideInHierarchy;
-                    cityObj.layer = citiesLayer.layer;
-                    cityObj.transform.SetParent(cityParent.transform, false);
-                    cityObj.transform.localPosition = city.unity2DLocation;
-                    Renderer rr = cityObj.GetComponent<Renderer>();
-                    if (rr != null)
+                cityObj.name = city.name.ToString();
+                cityObj.hideFlags = HideFlags.DontSave | HideFlags.HideInHierarchy;
+                cityObj.layer = citiesLayer.layer;
+                cityObj.transform.SetParent(cityParent.transform, false);
+                cityObj.transform.localPosition = city.unity2DLocation;
+                Renderer rr = cityObj.GetComponent<Renderer>();
+                if (rr != null)
                 {
                     rr.sharedMaterial = mat;
                 }
-                     
 
-                    numCitiesDrawn++;
-                    visibleCount++;
-                }
-            
+
+                numCitiesDrawn++;
+                visibleCount++;
+            }
+
 
 
 

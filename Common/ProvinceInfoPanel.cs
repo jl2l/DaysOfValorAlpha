@@ -7,6 +7,8 @@ using UIWidgets;
 
 public class ProvinceInfoPanel : MonoBehaviour
 {
+
+    public GameObject ProvinceAccordion;
     public Text ProvinceNameText;
     public Text ProvinceCountryText;
     public Text PopulationText;

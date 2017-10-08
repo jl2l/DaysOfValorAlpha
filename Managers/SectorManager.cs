@@ -313,7 +313,12 @@ public class SectorManager : MonoBehaviour
         [Description("Cryto Currency")]
         Cyrptocurrency,
         [Description("Cash")]
-        Cash
+        Cash,
+        [Description("Livestock Water")]
+        LivestockWater,
+        [Description("Drinking Water")]
+        DrinkingWater
+
 
     }
     public class CountryResource : ScriptableObject
