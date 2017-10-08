@@ -12,7 +12,7 @@ public class WorldEvent : ScriptableObject
     public string EventDescription;
     public string StartTime;
     public DateTime EventGameDate;
-  
+
 
     /// <summary>
     /// The country making the diplomatic offer
@@ -41,8 +41,10 @@ public class WorldEvent : ScriptableObject
     public float GainLost;
     public long EventCost;
     public bool IsEventInFuture;
+    public bool HasEnded;
+    public bool IsUprisingEvent;
     public Timer EventTimer;
-   
+
 
     public void onTimerComplete(object source, ElapsedEventArgs e)
     {

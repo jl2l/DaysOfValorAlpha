@@ -15,6 +15,7 @@ public class CountryManager : MonoBehaviour
     public List<CountryLaw> CountryLaws;
     public List<Deal> CountryDeals;
     private UnityAction CounterListener;
+    private UnityAction UprisingListener;
     public CountryGovernment CountryGovernment;
     public CountryAgent countryAIAgent;
     public CountryRelationsFactory countryFactory;
@@ -41,11 +42,13 @@ public class CountryManager : MonoBehaviour
     void OnEnable()
     {
         EventGenerator.StartListening("CheckForSubgroups", CounterListener);
+        EventGenerator.StartListening("CheckForUprisings", UprisingListener);
     }
 
     void OnDisable()
     {
         EventGenerator.StopListening("CheckForSubgroups", CounterListener);
+        EventGenerator.StopListening("CheckForUprisings", UprisingListener);
     }
 
     public TerroristLeaderAgent CreateNewTerroristLeader(CountryToGlobalCountry.GenericProvince provinceHomeland)
@@ -101,8 +104,101 @@ public class CountryManager : MonoBehaviour
         throw new NotImplementedException();
     }
 
+    public void CheckHistoryBias(CountryGovernment gov, float Value = 0)
+    {
+        switch (gov.GovernmnetBias)
+        {
+            case CountryRelationsFactory.CountryBias.westerndemocracy:
+                break;
+            case CountryRelationsFactory.CountryBias.europeandemocracy:
+                break;
+            case CountryRelationsFactory.CountryBias.europeansocialdemocracy:
+                break;
+            case CountryRelationsFactory.CountryBias.formersoviet:
+                break;
+            case CountryRelationsFactory.CountryBias.formersovietAuthoratian:
+                break;
+            case CountryRelationsFactory.CountryBias.formereuro:
+                break;
+            case CountryRelationsFactory.CountryBias.formercommonwealth:
+                break;
+            case CountryRelationsFactory.CountryBias.africanstable:
+                break;
+            case CountryRelationsFactory.CountryBias.africaninstable:
+                break;
+            case CountryRelationsFactory.CountryBias.notchinaAsian:
+                break;
+            case CountryRelationsFactory.CountryBias.chinaAndAllies:
+                break;
+            case CountryRelationsFactory.CountryBias.russiaAndAllies:
+                break;
+            case CountryRelationsFactory.CountryBias.islamStable:
+                break;
+            case CountryRelationsFactory.CountryBias.islamInstable:
+                break;
+            case CountryRelationsFactory.CountryBias.southamericandemocracy:
+                break;
+            case CountryRelationsFactory.CountryBias.southamericansocialist:
+                break;
+            case CountryRelationsFactory.CountryBias.superpower:
+                break;
+            case CountryRelationsFactory.CountryBias.regionalpower:
+                break;
+            case CountryRelationsFactory.CountryBias.citystateisland:
+                break;
+            case CountryRelationsFactory.CountryBias.civilwar:
+                break;
+            default:
+                break;
+        }
+    }
+
+    IEnumerator TriggerUprisingStart()
+    {
+        var map = FindObjectOfType<MapManager>();
+
+        map.DebugText.text = string.Format("Uprising Staring in ", CountryGovernment.LocalNameOfGovernment);
+
+        //decorsToFade.StartCoroutine(DoFade(3f));
+        map.DebugText.text = "DEFCONE 1 MODE ON";
+
+        yield return new WaitForEndOfFrame();
+    }
+    public void CheckForUprisings()
+    {
+        float likelyHoodOfUprising = 0;
+
+        //lets see if the government did anything in the last day to caause a uprising event.
+        var newUprising = CountryGovernment.GovernmentWorldHistory.FirstOrDefault(events => events.EventType == EventGenerator.WorldEventType.UprisingEvent);
+
+        if (newUprising.IsUprisingEvent && !newUprising.HasEnded)
+        {
+            StartCoroutine("TriggerUprisingStart");
+        }
+        else
+        {
+            switch (CountryGovernment.CountryFreedomIndex)
+            {
+                case CountryRelationsFactory.CountryFreedomIndex.FullDemocracy:
+                    CheckHistoryBias(CountryGovernment, likelyHoodOfUprising);
+                    break;
+                case CountryRelationsFactory.CountryFreedomIndex.FlawedDemocracy:
+                    CheckHistoryBias(CountryGovernment, likelyHoodOfUprising);
+                    break;
+                case CountryRelationsFactory.CountryFreedomIndex.HybridRegime:
+                    CheckHistoryBias(CountryGovernment, likelyHoodOfUprising);
+                    break;
+                case CountryRelationsFactory.CountryFreedomIndex.Authoritarian:
+                    CheckHistoryBias(CountryGovernment, likelyHoodOfUprising);
+                    break;
+                default:
+                    break;
+            }
+        }
 
 
+
+    }
 
     public int GetCityCrimeAverageIndexAcrossEmpire(List<CountryToGlobalCountry.GenericCity> CountryCityControlList)
     {
@@ -206,6 +302,7 @@ public class CountryManager : MonoBehaviour
     void Awake()
     {
         CounterListener = new UnityAction(CheckForNewSubgroup);
+        CounterListener = new UnityAction(CheckForUprisings);
     }
 
     // Use this for initialization

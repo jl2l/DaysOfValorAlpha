@@ -11,6 +11,7 @@ using static CountryToGlobalCountry;
 using UnityEngine.EventSystems;
 using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
+using UIWidgets;
 
 public class MapManager : MonoBehaviour
 {
@@ -92,63 +93,7 @@ public class MapManager : MonoBehaviour
 
     public Text WorldMapHintInfo;
     public Text WorldHoverOverInfo;
-    public GameObject GameButtonCountryInfo;
-    public GameObject GameButtonCountryVassal;
-    public GameObject GameButtonCountryLaws;
-    public GameObject GameButtonCountryPol;
-    public GameObject GameButtonCountryDemoGroups;
-    public GameObject GameButtonCountryMilitary;
-    public GameObject GameButtonCountryIntel;
-    public GameObject GameButtonCountryTrade;
-    public GameObject GameButtonCountryResearch;
     public bool UpdateNewLocalTime;
-
-
-    #region UI Country Government Info
-
-    public Text UICountryName;
-    public Text UICountryFounded;
-    public Text UICountryCommon;
-    public Text UICountryGovernmentName;
-    public Text UICountryHeadOfState;
-    public Text UICountryHeadOfMilitary;
-    public Text UICountryHeadOfEconomic;
-    public Text UICountryAmbassdor;
-    public Text UICountryStationHead;
-
-    public GameObject GameGovernmentInfoPanel;
-    public GameObject GameCityInfoPanel;
-    public GameObject GameCountryInfoPanel;
-    public GameObject GameProvinceInfoPanel;
-    public GameObject GameEconomicInfoPanel;
-    public GameObject GameDiplomaticInfoPanel;
-    public GameObject GameIntelInfoPanel;
-    public GameObject GameDeckInfoPanel;
-    public GameObject GameShipInfoPanel;
-    public GameObject GameResearchInfoPanel;
-    public GameObject GameDefconInfoPanel;
-    public GameObject GameInfrastructureInfoPanel;
-
-    public GameObject GameTradeInfoPanel;
-    #endregion
-    #region UI Country Relations
-
-    public Slider PlayerPopulationTrustLevel;
-    public Slider CountryPopulationTrustLevel;
-    public Slider MilitaryToGovernmentTrustLevel;
-    public Slider GovernmentToMilitaryTrustLevel;
-    public Slider PoliticalStability;
-    public Slider PoliticalCorruption;
-    public Slider GovernmentIdeologyIndex;
-    public Toggle FreezeAssets;
-    public Toggle TraveBan;
-    public Toggle Inspections;
-    public Toggle Dumping;
-    public Toggle Subsides;
-    public Toggle EnforceLicenses;
-    public Toggle CommericalBan;
-
-    #endregion
 
     public GameManager GameManager;
     public WorldManager WorldManager;
@@ -159,11 +104,8 @@ public class MapManager : MonoBehaviour
     public CountryManager SelectedCountryManager;
     public CountryManager GamePlayerCountryManager;
 
-
-
-
     public Text GamePlayerCountryText;
-    GameObjectAnimator tank;
+    GameObjectAnimator PlayerShip;
     List<GameObjectAnimator> SelectedObjects;
     public GameObject CountryPerkTemplate;
     public Helper helpers;
@@ -565,7 +507,7 @@ public class MapManager : MonoBehaviour
         GamePlayerCountryManager = null;
         GameLastMapDisplayMode = GameMapDisplayMode;
         GameMapDisplayMode = MapDisplayMode.DeckView;
-        GameDeckInfoPanel.SetActive(true);
+        //GameDeckInfoPanel.SetActive(true);
         GamePlayerCountryManager = WorldManager.CountryPlayerManagerGameObject.transform.GetChild(0).GetComponent<CountryManager>();
         StartCoroutine(ColorForEachCountry(GameMapDisplayMode));
         var decorsToFade = wmslObj.decorator.GetDecoratorGroup(0, false);
@@ -580,7 +522,7 @@ public class MapManager : MonoBehaviour
         GameMapDisplayMode = MapDisplayMode.DeckView;
         GamePlayerCountryManager = WorldManager.CountryPlayerManagerGameObject.transform.GetChild(0).GetComponent<CountryManager>();
         StartCoroutine(ColorForEachCountry(GameMapDisplayMode));
-        GameDeckInfoPanel.SetActive(true);
+        //GameDeckInfoPanel.SetActive(true);
         DebugText.text = "DECK MODE UPDATED..";
         yield return new WaitForEndOfFrame();
     }
@@ -673,7 +615,7 @@ public class MapManager : MonoBehaviour
     }
     IEnumerator SetCountryInfoBar()
     {
-        GameGovernmentInfoPanel.SetActive(true);
+        //GameGovernmentInfoPanel.SetActive(true);
         yield return new WaitForEndOfFrame();
 
     }
@@ -682,46 +624,6 @@ public class MapManager : MonoBehaviour
         var politicalGroupInPower = countryManager.CountryGovernment.PoliticalParties.FirstOrDefault(e => e.LawStatus == Assets.CountryRelationsFactory.CountryLegalStatus.InPower);
 
 
-        UICountryName.text = countryManager.CountryGovernment.LocalNameOfGovernment;
-        UICountryCommon.text = countryManager.CountryGovernment.TitleOfPopulation;
-
-        UICountryFounded.text = string.Format("Found: {0}",
-            countryManager.CountryGovernment.FoundingYear);
-
-        UICountryGovernmentName.text = string.Format("{0} ({1})",
-            countryManager.CountryGovernment.NameOfGovernment,
-            countryManager.CountryGovernment.GovernmentAbbreviation);
-
-        UICountryHeadOfState.text = string.Format("{0} ({1} {2})",
-            countryManager.CountryGovernment.TitleOfHeadOfState,
-            countryManager.CountryGovernment.ContactOfHeadOfState.ContactName,
-            politicalGroupInPower.PartySymbol);
-
-        UICountryHeadOfMilitary.text = string.Format("{0} ({1} {2})",
-            countryManager.CountryGovernment.TitleOfHeadOfState,
-            countryManager.CountryGovernment.ContactOfHeadOfState.ContactName);
-
-
-        UICountryHeadOfEconomic.text = string.Format("{0} ({1} {2})",
-                countryManager.CountryGovernment.TitleOfHeadOfState,
-                countryManager.CountryGovernment.ContactOfHeadOfState.ContactName);
-
-        UICountryAmbassdor.text = string.Format("{0} ({1} {2})",
-                countryManager.CountryGovernment.TitleOfHeadOfState,
-                countryManager.CountryGovernment.ContactOfHeadOfState.ContactName);
-
-        UICountryStationHead.text = string.Format("{0} ({1} {2})",
-                countryManager.CountryGovernment.TitleOfHeadOfState,
-                countryManager.CountryGovernment.ContactOfHeadOfState.ContactName);
-
-
-        PlayerPopulationTrustLevel.value = countryManager.CountryGovernment.PlayerPopulationTrustLevel;
-        CountryPopulationTrustLevel.value = countryManager.CountryGovernment.PopulationTrustLevel;
-        MilitaryToGovernmentTrustLevel.value = countryManager.CountryGovernment.MilitaryGovernmentTrustLevel;
-        GovernmentToMilitaryTrustLevel.value = countryManager.CountryGovernment.GovernmentMilitaryTrustLevel;
-        PoliticalStability.value = countryManager.CountryGovernment.PoliticalStablity;
-        PoliticalCorruption.value = countryManager.CountryGovernment.PoliticalCorruption;
-        GovernmentIdeologyIndex.value = countryManager.CountryGovernment.GovernmentIdeologyIndex;
 
 
 
@@ -1038,13 +940,11 @@ public class MapManager : MonoBehaviour
         {
             if (GameMapDisplayMode == MapDisplayMode.DetailCityMode)
             {
-                SetAll(new List<GameObject>() { GameCityInfoPanel
-        }, true);
+
             }
             else
             {
-                SetAll(new List<GameObject>() { GameCityInfoPanel
-        }, false);
+
 
             }
 
@@ -1068,16 +968,14 @@ public class MapManager : MonoBehaviour
             GameMapDisplayMode = GameLastMapDisplayMode;
             if (GameMapDisplayMode == MapDisplayMode.DetailCityMode)
             {
-                SetAll(new List<GameObject>() { GameCityInfoPanel
-        }, true);
+
             }
             else
             {
                 ResetMenus();
             }
 
-            SetAll(new List<GameObject>() { GameCountryInfoPanel
-        }, true);
+
         };
 
         wmslObj.OnProvinceClick += (int provinceIndex, int regionIndex, int buttonIndex) =>
@@ -1119,25 +1017,25 @@ public class MapManager : MonoBehaviour
                 case MapDisplayMode.InMenu:
                     break;
                 case MapDisplayMode.DiplomaticView:
-                    GameDiplomaticInfoPanel.SetActive(true);
+                    //GameDiplomaticInfoPanel.SetActive(true);
                     break;
                 case MapDisplayMode.MilitaryView:
                     //GameCountryMiilitaryInfoPanel.SetActive(true);
                     break;
                 case MapDisplayMode.EconomcView:
-                    GameEconomicInfoPanel.SetActive(true);
+                    //GameEconomicInfoPanel.SetActive(true);
                     break;
                 case MapDisplayMode.ResearchView:
-                    GameResearchInfoPanel.SetActive(true);
+                    //GameResearchInfoPanel.SetActive(true);
                     break;
                 case MapDisplayMode.IntelView:
-                    GameIntelInfoPanel.SetActive(true);
+                    // GameIntelInfoPanel.SetActive(true);
                     break;
                 case MapDisplayMode.TradeView:
-                    GameTradeInfoPanel.SetActive(true);
+                    //GameTradeInfoPanel.SetActive(true);
                     break;
                 case MapDisplayMode.DefconView:
-                    GameDefconInfoPanel.SetActive(true);
+                    //GameDefconInfoPanel.SetActive(true);
                     break;
                 case MapDisplayMode.DetailCityMode:
                     break;
@@ -1146,7 +1044,7 @@ public class MapManager : MonoBehaviour
                 case MapDisplayMode.NarrationMode:
                     break;
                 case MapDisplayMode.DeckView:
-                    GameDeckInfoPanel.SetActive(true);
+                    //GameDeckInfoPanel.SetActive(true);
                     break;
                 default:
                     break;
@@ -1198,9 +1096,13 @@ public class MapManager : MonoBehaviour
         //if its not the players then it might be another world governments WorldCountryManagement find it in here
         //if its not in there then get the historic data from either the  WorldManager.WorldCityData or auto generate it and add it to the list of world cities that 
         //you can click on a city and spawn the data for it into the memory
+        var slideBar = FindObjectOfType<Sidebar>();
+        slideBar.Toggle();
 
+        var cityInfoPanel = FindObjectOfType<CityInfoPanel>();
+        cityInfoPanel.gameObject.SetActive(true);
+        cityInfoPanel.CityAccordion.SetActive(true);
 
-        var cityInfoPanel = GameCityInfoPanel.GetComponent<CityInfoPanel>();
         cityInfoPanel.CitySelectedPanel.SetActive(true);
         if (s == null)
         {
@@ -1228,7 +1130,7 @@ public class MapManager : MonoBehaviour
     {
         var cityName = wmslObj.GetCityHierarchyName(cityIndex);
 
-        var cityInfoPanel = GameCityInfoPanel.GetComponent<CityInfoPanel>();
+        var cityInfoPanel = FindObjectOfType<CityInfoPanel>();
 
         var cityInfo = wmslObj.cities[cityIndex];
 
@@ -1299,8 +1201,8 @@ public class MapManager : MonoBehaviour
         cityInfoPanel.CityPopulationText.text = string.Format("{0:n0}", SelectedCity.population);
 
         cityInfoPanel.CityControllingFlag.texture = mapFlag;
-        GameCityInfoPanel.SetActive(true);
-        GameCityInfoPanel.GetComponent<FadeObjectInOut>().FadeIn();
+        // GameCityInfoPanel.SetActive(true);
+        // GameCityInfoPanel.GetComponent<FadeObjectInOut>().FadeIn();
     }
 
 
@@ -1308,15 +1210,26 @@ public class MapManager : MonoBehaviour
     {
         DebugText.text = "Clicked province " + wmslObj.provinces[provindeIndex].name;
         GameMapSelectedType = MapSelected.Province;
+
+        var slideBar = FindObjectOfType<Sidebar>();
+        slideBar.Toggle();
+
+
+
+
         SelectProvince(provindeIndex, regionIndex, SelectedProvince);
     }
     public void SelectProvince(int provinceIndex, int regionIndex, GenericProvince SelectedProvince)
     {
 
         //  wmslObj.getpr
-        GameProvinceInfoPanel.SetActive(true);
+        // GameProvinceInfoPanel.SetActive(true);
+
+
         var cm = new CountryToGlobalCountry();
-        var provinceUI = GameProvinceInfoPanel.GetComponent<ProvinceInfoPanel>();
+        var provinceUI = FindObjectOfType<ProvinceInfoPanel>();
+        provinceUI.gameObject.SetActive(true);
+        provinceUI.ProvinceAccordion.SetActive(true);
         var controlLevel = 100f;
         if (SelectedProvince != null && SelectedCountryManager != null)
         {
@@ -1449,12 +1362,13 @@ public class MapManager : MonoBehaviour
 
     public void SelectOnCountry()
     {
-        var countryInfoPanel = GameCountryInfoPanel.GetComponent<CountryInfoPanel>();
+        var countryInfoPanel = FindObjectOfType<CountryInfoPanel>();
         //AND HAS EMBASY OPEN TODO
         if (wmslObj.countryHighlighted != null)
         {
             ResetMenus();
-
+            countryInfoPanel.gameObject.SetActive(true);
+            countryInfoPanel.CountryAccordion.SetActive(true);
 
             SelectedCountryManager = WorldManager.WorldCountryManagement.FirstOrDefault(e => e.CountryGovernment.CountryOfGovernment.name == wmslObj.countryHighlighted.name);
             if (SelectedCountryManager != null)
@@ -1492,21 +1406,6 @@ public class MapManager : MonoBehaviour
     public void ResetMenus()
     {
 
-        SetAll(new List<GameObject>() { GameCityInfoPanel,
-            GameGovernmentInfoPanel,
-            GameProvinceInfoPanel,
-            GameIntelInfoPanel,
-            GameDiplomaticInfoPanel,
-            GameCountryInfoPanel,
-            GameResearchInfoPanel,
-            GameShipInfoPanel,
-            GameEconomicInfoPanel,
-            GameShipInfoPanel,
-            GameDeckInfoPanel,
-            GameDefconInfoPanel,
-            GameInfrastructureInfoPanel
-
-        }, false);
     }
 
     #region Toggles
@@ -1851,7 +1750,7 @@ public class MapManager : MonoBehaviour
         //GameCountryMiilitaryInfoPanel.SetActive(false);
         SceneManager.LoadScene(3);
     }
-
+    //move thegamemanger
     public void OpenSeaGarage()
     {
         // GameCountryMiilitaryInfoPanel.SetActive(false);

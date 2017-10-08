@@ -1,19 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets;
+using static Assets.CountryRelationsFactory;
 
 [System.Serializable]
 public class DemographicGroups : ScriptableObject
 {
     public string GroupName;
 
-   
+
 
     [Range(0.0f, 100.0f)]
     public float Population;
 
-   
-    public long  Numbers;
+
+    public long Numbers;
 
     [Range(-1.0f, 1.0f)]
     public float Happiness;
@@ -24,4 +25,6 @@ public class DemographicGroups : ScriptableObject
     [Range(-1.0f, 1.0f)]
     public float Fear;
     public CountryRelationsFactory.CountryLegalStatus LawStatus;
+
+    public CountrySpokeLanguage SpokenLanguage;
 }

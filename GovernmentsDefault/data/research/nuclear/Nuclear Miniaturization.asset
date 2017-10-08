@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b17894a85fe26b24a9325e7c270f6b9f, type: 3}
+  m_Name: Nuclear Miniaturization
+  m_EditorClassIdentifier: 
+  ResearchName: Nuclear Minituzation
+  ResearchDescription: taking the step to make nuclear components small and able to
+    fit on a missile is the first offensive step in building a nuclear weapon.
+  ResearchIcon: {fileID: 0}
+  ResearchSector: 2
+  AssignedResearchAgent: {fileID: 0}
+  UnlockVehicles: []
+  UnlockWeapons: []
+  UnlockSensors: []
+  UnlocksResources: []
+  Tier: 3
+  ResearchWorldEvent: {fileID: 0}
+  ResearchTriggersIntelEvent: {fileID: 0}
+  IsRootNode: 0
+  IsResearchKnownToPlayer: 0
+  DaysToResearch: 0
+  RequiredTech:
+  - {fileID: 11400000, guid: ff2922afa5db6934c93b6e5914d8ab5c, type: 2}
+  ResearchPoints: 0
+  ParentResearch: {fileID: 11400000, guid: 6bffeffa3192a194cbacf793d0006bd8, type: 2}
+  ChildrenResearch:
+  - {fileID: 11400000, guid: 6639071855da0e645b72a7507bde361b, type: 2}
+  - {fileID: 11400000, guid: f4a8721229d1542458051bd50f544fd1, type: 2}

@@ -251,7 +251,15 @@ public class EditorHelper
         if (asset != null)
             asset.EventName = "some government";
     }
-
+    // -------- duplicate this code block to create your own custom item type --------
+    // for more info, see the comments in "vp_CustomType.cs"
+    [MenuItem("DOV/Create New Uprising", false, 101)]
+    public static void CreateUprising()
+    {
+        UprisingEvent asset = (UprisingEvent)CreateAsset("DoVAlpha/GovernmentsDefault/data/events/", typeof(UprisingEvent));
+        if (asset != null)
+            asset.EventName = "some government";
+    }
 
     // -------- duplicate this code block to create your own custom item type --------
     // for more info, see the comments in "vp_CustomType.cs"

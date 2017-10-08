@@ -175,7 +175,7 @@ public class MilitaryManager : MonoBehaviour
                 gameBase.BaseData = militaryBase;
 
                 gameBase.GameBaseMaxSize = 10;
-                gameBase.GameBaseStrength = 1000;
+                gameBase.GameBaseStrength = militaryBase.BaseStrength;
                 gameBase.GameBaseSupplyLevel = 5000;
                 gameBase.GameMaxBaseDecksAP = 50;
                 gameBase.BaseUniqueId = BaseId;
@@ -201,32 +201,32 @@ public class MilitaryManager : MonoBehaviour
         var UIMilitaryInfoPanel = GameMilitaryInfoPanel.GetComponent<MilitaryInfoPanel>();
         UIMilitaryInfoPanel.NavalGroups.DataSource.Clear();
 
-        GameManager.GamePlayerCountryManager.countryMilitary.CountryMilitaryNavy.ForEach(navalGroup =>
+        GameManager.GameMapManager.GamePlayerCountryManager.countryMilitary.CountryMilitaryNavy.ForEach(navalGroup =>
        {
-           //a new tab/naval group
-           var newItem = new AccordionItem();
-           newItem.ToggleObject.GetComponent<Text>().text = navalGroup.NavalGroupNam;
-           //the number of DDG in the group
-           var newNavalGroup = Instantiate(UIMilitaryInfoPanel.NavalGroupSizeTemplate);
-           //The container for all sizes
-           var navalGroupSize = Instantiate(UIMilitaryInfoPanel.NavalGroupContent);
-           //the list of ships go in here
-           var navalGroupTemplate = Instantiate(UIMilitaryInfoPanel.NavalGroupItemTemplate);
-           var newContainer = Instantiate(UIMilitaryInfoPanel.MilitaryNavyContainer);
-
+           var newTab = new AccordionItem();
+           UIMilitaryInfoPanel.NavalGroups.DataSource.Add(newTab);
            var listOfDistinceClasses = navalGroup.Ships.Distinct().Select(ship => ship.BaseSeaType);
+           var newCountContainer = Instantiate(UIMilitaryInfoPanel.NavalGroupContent);
+           var newTabContainer = Instantiate(UIMilitaryInfoPanel.NavalGroupItemTemplate);
+           var newMilitaryContainer = Instantiate(UIMilitaryInfoPanel.MilitaryNavyContainer);
+
+           var newTabHeader = Instantiate(UIMilitaryInfoPanel.NavalGroupHeader);
+           newTab.ContentObject = newTabContainer;
+           newTab.ToggleObject = newTabHeader;
+
+
            listOfDistinceClasses.ForEach(typeOf =>
            {
-               var groupNavalTextList = newNavalGroup.GetComponentsInChildren<Text>();
+               var newTabPanel = Instantiate(UIMilitaryInfoPanel.NavalGroupSizeTemplate);
+               var groupNavalTextList = newTabPanel.GetComponentsInChildren<Text>();
                var totalOfThatType = navalGroup.Ships.Count(ship => ship.BaseSeaType == typeOf);
                groupNavalTextList[0].text = typeOf.ToDescription();
                groupNavalTextList[1].text = totalOfThatType.ToString();
+               newTabPanel.transform.SetParent(newCountContainer.transform);
            });
-           newNavalGroup.transform.SetParent(navalGroupSize.transform);
-           navalGroupSize.transform.SetParent(newItem.ContentObject.transform);
-           UIMilitaryInfoPanel.NavalGroups.DataSource.Add(newItem);
 
-
+           newCountContainer.transform.SetParent(newTabContainer.transform);
+           newTabContainer.transform.SetParent(UIMilitaryInfoPanel.NavalGroups.transform);
        });
         StartCoroutine("DrawPlayerShips");
         yield return new WaitForEndOfFrame();
