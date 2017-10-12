@@ -87,17 +87,17 @@ namespace Assets
         }
         public static WMSK map = WMSK.instance;
         public ForcesFactory ForcesFactory;
-        
+
         public Sprite DeckIconImage(DeckRank rank, DeckManager deckManager)
         {
-          
+
             var deckIcon = new Texture2D(32, 32);
             switch (rank)
             {
                 case DeckRank.Rank1:
-                    
+
                     return Sprite.Create(deckManager.Rank1Icon, new Rect(0.0f, 0.0f, deckManager.Rank1Icon.width, deckManager.Rank1Icon.height), new Vector2(0.5f, 0.5f), 100.0f);
-                    
+
                 case DeckRank.Rank2:
                     return Sprite.Create(deckManager.Rank2Icon, new Rect(0.0f, 0.0f, deckManager.Rank1Icon.width, deckManager.Rank1Icon.height), new Vector2(0.5f, 0.5f), 100.0f);
                 case DeckRank.Rank3:
@@ -124,23 +124,9 @@ namespace Assets
                 DeckCurrentWorldLocation = map.GetProvince(DeckLocationName, DeckLocationContinent).center,
                 //DeckIcon = DeckType,
                 //DisplayDeckNameCountryFlag = deckFlag,
-                DeckFuel = 0,
-                DeckAmmo = 0,
-                DeckHealth = 0,
                 UnitDeckRank = DeckRank.Rank0,
                 //UnitDeckRankIcon = DeckIconName(DeckRank.Rank0),
-                MaxDeploymentScore = 0,
-                UnitSummaryArtillerySum = 0,
-                UnitSummaryHeloSum = 0,
-                UnitSummaryInfantrySum = 0,
-                UnitSummaryJetsSum = 0,
-                UnitSummaryLogSum = 0,
-                UnitSummaryRebelsSum = 0,
-                UnitSummaryReconSum = 0,
-                UnitSummaryShipsSubsSum = 0,
-                UnitSummarySpecialOpsSum = 0,
-                UnitSummaryTanksSum = 0,
-                UnitSummaryUnmannedSum = 0,
+                MaxDeploymentScore = 0
             };
         }
 

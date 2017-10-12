@@ -9,65 +9,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b464b783d40c7e246bb6a98089e049ec, type: 3}
-  m_Name: New DeckDataItem
+  m_Name: 75th Ranagers
   m_EditorClassIdentifier: 
-  CurrentDeploymentScore: 0
   DeckDestination: {x: 0, y: 0}
-  DeckName: 
-  DeckTimeEra: 0
+  DeckName: 75th Rangers
+  DeckLocation: 
+  DeckStatus: 
+  DeckTimeEra: 3
   DeckType: 0
   DeckCurrentWorldLocation: {x: 0, y: 0}
-  DeckLocaledProvince:
-    index: 0
-    name: 
-    countryIndex: 0
-    population: 0
-    urbanRate: 0
-    provinceTaxRate: 0
-    provinceRuleOfLaw: 0
-    provinceCulturalValue: 0
-    provinceHumanSecurity: 0
-    provinceEconomicDevelopment: 0
-    SantiationIndex: 0
-    WaterSupplyIndex: 0
-    FoodSUpplyIndex: 0
-    MedicalCareIndex: 0
-    ElectricitySupplyIndex: 0
-    InternetAccessIndex: 0
-    location: {x: 0, y: 0}
-    ProvinceControl: 0
-    ProvinceRebelControl: 0
-    regionCaptialLocation: {x: 0, y: 0}
-    flagowner: {fileID: 0}
-    provinceInfrastructure: []
-    LocalRebelGroups: []
-    RebelCamps: 0
-    LocalTerroristGroups: []
-    TerroristCamps: 0
-    ProvinceCities: []
-    ProvincePoliticalParties: []
-    ProvinceDeomgraphicGroups: []
-    IsUprising: 0
-    UprisingStarted: 0
-    UprsiningEnded: 0
   DeckIcon: {fileID: 0}
   DisplayDeckNameCountryFlag: {fileID: 0}
-  DeckFuel: 0
-  DeckAmmo: 0
-  DeckHealth: 0
+  DeckUnits: 20
+  DeckMaxUnits: 20
   UnitDeckRank: 0
   UnitDeckRankIcon: {fileID: 0}
   MaxDeploymentScore: 0
-  UnitSummaryArtillerySum: 0
-  UnitSummaryHeloSum: 0
-  UnitSummaryInfantrySum: 0
-  UnitSummaryJetsSum: 0
-  UnitSummaryLogSum: 0
-  UnitSummaryRebelsSum: 0
-  UnitSummaryReconSum: 0
-  UnitSummaryShipsSubsSum: 0
-  UnitSummarySpecialOpsSum: 0
-  UnitSummaryTanksSum: 0
-  UnitSummaryUnmannedSum: 0
+  CurrentDeploymentScore: 0
   VehiclesInDeck: []
   DeckCommander: {fileID: 0}

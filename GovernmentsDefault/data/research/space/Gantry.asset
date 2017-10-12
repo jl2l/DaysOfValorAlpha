@@ -28,5 +28,5 @@ MonoBehaviour:
   DaysToResearch: 0
   RequiredTech: []
   ResearchPoints: 0
-  ParentResearch: {fileID: 0}
+  ParentResearch: {fileID: 11400000, guid: d7d20c893057ec344b5ed869a5357f18, type: 2}
   ChildrenResearch: []

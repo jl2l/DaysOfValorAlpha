@@ -9,11 +9,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b464b783d40c7e246bb6a98089e049ec, type: 3}
-  m_Name: New DeckDataItem
+  m_Name: 101st Airborne
   m_EditorClassIdentifier: 
   CurrentDeploymentScore: 0
   DeckDestination: {x: 0, y: 0}
-  DeckName: 
+  DeckName: custom deck name
   DeckTimeEra: 0
   DeckType: 0
   DeckCurrentWorldLocation: {x: 0, y: 0}

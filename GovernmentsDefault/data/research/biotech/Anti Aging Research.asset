@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b17894a85fe26b24a9325e7c270f6b9f, type: 3}
+  m_Name: Anti Aging Research
+  m_EditorClassIdentifier: 
+  ResearchName: Anti Aging Cure
+  ResearchDescription: By modifiy the DNA of humans using retrovirus and then manintaing
+    them with a vast network of nanobots humans have sucessfully defeated the aging
+    process. This has giant socialecomnic effects in your society and will likely
+    result in increase populations and your citizens living hundreds of years.
+  ResearchIcon: {fileID: 0}
+  ResearchSector: 5
+  AssignedResearchAgent: {fileID: 0}
+  UnlockVehicles: []
+  UnlockWeapons: []
+  UnlockSensors: []
+  UnlocksResources: []
+  Tier: 2
+  ResearchWorldEvent: {fileID: 0}
+  ResearchTriggersIntelEvent: {fileID: 0}
+  IsRootNode: 0
+  IsResearchKnownToPlayer: 0
+  DaysToResearch: 14000
+  RequiredTech:
+  - {fileID: 11400000, guid: 96ae86a6f46cde44183753a10fa0fcc9, type: 2}
+  - {fileID: 11400000, guid: 234cd287d2379424faae526419c3aa81, type: 2}
+  - {fileID: 11400000, guid: a9814d7e32474b546a27edbba5fd2276, type: 2}
+  - {fileID: 11400000, guid: 967a9f0d9824e384784e943dd3641824, type: 2}
+  ResearchPoints: 0
+  ParentResearch: {fileID: 11400000, guid: a9814d7e32474b546a27edbba5fd2276, type: 2}
+  ChildrenResearch: []

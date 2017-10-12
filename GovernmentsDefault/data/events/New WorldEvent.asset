@@ -11,8 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b0c3852c1f8bf47b3b7575fb279893, type: 3}
   m_Name: New WorldEvent
   m_EditorClassIdentifier: 
-  EventName: 
-  EventDescription: 
+  EventName: Cure For Aging
+  EventDescription: The {Country} has discovered the cure for aging, its citizens
+    are the envy of the world living into the hundreds of years.
   StartTime: 
   EventInCountry:
     index: 0
