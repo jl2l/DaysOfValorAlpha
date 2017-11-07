@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71718c565988d5649a540cedfff7e9b5, type: 3}
+  m_Name: Vrigina Class Multi-Mission
+  m_EditorClassIdentifier: 
+  Name: Virgina Class Land Attack
+  MaxWeaponsPayload: 2
+  WeaponsStations:
+  - UsesBullets: 0
+    MaxBullets: 0
+    ConfigWeapons:
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    WeaponsStationType: 3
+  - UsesBullets: 0
+    MaxBullets: 0
+    ConfigWeapons:
+    - {fileID: 11400000, guid: 52a851cdd6a96b94bb0cb710a71cbf7d, type: 2}
+    - {fileID: 11400000, guid: 52a851cdd6a96b94bb0cb710a71cbf7d, type: 2}
+    - {fileID: 11400000, guid: 52a851cdd6a96b94bb0cb710a71cbf7d, type: 2}
+    - {fileID: 11400000, guid: 52a851cdd6a96b94bb0cb710a71cbf7d, type: 2}
+    - {fileID: 11400000, guid: 52a851cdd6a96b94bb0cb710a71cbf7d, type: 2}
+    - {fileID: 11400000, guid: 52a851cdd6a96b94bb0cb710a71cbf7d, type: 2}
+    - {fileID: 11400000, guid: 52a851cdd6a96b94bb0cb710a71cbf7d, type: 2}
+    - {fileID: 11400000, guid: 52a851cdd6a96b94bb0cb710a71cbf7d, type: 2}
+    - {fileID: 11400000, guid: 5e9f799085185fc4abfe46edd9287ffd, type: 2}
+    - {fileID: 11400000, guid: 5e9f799085185fc4abfe46edd9287ffd, type: 2}
+    - {fileID: 11400000, guid: 5e9f799085185fc4abfe46edd9287ffd, type: 2}
+    - {fileID: 11400000, guid: 5e9f799085185fc4abfe46edd9287ffd, type: 2}
+    - {fileID: 11400000, guid: 5e9f799085185fc4abfe46edd9287ffd, type: 2}
+    - {fileID: 11400000, guid: 5e9f799085185fc4abfe46edd9287ffd, type: 2}
+    - {fileID: 11400000, guid: 5e9f799085185fc4abfe46edd9287ffd, type: 2}
+    - {fileID: 11400000, guid: 5e9f799085185fc4abfe46edd9287ffd, type: 2}
+    - {fileID: 11400000, guid: 5e9f799085185fc4abfe46edd9287ffd, type: 2}
+    - {fileID: 11400000, guid: 5e9f799085185fc4abfe46edd9287ffd, type: 2}
+    - {fileID: 11400000, guid: 5e9f799085185fc4abfe46edd9287ffd, type: 2}
+    - {fileID: 11400000, guid: 5e9f799085185fc4abfe46edd9287ffd, type: 2}
+    - {fileID: 11400000, guid: 5e9f799085185fc4abfe46edd9287ffd, type: 2}
+    - {fileID: 11400000, guid: 5e9f799085185fc4abfe46edd9287ffd, type: 2}
+    - {fileID: 11400000, guid: 5e9f799085185fc4abfe46edd9287ffd, type: 2}
+    - {fileID: 11400000, guid: 5e9f799085185fc4abfe46edd9287ffd, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    - {fileID: 11400000, guid: 5e40dd2dd514dc4479f0bf9068954ca8, type: 2}
+    WeaponsStationType: 0

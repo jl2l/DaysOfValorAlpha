@@ -740,7 +740,7 @@ public class MapManager : MonoBehaviour
         {
             timeOfDay = 0;
             GameDisplayDate = GameDisplayDate.AddDays(1);
-
+            FindObjectOfType<GameManager>().GameResearchManager.UpdateResearchProgressForDay();
             if (OldMonth != GameDisplayDate.Month)
             {
                 //WorldManager.CountryPlayerManagerGameObject.GetComponent<CountryManager>().countryBudget.ProcessBudgetMonth();

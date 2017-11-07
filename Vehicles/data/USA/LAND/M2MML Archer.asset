@@ -1,0 +1,112 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d61af66dbc6a7f849bb6a4cb4ea3ea66, type: 3}
+  m_Name: M2MML Archer
+  m_EditorClassIdentifier: 
+  IndefiniteArticle: a missile tank
+  DisplayName: M2MML Archer
+  Description: 
+  ClassIcon: {fileID: 0}
+  MapIcon: {fileID: 0}
+  Model: {fileID: 101258, guid: 120450fceda628e4b9b57c77650c6f68, type: 3}
+  LowPolyModel: {fileID: 0}
+  MenuIcon: {fileID: 2800000, guid: aa3aa8ec2334fd44a928461dd1f13df8, type: 3}
+  Space: 34
+  VehicleArmor:
+  - {fileID: 11400000, guid: b6fdc914f5590344bb44c0950511ac16, type: 2}
+  - {fileID: 11400000, guid: 3ea8803a91582a247b2380065b741bf1, type: 2}
+  - {fileID: 11400000, guid: 9afac2affb26ad1408f4d93af7259118, type: 2}
+  - {fileID: 11400000, guid: 8a8c3220a842482448ffc893afdb2d31, type: 2}
+  VehicleSensors:
+  - {fileID: 11400000, guid: 746386131be8b14498cd4501f20f44c7, type: 2}
+  - {fileID: 11400000, guid: e24d4501abdf90d45a27a6adaf9bf245, type: 2}
+  - {fileID: 11400000, guid: d80025ae2210940449abc1afce79f741, type: 2}
+  VehicleWeapons:
+  - {fileID: 11400000, guid: aa4d88ae5a382594bb929bbc1a133c52, type: 2}
+  - {fileID: 11400000, guid: e1cc968373c4e694ab10385ac59af36a, type: 2}
+  - {fileID: 11400000, guid: 92d0375899fd51142bc211eee774e031, type: 2}
+  GroundVehicles: []
+  Aircraft: []
+  BaseAirType: 0
+  AircraftType: 0
+  FlightSpeed: 0
+  FlightCombatRadius: 0
+  FlightTransportRange: 0
+  SelfDesignate: 0
+  IsStealth: 0
+  IsAirTransport: 0
+  IsAirfueling: 0
+  IsAirborneReArming: 0
+  HasInternalGun: 0
+  GunAmmo: 0
+  JetFuelGallons: 0
+  HasTurret: 0
+  IsLandVehicle: 1
+  BaseGroundType: 5
+  GroundVehicleType: 16
+  CrewNumber: 2
+  OfficerNumber: 0
+  Length: 6
+  Height: 3
+  Width: 3
+  EmptyWeight: 30
+  LoadedWeight: 36
+  Powerplant:
+    PowerGeneration: 227
+    Name: Diesel
+    NumberOf: 1
+    TypeOfPower: 1
+  ProgramName: 
+  TotalNumberBuilt: 0
+  CountryOfOriginFlag: {fileID: 2800000, guid: 14c79d6609aae4246a78c54e243dbf97, type: 3}
+  CountryOfOrigin: 
+  CountryOfOriginIndex: 0
+  Name: 
+  TroopCarryTotal: 0
+  HasStablizer: 0
+  Year: 
+  Value: 0
+  Strength: 0
+  Ecm: 0
+  Generation: 4
+  FuelRange: 0
+  FuelMax: 0
+  Size: 0
+  Instability: 0
+  Rcs: 0
+  ThermalRating: 0
+  TargetTime: 0
+  PilotExp: 0
+  Cost: 0
+  UnitSize: 0
+  HasFCS: 0
+  IsInfantry: 0
+  IsCapturing: 0
+  SquadSize: 0
+  InfType: 0
+  IsLogistical: 0
+  Resupply: 0
+  MaxResupply: 0
+  LogisticVehicleType: 0
+  BaseSeaType: 0
+  SeacraftType: 0
+  IsDeckFlagShip: 0
+  SeacraftTypeName: 
+  ShipSonarPreceptionRange: 0
+  ShipSonarArrayGain: 0
+  ShipNoiseLevel: 0
+  IsShip: 0
+  IsASW: 0
+  IsSSK: 0
+  IsSub: 0
+  IsCarrier: 0
+  IsTransport: 0
+  IsNuclearPower: 0

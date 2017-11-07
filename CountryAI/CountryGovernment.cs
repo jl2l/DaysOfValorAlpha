@@ -279,7 +279,7 @@ public class CountryGovernment : ScriptableObject
     [Range(0f, 10.00f)]
     public float FeedomIndex;
     public CountryFreedomIndex CountryFreedomIndex;
-
+    public CountryToGlobalCountry.DevelopmentTier CountryDevelopmentTier;
     public CountryGovernmentTypes GovernmentType;
     [Tooltip("If you want to use the historic bias to build up the country allies and rivals")]
     public CountryBias GovernmnetBias;

@@ -1,0 +1,109 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d61af66dbc6a7f849bb6a4cb4ea3ea66, type: 3}
+  m_Name: M109 Paldin
+  m_EditorClassIdentifier: 
+  IndefiniteArticle: a self propelled artillery gun
+  DisplayName: M109A1 Paladin
+  Description: 
+  ClassIcon: {fileID: 2800000, guid: 4445d7fb9ff3e70498bbbeb897962298, type: 3}
+  MapIcon: {fileID: 2800000, guid: db17ebda227776345875b7131149bcba, type: 3}
+  Model: {fileID: 100018, guid: 45d701c47ebc8f246bda687c6e3ed07f, type: 3}
+  LowPolyModel: {fileID: 0}
+  MenuIcon: {fileID: 2800000, guid: 5767de4824f74f943b856811b5634692, type: 3}
+  Space: 27
+  VehicleArmor:
+  - {fileID: 11400000, guid: b6fdc914f5590344bb44c0950511ac16, type: 2}
+  - {fileID: 11400000, guid: 9afac2affb26ad1408f4d93af7259118, type: 2}
+  - {fileID: 11400000, guid: 3ea8803a91582a247b2380065b741bf1, type: 2}
+  - {fileID: 11400000, guid: 8a8c3220a842482448ffc893afdb2d31, type: 2}
+  VehicleSensors:
+  - {fileID: 11400000, guid: e24d4501abdf90d45a27a6adaf9bf245, type: 2}
+  - {fileID: 11400000, guid: 6bb1d232098ef3844815f9a646483fbc, type: 2}
+  VehicleWeapons:
+  - {fileID: 11400000, guid: 46452f1d290d7ac4c930b2b636c8bc99, type: 2}
+  GroundVehicles: []
+  Aircraft: []
+  BaseAirType: 0
+  AircraftType: 0
+  FlightSpeed: 0
+  FlightCombatRadius: 0
+  FlightTransportRange: 0
+  SelfDesignate: 0
+  IsStealth: 0
+  IsAirTransport: 0
+  IsAirfueling: 0
+  IsAirborneReArming: 0
+  HasInternalGun: 0
+  GunAmmo: 0
+  JetFuelGallons: 0
+  HasTurret: 1
+  IsLandVehicle: 1
+  BaseGroundType: 5
+  GroundVehicleType: 10
+  CrewNumber: 5
+  OfficerNumber: 1
+  Length: 7
+  Height: 4
+  Width: 4
+  EmptyWeight: 27
+  LoadedWeight: 31
+  Powerplant:
+    PowerGeneration: 447
+    Name: Diesel
+    NumberOf: 1
+    TypeOfPower: 1
+  ProgramName: 
+  TotalNumberBuilt: 0
+  CountryOfOriginFlag: {fileID: 2800000, guid: 14c79d6609aae4246a78c54e243dbf97, type: 3}
+  CountryOfOrigin: US
+  CountryOfOriginIndex: 0
+  Name: M109 Paladin
+  TroopCarryTotal: 0
+  HasStablizer: 0
+  Year: 1991
+  Value: 6
+  Strength: 560
+  Ecm: 0
+  Generation: 4
+  FuelRange: 0
+  FuelMax: 99
+  Size: 4
+  Instability: 0
+  Rcs: 0
+  ThermalRating: 0
+  TargetTime: 0
+  PilotExp: 0
+  Cost: 0
+  UnitSize: 3
+  HasFCS: 1
+  IsInfantry: 0
+  IsCapturing: 0
+  SquadSize: 0
+  InfType: 0
+  IsLogistical: 0
+  Resupply: 0
+  MaxResupply: 0
+  LogisticVehicleType: 0
+  BaseSeaType: 0
+  SeacraftType: 0
+  IsDeckFlagShip: 0
+  SeacraftTypeName: 
+  ShipSonarPreceptionRange: 0
+  ShipSonarArrayGain: 0
+  ShipNoiseLevel: 0
+  IsShip: 0
+  IsASW: 0
+  IsSSK: 0
+  IsSub: 0
+  IsCarrier: 0
+  IsTransport: 0
+  IsNuclearPower: 0

@@ -41,7 +41,8 @@ namespace Assets
             Internal,
             WingTip
         }
-
+        public bool UsesBullets;
+        public int MaxBullets;
         public List<Weapon> ConfigWeapons;
         public PointType WeaponsStationType;
     }
@@ -169,6 +170,9 @@ namespace Assets
         Processor,
         Chemical,
         Lidar,
+        NightVision,
+        DataLink,
+
     }
 
     /// <summary>
@@ -641,12 +645,19 @@ namespace Assets
 
     public enum BaseGroundType
     {
+        [Description("None")]
         None,
+        [Description("Logistic Vehicle")]
         Log,
+        [Description("Light Vehicle")]
         X4,
+        [Description("Infantry Carry Vehicles")]
         APC,
+        [Description("Armored Vehicles")]
         TANK,
+        [Description("Indirect Fire Vehicles")]
         Artillery,
+        [Description("Support Vehicle")]
         Misc
 
     }

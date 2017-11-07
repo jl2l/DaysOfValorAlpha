@@ -22,13 +22,23 @@ public class CountryToGlobalCountry
     }
 
 
+    public enum DevelopmentTier
+    {
+        Any,
+        Underdeveloped,
+        Developed,
+        HighlyDeveloped,
+        Advanced
+    }
+
     public enum MapLevelType
     {
 
         City,
         Province,
         State,
-        World
+        World,
+        Local
     }
 
     /// <summary>
@@ -644,6 +654,7 @@ public class CountryToGlobalCountry
         public Texture2D flagowner = null;
         public Texture2D CityTypeIcon;
         public CityType CityType;
+        public DevelopmentTier CityDevelopmentTier;
         public List<Tuple<SectorManager.Sectors, long>> ProductionSectors;
         public List<GenericCountryInfrastructure> cityInfrastructure;
         public bool isRegionalCaptial;
@@ -834,7 +845,7 @@ public class CountryToGlobalCountry
         public long FundingCost;
         public long ConstructionCost;
         public int ConstructionTimeInDays;
-
+        public DevelopmentTier RequiredDevelopmentTier;
         public Vector2 location;
         public Texture2D icon;
         public Texture2D marker;

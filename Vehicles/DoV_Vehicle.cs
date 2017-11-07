@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-
+using UnityEngine.UI;
 
 [System.Serializable]
 public class DoV_Vehicle : ScriptableObject
@@ -115,6 +115,7 @@ public class DoV_Vehicle : ScriptableObject
     public Powerplant Powerplant;
     public string ProgramName;
     public int TotalNumberBuilt;
+    public Texture2D CountryOfOriginFlag;
     public string CountryOfOrigin;
     public int CountryOfOriginIndex;
     public string Name;
@@ -143,7 +144,7 @@ public class DoV_Vehicle : ScriptableObject
     /// units ability to resist jamming the higher 1 the more likely you are to resisit, if you have low 0.20 you will get jammed
     /// </summary>
     [Tooltip("units ability to resist jamming the higher 1 the more likely you are to resisit, if you have low 0.20 you will get jammed")]
-    [Range(-100.0f, 100.0f)]
+    [Range(0.0f, 1.0f)]
     public float Ecm;
     /// <summary>
     /// what generations it is
@@ -154,7 +155,7 @@ public class DoV_Vehicle : ScriptableObject
     /// How fast it burns through fuel rate would be to move at top speed
     /// </summary>
     [Tooltip("How fast it burns through fuel rate would be to move at top speed")]
-    [Range(1.0f, 100.0f)]
+    [Range(0.0f, 1.0f)]
     public float FuelRange;
     /// <summary>
     /// How much fuel points is can carry total
@@ -169,13 +170,13 @@ public class DoV_Vehicle : ScriptableObject
     ///how unstablity the unit is 1 being very stable, for vehicles and ships stabiliy is good, for aircraft its bad, aircraft with lower 0 are more manurable
     /// </summary>
     [Tooltip("how unstablity the unit is 1 being very stable, for vehicles and ships stabiliy is good, for aircraft its bad, aircraft with lower 0 are more manurable")]
-    [Range(-100.0f, 100.0f)]
+    [Range(0.0f, 1.0f)]
     public float Instability;
     /// <summary>
     /// How easily it can be detected 1 equals will always be detected
     /// </summary>
     [Tooltip("How easy it can be detect by radar 1 = always 0 = hidden ie F-22 0.022 rcs")]
-    [Range(-100.0f, 100.0f)]
+    [Range(0.0f, 1.0f)]
     public float Rcs;
     /// <summary>
     /// How far ingame radius it can detect something
@@ -194,13 +195,14 @@ public class DoV_Vehicle : ScriptableObject
     /// How well the vehicle is protected against FLIR 1 = visible to Flir / 0 = nothing 
     /// </summary>
     [Tooltip("how detectable it is to IR, 1 = visible 0 = hidden")]
-    [Range(-100.0f, 100.0f)]
+    [Range(0.0f, 1.0f)]
     public float ThermalRating;
     /// <summary>
     /// how long once it detects something it can shoot at it in seconds
     /// </summary>
     [Tooltip("How long it takes the ship to fire at something once it detects it")]
-    public int TargetTime;
+    [Range(0.0f, 1.0f)]
+    public float TargetTime;
     /// <summary>
     /// The diffculty of the object to be piloted in using the weapon modifier to the Weapons Relibility rate for Ships set to 0, vehicles or aircraft %
     /// </summary>

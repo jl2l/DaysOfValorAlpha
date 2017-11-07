@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70c4519c0303bee468752f51cc833f40, type: 3}
+  m_Name: AIM-92 Stinger Missile
+  m_EditorClassIdentifier: 
+  WeaponRangeGround: 0
+  WeaponRangeAirLow: 4800
+  WeaponRangeAirHigh: 8600
+  ThreatRange: 1
+  TechLevel: 6
+  WeaponReliablity: 0
+  WeaponSpeed: 750
+  WeaponResistance: 79.7
+  WeaponRateOfFire: 1
+  IsNuclearWeapon: 0
+  NuclearPayload: 0
+  WeaponName: Stinger Missile
+  WeaponIconName: {fileID: 0}
+  WeaponModel: {fileID: 0}
+  WeaponAmmoName: 3kg HE blast
+  WeaponAP: 0
+  WeaponHE: 2
+  WeaponsRemaining: 1
+  MaxNumWeaponsRemaining: 1
+  GroundWeaponType: 54
+  SeaWeaponType: 0
+  AirWeaponType: 0
+  WeaponPerks: 03000000
+  WarheadSize: 2
+  warheadType: 040000000b000000
+  PurchaseCost: 38
+  RepairCost: 5
+  RearmCost: 5
+  CountryOfOrigin: US
