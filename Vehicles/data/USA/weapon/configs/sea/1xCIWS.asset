@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71718c565988d5649a540cedfff7e9b5, type: 3}
+  m_Name: 1xCIWS
+  m_EditorClassIdentifier: 
+  Name: 1 x CIWS
+  MaxWeaponsPayload: 2
+  WeaponsStations:
+  - UsesBullets: 0
+    MaxBullets: 0
+    ConfigWeapons:
+    - {fileID: 11400000, guid: 4524978c07c93824183adebc9f76dcc8, type: 2}
+    WeaponsStationType: 1

@@ -24,6 +24,7 @@ public class WorldManager : MonoBehaviour
     public List<CityData> WorldCityData;
     public MapManager GameMapManager;
     public MilitaryManager GameMilitaryManager;
+
     public Sprite CapitalIcon;
     public Sprite MilitaryBaseIcon;
     public Sprite FOBIcon;
@@ -92,6 +93,14 @@ public class WorldManager : MonoBehaviour
 
     public void InitalizeUnknowCity(string cityName, CountryToGlobalCountry.GenericCity cityData) { }
     public void GenerateNewCity(string cityName, CountryToGlobalCountry.GenericCity cityData) { }
+
+    IEnumerator SetPlayerResearch(List<ResearchItem> startingResearch, CountryGovernment gov)
+    {
+
+        FindObjectOfType<ResearchManager>().SetResearchFromCountry(startingResearch, gov);
+
+        yield return new WaitForEndOfFrame();
+    }
 
     IEnumerator IntializeWorld(List<CountryGovernment> WorldGovernments)
     {
@@ -178,6 +187,8 @@ public class WorldManager : MonoBehaviour
                         newCountrySectoryManager.transform.SetParent(newCountry.transform);
                         newCountry.transform.SetParent(CountryPlayerManagerGameObject.transform);
                         GameMapManager.GamePlayerCountryManager = newCountryManagerSetup;
+
+                        StartCoroutine(SetPlayerResearch(newCountryManagerSetup.CountryGovernment.CountryKnownResearch, newCountryManagerSetup.CountryGovernment));
                     }
                 }
 

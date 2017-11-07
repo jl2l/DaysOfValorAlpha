@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 300fed321b7a51e4ea13d331265a35b8, type: 3}
+  m_Name: M2A1 Gunner DayNightScope
+  m_EditorClassIdentifier: 
+  SensorName: M2A1 Gunner Day Night Optic
+  SensorType: 9
+  CountryOfOrigin: US
+  ThreatTrack: 1
+  MaxRange: 4500
+  TotalNumSensors: 1
+  MinRange: 10
+  SensorReliablity: 4.3
+  SensorResistance: 39.1
+  SensorWeight: 5
+  SensorPowerRate: 55
+  TechLevel: 6
+  IsAllWeather: 1
+  IsDayNight: 1
+  IsElectronicWarfare: 0
+  IsJammingDevice: 0
+  SensorSpectrum: 10
+  SensorDescription: 
+  IsActive: 0
+  IsJammed: 0

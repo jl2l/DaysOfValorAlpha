@@ -344,7 +344,22 @@ public class SectorManager : MonoBehaviour
         public ResourceType Type;
         public CountryLegalStatus LegalStatus;
 
+        // Declare the method signature of the delegate to call.
+        // For a void method with no parameters you could just use System.Action.
+        public delegate void RepaintAction();
 
+        // Declare the event to which editor code will hook itself.
+        public event RepaintAction WantRepaint;
+
+        // This private method will invoke the event and thus the attached editor code.
+        private void Repaint()
+        {
+            // If no handlers are attached to the event then don't invoke it.
+            if (WantRepaint != null)
+            {
+                WantRepaint();
+            }
+        }
     }
     #endregion
 

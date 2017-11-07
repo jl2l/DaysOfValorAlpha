@@ -98,6 +98,16 @@ MonoBehaviour:
     Inventory: 168
   - Vehicle: {fileID: 11400000, guid: 248b29789e84c474d9bd5880208695f4, type: 2}
     Inventory: 536
+  - Vehicle: {fileID: 11400000, guid: 8be3551a623cca94887534c66147b20b, type: 2}
+    Inventory: 84
+  - Vehicle: {fileID: 11400000, guid: e57a0dd81fb839244950f254df03a9c3, type: 2}
+    Inventory: 120
+  - Vehicle: {fileID: 11400000, guid: e6bda51573723154b8162d0dcd5847f3, type: 2}
+    Inventory: 2200
+  - Vehicle: {fileID: 11400000, guid: 8cfe2cd125503204e95160c0c2c7da01, type: 2}
+    Inventory: 80
+  - Vehicle: {fileID: 11400000, guid: 2f47ae6ce8e273c48aca0d0d6b6da0c4, type: 2}
+    Inventory: 200
   CountryStrategicForces:
   - {fileID: 11400000, guid: 1664d8cff183d2048b275bcd7da5fc8a, type: 2}
   - {fileID: 11400000, guid: 7b6b778ba9d3fda4daecf7987332ac34, type: 2}
