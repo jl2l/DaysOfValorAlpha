@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 300fed321b7a51e4ea13d331265a35b8, type: 3}
+  m_Name: TKN-3A RocketSight
+  m_EditorClassIdentifier: 
+  SensorName: custom air sensor
+  SensorType: 0
+  CountryOfOrigin: 
+  ThreatTrack: 0
+  MaxRange: 0
+  TotalNumSensors: 0
+  MinRange: 0
+  SensorReliablity: 0
+  SensorResistance: 0
+  SensorWeight: 0
+  SensorPowerRate: 0
+  TechLevel: 0
+  IsAllWeather: 0
+  IsDayNight: 0
+  IsElectronicWarfare: 0
+  IsJammingDevice: 0
+  SensorSpectrum: 0
+  SensorDescription: 
+  IsActive: 0
+  IsJammed: 0

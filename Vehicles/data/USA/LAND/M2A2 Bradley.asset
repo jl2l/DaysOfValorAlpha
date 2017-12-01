@@ -16,6 +16,7 @@ MonoBehaviour:
   Description: 
   ClassIcon: {fileID: 0}
   MapIcon: {fileID: 0}
+  OPFORIcon: {fileID: 0}
   Model: {fileID: 100040, guid: b4f1bef9d9faa9d439b7a818af5b6406, type: 3}
   LowPolyModel: {fileID: 0}
   MenuIcon: {fileID: 2800000, guid: 9c5202cb5245e55429ce967af150921e, type: 3}
@@ -43,10 +44,16 @@ MonoBehaviour:
   IsAirfueling: 0
   IsAirborneReArming: 0
   HasInternalGun: 0
-  GunAmmo: 0
   JetFuelGallons: 0
   HasTurret: 1
   IsLandVehicle: 1
+  DeployToFire: 0
+  HasCommanderTurret: 0
+  FireOnMove: 0
+  CanTargetMoving: 0
+  CanTargetStationary: 0
+  Amphibious: 0
+  AmphibiousIn: 0
   BaseGroundType: 3
   GroundVehicleType: 8
   CrewNumber: 3
@@ -77,10 +84,10 @@ MonoBehaviour:
   FuelRange: 0
   FuelMax: 1000
   Size: 3
-  Instability: 0
-  Rcs: 15.3
-  ThermalRating: 51.7
-  TargetTime: 4
+  Instability: 0.408
+  Rcs: 0.472
+  ThermalRating: 0.412
+  TargetTime: 0.416
   PilotExp: 0
   Cost: 2300
   UnitSize: 3

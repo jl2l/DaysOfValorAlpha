@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
-
     public BattleManager GameBattleManager;
     public WorldManager GameWorldManager;
     public CountryManager GamePlayerCountryManager;
@@ -15,7 +13,6 @@ public class GameManager : MonoBehaviour
     public IntelManager GameIntelManager;
     public UnitManager GameUnitManager;
     public MapManager GameMapManager;
-
     #region Game UI
     #endregion
     private static GameManager _instance;
@@ -39,7 +36,6 @@ public class GameManager : MonoBehaviour
         GameWorldManager = FindObjectOfType<WorldManager>();
         GameMapManager = FindObjectOfType<MapManager>();
         GamePlayerCountryManager = GameMapManager.GamePlayerCountryManager;
-
         GameBattleManager = FindObjectOfType<BattleManager>();
         GameCharacterManager = FindObjectOfType<CharacterManager>();
         GameDeckManager = FindObjectOfType<DeckManager>();
@@ -48,14 +44,12 @@ public class GameManager : MonoBehaviour
         GameResearchManager = FindObjectOfType<ResearchManager>();
         GameTradeManager = FindObjectOfType<TradeManager>();
         GameUnitManager = FindObjectOfType<UnitManager>();
-
-
         //DontDestroyOnLoad(transform.gameObject);
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        //Check for pause, and for switching between Garage and Map Agent States 
     }
 }

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 300fed321b7a51e4ea13d331265a35b8, type: 3}
+  m_Name: CROWS Turret Video Camera
+  m_EditorClassIdentifier: 
+  SensorName: 'CROWS Video Camera '
+  SensorType: 13
+  CountryOfOrigin: US
+  ThreatTrack: 1
+  MaxRange: 2000
+  TotalNumSensors: 1
+  MinRange: 10
+  SensorReliablity: 92.4
+  SensorResistance: 90.3
+  SensorWeight: 36
+  SensorPowerRate: 100
+  TechLevel: 8
+  IsAllWeather: 0
+  IsDayNight: 0
+  IsElectronicWarfare: 0
+  IsJammingDevice: 0
+  SensorSpectrum: 0
+  SensorDescription: 
+  IsActive: 0
+  IsJammed: 0

@@ -65,7 +65,8 @@ public class GarageManager : MonoBehaviour
     public List<GameObject> VehicleClasses;
     public List<GarageClickAirUnit> Vehicles;
     public List<DoV_Vehicle> VehiclesToLoad;
-
+    public DoV_CombatVehicle SelectedDoV_CombatVehicle;
+    public DoV_Vehicle SelectedDoV_Vehicle;
     public void SetButtons()
     {
 
@@ -108,7 +109,7 @@ public class GarageManager : MonoBehaviour
             newVehicle.gameObject.transform.SetParent(VehicleListOfUnits.transform);
         });
         VehicleButtonTemplate.SetActive(false);
-
+        DisplayGarageName.text = drawType.ToDescription().ToUpper();
         yield return new WaitForEndOfFrame();
     }
     public void OpenLandGarage()
@@ -159,12 +160,18 @@ public class GarageManager : MonoBehaviour
         var statsPanel = FindObjectOfType<StatsInfoPanel>();
         var statsCube = FindObjectOfType<StatsCubePanel>();
         var sensorPanel = FindObjectOfType<SensorPanel>();
+        var weaponsconfig = FindObjectOfType<WeaponsConfigPanel>();
+
 
         sensorPanel.Vehicle = statsCube.Vehicle = statsPanel.Vehicle = DoV;
+        SelectedDoV_Vehicle = DoV;
+        SelectedDoV_CombatVehicle = FindObjectOfType<DoV_CombatVehicle>();
+        SelectedDoV_CombatVehicle.Vehicle = DoV;
 
-        statsCube.SetStats();
+        statsCube.SetStats(DoV);
         statsPanel.SetStats();
         sensorPanel.SetSensorPanel();
+        weaponsconfig.SetTabWeaponConfig();
         VehicleListPanel.SetActive(false);
     }
 
@@ -181,4 +188,13 @@ public class GarageManager : MonoBehaviour
     public void OnCountryChange() { }
 
     public void NextUnityClass() { }
+
+    public void ToggleWeapons()
+    {
+        // FindObjectOfType<DoV_CombatVehicle>().game
+    }
+    public void ToggleArmor()
+    {
+
+    }
 }

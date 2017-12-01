@@ -22,6 +22,7 @@ public class DoV_Vehicle : ScriptableObject
     public string Description;
     public Texture2D ClassIcon;
     public Texture2D MapIcon;
+    public Texture2D OPFORIcon;
     public GameObject Model;
     public GameObject LowPolyModel;
     public Texture2D MenuIcon;
@@ -67,8 +68,6 @@ public class DoV_Vehicle : ScriptableObject
     public bool IsAirborneReArming;
     public bool HasInternalGun;
 
-    public int GunAmmo;
-
 
 
     //one gallon of jet fuel should weigh 6.7 lbs
@@ -84,6 +83,19 @@ public class DoV_Vehicle : ScriptableObject
     [Tooltip("Tanks/IFV have turrets")]
     public bool HasTurret;
     public bool IsLandVehicle = true;
+    [Tooltip("Stops and plays animation before firing")]
+    public bool DeployToFire;
+    [Tooltip("Tanks/IFV have commander turrets can target another enemy while it reloads ")]
+    public bool HasCommanderTurret;
+    [Tooltip("Tanks/IFV can move and shoot")]
+    public bool FireOnMove;
+    [Tooltip("Tanks/IFV can hit moving targets artillery not so much")]
+    public bool CanTargetMoving;
+    [Tooltip("Artillery/missiles can hit a stationary target or bunker")]
+    public bool CanTargetStationary;
+
+    public bool Amphibious;
+    public SeaState AmphibiousIn;
     public BaseGroundType BaseGroundType;
     public GroundVehicleType GroundVehicleType;
 
@@ -147,7 +159,7 @@ public class DoV_Vehicle : ScriptableObject
     [Range(0.0f, 1.0f)]
     public float Ecm;
     /// <summary>
-    /// what generations it is
+    /// what generations it is ie the tier
     /// </summary>
     [Tooltip("what generations it is")]
     public int Generation;

@@ -108,6 +108,8 @@ MonoBehaviour:
     Inventory: 80
   - Vehicle: {fileID: 11400000, guid: 2f47ae6ce8e273c48aca0d0d6b6da0c4, type: 2}
     Inventory: 200
+  - Vehicle: {fileID: 11400000, guid: 815ce8e78afe1c145ba0b4034440b15a, type: 2}
+    Inventory: 1600
   CountryStrategicForces:
   - {fileID: 11400000, guid: 1664d8cff183d2048b275bcd7da5fc8a, type: 2}
   - {fileID: 11400000, guid: 7b6b778ba9d3fda4daecf7987332ac34, type: 2}

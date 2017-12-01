@@ -296,7 +296,57 @@ public class Helper
     public BinomialDistribution DemographicDistribution;
 }
 
+public enum ArmorState
+{
+    ActiveDefenseOffline,
+    ActiveDefenseOnline,
+    ActiveDefenseDectecting,
+    ActiveDefenseHit,
+    ActiveDefenseMiss,
+    Damaged,
+    Destoryed
+}
+public enum SensorState
+{
+    IsJammed,
+    IsConfused,
+    IsTracking,
+    IsLockedOn,
+    IsTargeted
 
+}
+
+public enum WeaponState
+{
+    IsTracking,
+    IsLockedOn,
+    IsFiring,
+    IsReloading,
+    IsOutOfAmmo
+}
+public enum TurretState
+{
+    Idle,
+    IdleRotating,
+    Tracking,
+    LockedOn,
+}
+public enum MoveState
+{
+    [Description("no contact reported")]
+    Idle,
+    [Description("ready for orders")]
+    IdleStart,
+    [Description("orders confirmed")]
+    StartMoving,
+    [Description("on the move")]
+    Moving,
+    [Description("near target")]
+    PrepearToStop,
+    [Description("arrived at target")]
+    Stopped,
+
+}
 
 /// <summary>
 /// The country is usually backed by a reserve currency this is it

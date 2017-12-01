@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using WorldMapStrategyKit;
 using System.Linq;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class CityData : ScriptableObject
@@ -25,6 +26,7 @@ public class CityData : ScriptableObject
         location = fillCity.unity2DLocation;
 
     }
+    public RawImage CityIcon;
     public string provinceName;
     public long population;
     public Vector2 location;

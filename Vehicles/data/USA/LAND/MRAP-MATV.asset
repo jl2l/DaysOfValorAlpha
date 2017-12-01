@@ -1,0 +1,122 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d61af66dbc6a7f849bb6a4cb4ea3ea66, type: 3}
+  m_Name: MRAP-MATV
+  m_EditorClassIdentifier: 
+  IndefiniteArticle: a MRAP
+  DisplayName: MATV
+  Description: 
+  ClassIcon: {fileID: 2800000, guid: 4d219cef1b2fc244d80758541f1320b0, type: 3}
+  MapIcon: {fileID: 2800000, guid: 698e1f9a9f6ddd44b9e618da5bad61cd, type: 3}
+  OPFORIcon: {fileID: 2800000, guid: 63d7a8834eec54c4186598ef609e0866, type: 3}
+  Model: {fileID: 100000, guid: 952c820c537942442aa02eec3f2074ab, type: 3}
+  LowPolyModel: {fileID: 100000, guid: 0fd1598056c314eb78a26393214164cb, type: 3}
+  MenuIcon: {fileID: 2800000, guid: 9910a0386aa756348abd7154a8418242, type: 3}
+  Space: 14
+  VehicleArmor:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  VehicleSensors:
+  - {fileID: 11400000, guid: a18108ff2334ab14290eecbc68e0ab5a, type: 2}
+  - {fileID: 11400000, guid: 35c49c433989b094e8d128cb4b93487c, type: 2}
+  - {fileID: 11400000, guid: 01de1167cf286074b91b767a036648ec, type: 2}
+  VehicleWeapons:
+  - {fileID: 11400000, guid: de51b3823a8521b45b9080f9f70e74a3, type: 2}
+  - {fileID: 11400000, guid: 85bcfce03dd201c4c8471b6c397ed738, type: 2}
+  - {fileID: 11400000, guid: ddd49b260bca45143a03afda89ce9216, type: 2}
+  - {fileID: 11400000, guid: c0e7bf7e1891af6488eea6cc82b84b22, type: 2}
+  - {fileID: 11400000, guid: b9e26902a9ac47e45b3d13f2d042a8f6, type: 2}
+  GroundVehicles: []
+  Aircraft: []
+  BaseAirType: 0
+  AircraftType: 0
+  FlightSpeed: 0
+  FlightCombatRadius: 0
+  FlightTransportRange: 0
+  SelfDesignate: 0
+  IsStealth: 0
+  IsAirTransport: 0
+  IsAirfueling: 0
+  IsAirborneReArming: 0
+  HasInternalGun: 0
+  GunAmmo: 0
+  JetFuelGallons: 0
+  HasTurret: 0
+  IsLandVehicle: 1
+  DeployToFire: 0
+  HasCommanderTurret: 1
+  FireOnMove: 1
+  CanTargetMoving: 1
+  CanTargetStationary: 1
+  Amphibious: 0
+  AmphibiousIn: 0
+  BaseGroundType: 2
+  GroundVehicleType: 7
+  CrewNumber: 1
+  OfficerNumber: 0
+  Length: 5
+  Height: 3
+  Width: 3
+  EmptyWeight: 6400
+  LoadedWeight: 8900
+  Powerplant:
+    PowerGeneration: 224
+    Name: Duronmex
+    NumberOf: 1
+    TypeOfPower: 1
+  ProgramName: JTLV
+  TotalNumberBuilt: 1600
+  CountryOfOriginFlag: {fileID: 2800000, guid: 14c79d6609aae4246a78c54e243dbf97, type: 3}
+  CountryOfOrigin: US
+  CountryOfOriginIndex: 0
+  Name: L-ATV
+  TroopCarryTotal: 6
+  HasStablizer: 1
+  Year: 2016
+  Value: 300
+  Strength: 600
+  Ecm: 0.644
+  Generation: 5
+  FuelRange: 0.42
+  FuelMax: 300
+  Size: 2
+  Instability: 0.946
+  Rcs: 0.87
+  ThermalRating: 0.738
+  TargetTime: 0.484
+  PilotExp: 0
+  Cost: 430
+  UnitSize: 0
+  HasFCS: 1
+  IsInfantry: 0
+  IsCapturing: 0
+  SquadSize: 0
+  InfType: 0
+  IsLogistical: 0
+  Resupply: 0
+  MaxResupply: 0
+  LogisticVehicleType: 0
+  BaseSeaType: 0
+  SeacraftType: 0
+  IsDeckFlagShip: 0
+  SeacraftTypeName: 
+  ShipSonarPreceptionRange: 0
+  ShipSonarArrayGain: 0
+  ShipNoiseLevel: 0
+  IsShip: 0
+  IsASW: 0
+  IsSSK: 0
+  IsSub: 0
+  IsCarrier: 0
+  IsTransport: 0
+  IsNuclearPower: 0

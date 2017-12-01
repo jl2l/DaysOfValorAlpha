@@ -338,7 +338,10 @@ namespace Assets
         #region Constants
 
         #region Squad Names
-
+        public string GenerateSquadName(string[] squadNames)
+        {
+            return string.Format("{0} - {1}{2}", squadNames[UnityEngine.Random.Range(0, squadNames.Length)], UnityEngine.Random.Range(0, 9), UnityEngine.Random.Range(0, 9));
+        }
         public static string[] ChineseSquads =
       {
             // A Male names
