@@ -5,11 +5,12 @@ using Assets;
 using System;
 using UnityEngine.Events;
 using System.Linq;
+using WorldMapStrategyKit;
 
 public class CountryManager : MonoBehaviour
 {
     public GameAgent countryAmbassdor;
-
+    public WMSK wmslObj;
     public List<DemographicGroups> CountryPopulationGroups;
     public List<PoliticalParties> CountryPoliticalParties;
     public List<CountryLaw> CountryLaws;
@@ -30,10 +31,10 @@ public class CountryManager : MonoBehaviour
     public List<TerroristGroup> GovernmentTerroristGroups;
     public long CountryCash;
 
+    public bool IsMasterPlayerManager;
     public CharacterManager countryCharacterGenerator;
-    //public long 
+    public WorldMapStrategyKit.Country WMSKCountry;
 
-    //public CountryBudget countryBudget;
 
     public CountryManager()
     {
@@ -308,7 +309,7 @@ public class CountryManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        wmslObj = WMSK.instance;
     }
 
     // Update is called once per frame
@@ -325,4 +326,22 @@ public class CountryManager : MonoBehaviour
     }
 
     public void SetProvinceStats() { }
+
+    public void ColorMasterPlayer()
+    {
+        StartCoroutine("ColorMasterPlayerCountry");
+    }
+    IEnumerator ColorMasterPlayerCountry()
+    {
+        WorldMapStrategyKit.CountryDecorator decorator = new WorldMapStrategyKit.CountryDecorator();
+        decorator.isColorized = true;
+        decorator.texture = Resources.Load<Texture2D>("DoV/UI/background_gradient");
+        ColorUtility.TryParseHtmlString("#494560D6", out decorator.fillColor);
+        wmslObj.decorator.SetCountryDecorator(0, CountryGovernment.MapLookUpName, decorator);
+
+        yield return new WaitForEndOfFrame();
+    }
+
 }
+
+

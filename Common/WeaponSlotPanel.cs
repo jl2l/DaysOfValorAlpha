@@ -9,7 +9,8 @@ public class WeaponSlotPanel : MonoBehaviour
 {
 
     public Weapon CurrentWeapon;
-
+    public RawImage CurrentWeaponImage;
+    public RawImage CurrentAmmoImage;
     public Text WeaponName;
     public Text WeaponStationInfo;
     public Text WeaponPerks;
@@ -20,6 +21,8 @@ public class WeaponSlotPanel : MonoBehaviour
     public GameObject WeaponModel;
     public Text WeaponHEDamage;
     public Text WeaponAPDamage;
+    public Text WeaponAmmo;
+
 
     // Use this for initialization
     void Start()
@@ -43,7 +46,7 @@ public class WeaponSlotPanel : MonoBehaviour
         WeaponHighAirRange.text = CurrentWeapon.WeaponRangeAirHigh.ToString();
         WeaponLowAirRange.text = CurrentWeapon.WeaponRangeAirLow.ToString();
         var perks = string.Empty;
-
+        CurrentWeaponImage.texture = CurrentWeapon.WeaponIconName;
         CurrentWeapon.WeaponPerks.ForEach(e => { perks += string.Format("{0}, ", e); });
         WeaponPerks.text = perks;
 

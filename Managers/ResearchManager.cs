@@ -75,7 +75,7 @@ public class ResearchManager : MonoBehaviour
             researchItem.transform.SetParent(ResearchContainer.transform);
         });
 
-        FindObjectOfType<GraphRenderer>().DrawGraph();
+        //FindObjectOfType<GraphRenderer>().DrawGraph();
         //ResearchContainer.transform 
 
     }

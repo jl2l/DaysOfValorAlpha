@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70c4519c0303bee468752f51cc833f40, type: 3}
+  m_Name: AGM-65 Maverick
+  m_EditorClassIdentifier: 
+  WeaponRangeGround: 0
+  WeaponRangeAirLow: 0
+  WeaponRangeAirHigh: 25000
+  ThreatRange: 2
+  TechLevel: 7
+  WeaponReliablity: 36.1
+  WeaponSpeed: 0
+  WeaponResistance: 40
+  WeaponRateOfFire: 0
+  IsNuclearWeapon: 0
+  NuclearPayload: 0
+  WeaponName: AGM-65 Maverick
+  WeaponIconName: {fileID: 2800000, guid: 5a1451e320fae9140976cde393f305ff, type: 3}
+  WeaponModel: {fileID: 100000, guid: 9e4059efe85aa634f9382c2cd0bcaa87, type: 3}
+  WeaponAmmoName: 
+  WeaponAP: 7
+  WeaponHE: 16
+  WeaponsRemaining: 0
+  MaxNumWeaponsRemaining: 0
+  GroundWeaponType: 0
+  SeaWeaponType: 0
+  AirWeaponType: 21
+  WeaponPerks: 010000002000000010000000
+  WarheadSize: 8
+  warheadType: 060000000e0000000d000000
+  PurchaseCost: 0
+  RepairCost: 0
+  RearmCost: 0
+  CountryOfOrigin: 

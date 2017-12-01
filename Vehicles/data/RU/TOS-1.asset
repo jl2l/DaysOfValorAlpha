@@ -1,0 +1,118 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d61af66dbc6a7f849bb6a4cb4ea3ea66, type: 3}
+  m_Name: TOS-1
+  m_EditorClassIdentifier: 
+  IndefiniteArticle: a MLRS
+  DisplayName: TOS-1
+  Description: 
+  ClassIcon: {fileID: 0}
+  MapIcon: {fileID: 2800000, guid: 7da5490ffdc02fd49b3dd014e7b6849e, type: 3}
+  OPFORIcon: {fileID: 2800000, guid: f98f5ea235aad45498c504a89622465c, type: 3}
+  Model: {fileID: 100042, guid: f310b627a04c1b64a9348d7ba7ce9e6e, type: 3}
+  LowPolyModel: {fileID: 100042, guid: f310b627a04c1b64a9348d7ba7ce9e6e, type: 3}
+  MenuIcon: {fileID: 2800000, guid: fb2df7e09505ba44eb74a6104d41f8ee, type: 3}
+  Space: 46
+  VehicleArmor:
+  - {fileID: 11400000, guid: fb298e5f81a85824e816b87068b06364, type: 2}
+  - {fileID: 11400000, guid: 5f75765458f85844aa895648cb728bcd, type: 2}
+  - {fileID: 11400000, guid: 075306f47f2828444b3d3730e7c39154, type: 2}
+  - {fileID: 11400000, guid: bee68ef27e6fa13489a99fcce23f0d9a, type: 2}
+  VehicleSensors:
+  - {fileID: 11400000, guid: 768bdb9f6431c204a9629a893e91c100, type: 2}
+  - {fileID: 11400000, guid: 01510a364a8382a4d929e2bad3e3b4d8, type: 2}
+  - {fileID: 11400000, guid: 465a173411032c64ab3ca5ab45675530, type: 2}
+  - {fileID: 11400000, guid: 6106344a46479e1498b99c86dba22ecd, type: 2}
+  - {fileID: 11400000, guid: 78dd3f9f4009c524aa06d54e0e5ac8a5, type: 2}
+  VehicleWeapons:
+  - {fileID: 11400000, guid: ab7ada1c4a5cdd0428ebc3213b20ae23, type: 2}
+  GroundVehicles: []
+  Aircraft: []
+  BaseAirType: 0
+  AircraftType: 0
+  FlightSpeed: 0
+  FlightCombatRadius: 0
+  FlightTransportRange: 0
+  SelfDesignate: 0
+  IsStealth: 0
+  IsAirTransport: 0
+  IsAirfueling: 0
+  IsAirborneReArming: 0
+  HasInternalGun: 0
+  GunAmmo: 0
+  JetFuelGallons: 0
+  HasTurret: 1
+  IsLandVehicle: 1
+  DeployToFire: 1
+  HasCommanderTurret: 0
+  FireOnMove: 0
+  CanTargetMoving: 0
+  CanTargetStationary: 1
+  BaseGroundType: 5
+  GroundVehicleType: 0
+  CrewNumber: 3
+  OfficerNumber: 1
+  Length: 3
+  Height: 6
+  Width: 3
+  EmptyWeight: 40
+  LoadedWeight: 46
+  Powerplant:
+    PowerGeneration: 630
+    Name: V-84
+    NumberOf: 1
+    TypeOfPower: 1
+  ProgramName: 
+  TotalNumberBuilt: 67
+  CountryOfOriginFlag: {fileID: 2800000, guid: ec5cd2622403ca046975cb400c31c60e, type: 3}
+  CountryOfOrigin: Russia
+  CountryOfOriginIndex: 0
+  Name: 
+  TroopCarryTotal: 0
+  HasStablizer: 1
+  Year: 1988
+  Value: 150
+  Strength: 550
+  Ecm: 0.628
+  Generation: 4
+  FuelRange: 0.842
+  FuelMax: 1000
+  Size: 3
+  Instability: 0.954
+  Rcs: 1
+  ThermalRating: 1
+  TargetTime: 0.733
+  PilotExp: 0
+  Cost: 3960
+  UnitSize: 1
+  HasFCS: 1
+  IsInfantry: 0
+  IsCapturing: 0
+  SquadSize: 0
+  InfType: 0
+  IsLogistical: 0
+  Resupply: 0
+  MaxResupply: 0
+  LogisticVehicleType: 0
+  BaseSeaType: 0
+  SeacraftType: 0
+  IsDeckFlagShip: 0
+  SeacraftTypeName: 
+  ShipSonarPreceptionRange: 0
+  ShipSonarArrayGain: 0
+  ShipNoiseLevel: 0
+  IsShip: 0
+  IsASW: 0
+  IsSSK: 0
+  IsSub: 0
+  IsCarrier: 0
+  IsTransport: 0
+  IsNuclearPower: 0

@@ -181,8 +181,11 @@ public class MilitaryManager : MonoBehaviour
                 gameBase.BaseUniqueId = BaseId;
                 gameBase.MilitaryCountryBattleFlag = militaryBase.MilitaryCountryBattleFlag;
 
+                if (militaryBase.BaseLocation != null)
+                {
+                    wmslObj.AddMarker2DSprite(mapIcon, militaryBase.BaseLocation, 0.002f);
+                }
 
-                wmslObj.AddMarker2DSprite(mapIcon, militaryBase.BaseLocation, 0.002f);
                 marker.transform.localRotation = Quaternion.Euler(90, 0, 0);
                 marker.transform.localScale = WorldMapStrategyKit.Misc.Vector3one * 0.01f;
                 marker.WMSK_MoveTo(militaryBase.BaseLocation.x, militaryBase.BaseLocation.y);

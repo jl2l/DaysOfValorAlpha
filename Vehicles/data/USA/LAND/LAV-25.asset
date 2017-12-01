@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d61af66dbc6a7f849bb6a4cb4ea3ea66, type: 3}
+  m_Name: LAV-25
+  m_EditorClassIdentifier: 
+  IndefiniteArticle: a
+  DisplayName: 
+  Description: 
+  ClassIcon: {fileID: 0}
+  MapIcon: {fileID: 0}
+  OPFORIcon: {fileID: 0}
+  Model: {fileID: 0}
+  LowPolyModel: {fileID: 0}
+  MenuIcon: {fileID: 0}
+  Space: 0
+  VehicleArmor: []
+  VehicleSensors: []
+  VehicleWeapons: []
+  GroundVehicles: []
+  Aircraft: []
+  BaseAirType: 0
+  AircraftType: 0
+  FlightSpeed: 0
+  FlightCombatRadius: 0
+  FlightTransportRange: 0
+  SelfDesignate: 0
+  IsStealth: 0
+  IsAirTransport: 0
+  IsAirfueling: 0
+  IsAirborneReArming: 0
+  HasInternalGun: 0
+  GunAmmo: 0
+  JetFuelGallons: 0
+  HasTurret: 0
+  IsLandVehicle: 1
+  DeployToFire: 0
+  HasCommanderTurret: 0
+  FireOnMove: 0
+  CanTargetMoving: 0
+  CanTargetStationary: 0
+  BaseGroundType: 0
+  GroundVehicleType: 0
+  CrewNumber: 0
+  OfficerNumber: 0
+  Length: 0
+  Height: 0
+  Width: 0
+  EmptyWeight: 0
+  LoadedWeight: 0
+  Powerplant:
+    PowerGeneration: 0
+    Name: 
+    NumberOf: 0
+    TypeOfPower: 0
+  ProgramName: 
+  TotalNumberBuilt: 0
+  CountryOfOriginFlag: {fileID: 0}
+  CountryOfOrigin: 
+  CountryOfOriginIndex: 0
+  Name: 
+  TroopCarryTotal: 0
+  HasStablizer: 0
+  Year: 
+  Value: 0
+  Strength: 0
+  Ecm: 0
+  Generation: 0
+  FuelRange: 0
+  FuelMax: 0
+  Size: 0
+  Instability: 0
+  Rcs: 0
+  ThermalRating: 0
+  TargetTime: 0
+  PilotExp: 0
+  Cost: 0
+  UnitSize: 0
+  HasFCS: 0
+  IsInfantry: 0
+  IsCapturing: 0
+  SquadSize: 0
+  InfType: 0
+  IsLogistical: 0
+  Resupply: 0
+  MaxResupply: 0
+  LogisticVehicleType: 0
+  BaseSeaType: 0
+  SeacraftType: 0
+  IsDeckFlagShip: 0
+  SeacraftTypeName: 
+  ShipSonarPreceptionRange: 0
+  ShipSonarArrayGain: 0
+  ShipNoiseLevel: 0
+  IsShip: 0
+  IsASW: 0
+  IsSSK: 0
+  IsSub: 0
+  IsCarrier: 0
+  IsTransport: 0
+  IsNuclearPower: 0

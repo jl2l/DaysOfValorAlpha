@@ -43,8 +43,11 @@ namespace Assets
         }
         public bool UsesBullets;
         public int MaxBullets;
+        public float ReloadTime;
         public List<Weapon> ConfigWeapons;
         public PointType WeaponsStationType;
+        public GameObject WeaponStationModel;
+        public GameObject WeaponStationMountPoint;
     }
 
 
@@ -160,17 +163,29 @@ namespace Assets
 
     public enum SensorSpectrum
     {
+        [Description("DAY")]
         Visible,
+        [Description("FLIR")]
         Ir,
+        [Description("RADAR")]
         Radar,
+        [Description("XBAND")]
         Xray,
+        [Description("UV")]
         UV,
+        [Description("GAMMA")]
         Gamma,
+        [Description("ULTRA")]
         Sound,
+        [Description("CPU")]
         Processor,
+        [Description("NBC")]
         Chemical,
+        [Description("LIDAR")]
         Lidar,
+        [Description("DAY/NIGHT")]
         NightVision,
+        [Description("DATA")]
         DataLink,
 
     }
@@ -647,17 +662,17 @@ namespace Assets
     {
         [Description("None")]
         None,
-        [Description("Logistic Vehicle")]
+        [Description("LOGISTIC")]
         Log,
-        [Description("Light Vehicle")]
+        [Description("LIGHT 4X4")]
         X4,
-        [Description("Infantry Carry Vehicles")]
+        [Description("INFANTRY CARRY")]
         APC,
-        [Description("Armored Vehicles")]
+        [Description("TANK")]
         TANK,
-        [Description("Indirect Fire Vehicles")]
+        [Description("INDIRECT FIRE")]
         Artillery,
-        [Description("Support Vehicle")]
+        [Description("SUPPORT")]
         Misc
 
     }
@@ -667,22 +682,39 @@ namespace Assets
     public enum GroundVehicleType
     {
         none,
+        [Description("Tank")]
         tank,
+        [Description("Main Battle Tank")]
         MBT,
+        [Description("Light Tank")]
         lighttank,
+        [Description("Ampbious Tank")]
         amphtank,
+        [Description("Armored Vehicle")]
         vehicle,
+        [Description("Armored Car")]
         armorcar,
+        [Description("Mine Resistance Armored Protection")]
         mrap,
+        [Description("Infantry Fighting Vehicle")]
         ifv,
+        [Description("Armored Personnel Carrier")]
         apc,
+        [Description("Self Propelled Gun")]
         spagun,
+        [Description("Multiple Launch Rocket System")]
         mlrs,
+        [Description("Supply Transport")]
         transport,
+        [Description("Recon Vehicle")]
         recon,
+        [Description("Technical")]
         technical,
+        [Description("Self Propelled Anti-Aircraft Gun")]
         AAA,
+        [Description("Self Propelled Surface To Air Missile")]
         SAM,
+        [Description("Electronic Warfare Vehicle")]
         ewarfare,
     }
 
@@ -1067,7 +1099,15 @@ namespace Assets
         HighAngleOfAttack,
         NonLethal,
         LaserGuided,
-        DataLink
+        DataLink,
+        LowPressure,
+        SoftLaunch,
+        GlideBomb,
+        MultiShot,
+        LowCollateralDam,
+        FireAndForget,
+        SensorDecoy
+
     }
 
     [Serializable]
@@ -1194,6 +1234,23 @@ namespace Assets
         guidedmissileSub
     }
 
+    [Serializable]
+    public enum SeaState
+    {
+        Swamp,
+        Rivers,
+        DeepRivers,
+        SeaState0,
+        SeaState1,
+        SeaState2,
+        SeaState3,
+        SeaState4,
+        SeaState5,
+        SeaState6,
+        SeaState7,
+        SeaState8,
+        SeaState9,
+    }
 
     [Serializable]
     public class SeaObject : BaseWarGameObject

@@ -20,4 +20,7 @@ public class WeaponConfig : ScriptableObject
     /// The list of weapon stations on a vehicle, if its a tank it will have one, but some can have more then one 
     /// </summary>
     public List<WeaponStationType> WeaponsStations;
+
+    public int CountryIndex;
+    public string CountryName;
 }

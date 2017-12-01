@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70c4519c0303bee468752f51cc833f40, type: 3}
+  m_Name: ThermabericRockets
+  m_EditorClassIdentifier: 
+  WeaponRangeGround: 2700
+  WeaponRangeAirLow: 0
+  WeaponRangeAirHigh: 0
+  ThreatRange: 1
+  TechLevel: 8
+  WeaponReliablity: 87.3
+  WeaponSpeed: 690
+  WeaponResistance: 0
+  WeaponRateOfFire: 0
+  IsNuclearWeapon: 0
+  NuclearPayload: 0
+  WeaponName: NURS
+  WeaponIconName: {fileID: 2800000, guid: b42c2d7ca00f5264e807210d05f90524, type: 3}
+  WeaponModel: {fileID: 100000, guid: e79e717725495d146aceb811e10fd995, type: 3}
+  WeaponAmmoName: Thermobaric Rocket
+  WeaponAP: 3
+  WeaponHE: 18
+  WeaponsRemaining: 1
+  MaxNumWeaponsRemaining: 1
+  GroundWeaponType: 44
+  SeaWeaponType: 0
+  AirWeaponType: 0
+  WeaponPerks: 0b0000001100000000000000
+  WarheadSize: 8
+  warheadType: 0200000006000000
+  PurchaseCost: 12
+  RepairCost: 6
+  RearmCost: 11
+  CountryOfOrigin: RU

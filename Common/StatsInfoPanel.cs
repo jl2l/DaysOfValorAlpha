@@ -27,7 +27,7 @@ public class StatsInfoPanel : MonoBehaviour
 
     public string BuildBasicStats()
     {
-        return string.Format("LENGTH <color=red> {0}m </color> HEIGHT <color=red> {1}m </color> WIDTH <color=red> {2}m </color> WEIGHT{4}  <color = red> LOADED {3}t </color>CREW <color=red> {5} </color> {6} YEAR <color = red> {7} </color> ", Vehicle.Length.ToString(), Vehicle.Height, Vehicle.Width, Vehicle.LoadedWeight, Vehicle.EmptyWeight, Vehicle.CrewNumber, Vehicle.OfficerNumber, Vehicle.Year);
+        return string.Format("LENGTH <color=red> {0}m </color> HEIGHT <color=red> {1}m </color> WIDTH <color=red> {2}m </color> \n WEIGHT LOADED  <color=red> {4}t </color>  WEIGHT EMPTY <color=red>  {3}t </color> CREW <color=red> {5} ({6}) </color>  YEAR <color=red>  {7} </color> ", Vehicle.Length.ToString(), Vehicle.Height, Vehicle.Width, Vehicle.LoadedWeight, Vehicle.EmptyWeight, Vehicle.CrewNumber, Vehicle.OfficerNumber, Vehicle.Year);
     }
 
     public void SetStats()

@@ -181,6 +181,7 @@ public class WorldManager : MonoBehaviour
                     }
                     if (gov.IsMasterPlayer)
                     {
+                        newCountryManagerSetup.IsMasterPlayerManager = true;
                         newCountryAgentConfig.transform.SetParent(newCountry.transform);
                         newCountryAgent.transform.SetParent(newCountry.transform);
                         newCountryAmbassdor.transform.SetParent(newCountry.transform);
